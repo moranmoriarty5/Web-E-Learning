@@ -64,11 +64,17 @@ app.get("/materi", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/materi.html"));
 });
 
-sequelize
-  .sync()
-  .then(() => {
-    app.listen(process.env.PORT, () =>
-      console.log(`✅ Server berjalan di http://localhost:${process.env.PORT}`)
+try {
+  await sequelize.sync();
+
+  app.listen(process.env.PORT, () => {
+    console.log(
+      `✅ Server berjalan di http://localhost:${process.env.PORT}`
     );
-  })
-  .catch((err) => console.error("❌ Gagal koneksi database:", err));
+  });
+} catch (err) {
+  console.error(
+    "❌ Gagal koneksi database:",
+    err
+  );
+}
