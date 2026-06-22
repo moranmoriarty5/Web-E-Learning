@@ -2,5 +2,5 @@ projectKey=cleanarchitecture
 serverUrl=http://localhost:9000
 serverVersion=26.4.0.121862
 dashboardUrl=http://localhost:9000/dashboard?id=cleanarchitecture
-ceTaskId=5105ce75-1713-4d36-8f12-f6b0dd62d53b
-ceTaskUrl=http://localhost:9000/api/ce/task?id=5105ce75-1713-4d36-8f12-f6b0dd62d53b
+ceTaskId=aa772c41-47dd-48f3-a99a-e588f7fd4b37
+ceTaskUrl=http://localhost:9000/api/ce/task?id=aa772c41-47dd-48f3-a99a-e588f7fd4b37
