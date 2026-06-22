@@ -1,0 +1,144 @@
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* Background Gradient */
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #2563eb);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Efek blur background */
+body::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  top: -100px;
+  left: -100px;
+  filter: blur(50px);
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  bottom: -100px;
+  right: -100px;
+  filter: blur(50px);
+}
+
+/* Judul */
+h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  z-index: 1;
+  animation: fadeDown 1s ease;
+}
+
+/* Deskripsi */
+p {
+  font-size: 1.1rem;
+  margin-bottom: 35px;
+  opacity: 0.9;
+  z-index: 1;
+  animation: fadeUp 1s ease;
+}
+
+/* Container tombol */
+div {
+  display: flex;
+  gap: 20px;
+  z-index: 1;
+}
+
+/* Link jadi tombol */
+a {
+  text-decoration: none;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* Tombol Login */
+a:first-child {
+  background: white;
+  color: #4f46e5;
+}
+
+/* Tombol Register */
+a:last-child {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Hover */
+a:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Animasi */
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  div {
+    flex-direction: column;
+  }
+
+  a {
+    width: 220px;
+  }
+}

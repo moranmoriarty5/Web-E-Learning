@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Dashboard Admin</title>
+
+    <link rel="stylesheet" href="css/dashadmin.css" />
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Dashboard Admin 👑</h1>
+
+      <p>
+        Selamat datang,
+        <span id="nama"></span>
+        (Admin)
+      </p>
+    </div>
+
+    <nav class="menu">
+      <button onclick="showSection('users')">
+        👥 Kelola Pengguna
+      </button>
+
+      <button onclick="showSection('pelajaran')">
+        📚 Kelola Mata Pelajaran
+      </button>
+
+      <button onclick="logout()">🚪 Logout</button>
+    </nav>
+
+    <!-- USERS -->
+    <section id="users" class="section">
+      <h2>Daftar Pengguna</h2>
+
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody></tbody>
+      </table>
+
+      <h3>Tambah Pengguna Baru</h3>
+
+      <form id="addUserForm">
+        <input
+          type="text"
+          id="namaUser"
+          placeholder="Nama"
+          required
+        />
+
+        <input
+          type="email"
+          id="emailUser"
+          placeholder="Email"
+          required
+        />
+
+        <input
+          type="password"
+          id="passwordUser"
+          placeholder="Password"
+          required
+        />
+
+        <select id="roleUser" required>
+          <option value="siswa">Siswa</option>
+          <option value="pengajar">Pengajar</option>
+        </select>
+
+        <button type="submit">
+          Tambah Pengguna
+        </button>
+      </form>
+    </section>
+
+    <!-- PELAJARAN -->
+    <section id="pelajaran" class="section hidden">
+      <h2>Kelola Mata Pelajaran</h2>
+
+      <form id="addPelajaranForm">
+        <input type="hidden" id="pelajaranId" />
+
+        <input
+          type="text"
+          id="namaPelajaran"
+          placeholder="Nama Mata Pelajaran"
+          required
+        />
+
+        <select id="pengajarSelect" required>
+          <option value="">
+            -- Pilih Pengajar --
+          </option>
+        </select>
+
+        <textarea
+          id="deskripsiPelajaran"
+          placeholder="Deskripsi"
+        ></textarea>
+
+        <button
+          type="submit"
+          id="submitPelajaranBtn"
+        >
+          Tambah
+        </button>
+
+        <button
+          type="button"
+          id="cancelEditBtn"
+          style="display: none"
+          onclick="cancelEditPelajaran()"
+        >
+          Batal Edit
+        </button>
+      </form>
+
+      <table id="pelajaranTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama Mata Pelajaran</th>
+            <th>Pengajar</th>
+            <th>Email</th>
+            <th>Deskripsi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <script>
+      const nama = localStorage.getItem("nama");
+      const role = localStorage.getItem("role");
+
+      if (!nama || role !== "admin") {
+        alert("Akses ditolak!");
+
+        globalThis.location.href = "/login";
+      } else {
+        document.getElementById("nama").textContent =
+          nama;
+      }
+
+      // LOGOUT
+      function logout() {
+        localStorage.clear();
+
+        globalThis.location.href = "/login";
+      }
+
+      // SHOW SECTION
+      function showSection(sectionId) {
+        document
+          .querySelectorAll(".section")
+          .forEach((sec) => {
+            sec.classList.add("hidden");
+          });
+
+        document
+          .getElementById(sectionId)
+          .classList.remove("hidden");
+      }
+
+      // LOAD USERS
+      async function loadUsers() {
+        const response = await fetch(
+          "/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem(
+                "token"
+              )}`,
+            },
+          }
+        );
+
+        const result = await response.json();
+        const users = result.data || result;
+
+        const tbody = document.querySelector(
+          "#userTable tbody"
+        );
+
+        tbody.innerHTML = users
+          .map(
+            (u) => `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.nama}</td>
+              <td>${u.email}</td>
+
+              <td>
+                <span class="role ${u.role}">
+                  ${u.role}
+                </span>
+              </td>
+
+              <td>
+                ${
+                  u.role === "admin"
+                    ? "-"
+                    : `
+                      <button
+                        class="delete-btn"
+                        onclick="deleteUser(${u.id})"
+                      >
+                        🗑 Hapus
+                      </button>
+                    `
+                }
+              </td>
+            </tr>
+          `
+          )
+          .join("");
+      }
+
+      // DELETE USER
+      async function deleteUser(id) {
+        const confirmDelete = confirm(
+          "Yakin ingin menghapus user ini?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+          const res = await fetch(
+            `/api/users/${id}`,
+            {
+              method: "DELETE",
+
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem(
+                  "token"
+                )}`,
+              },
+            }
+          );
+
+          const result = await res.json();
+
+          alert(
+            result.message ||
+              "User berhasil dihapus!"
+          );
+
+          loadUsers();
+          loadAvailablePengajar();
+          loadPelajaran();
+        } catch (error) {
+          console.error(error);
+
+          alert("Gagal menghapus user");
+        }
+      }
+
+      // LOAD PENGAJAR
+      async function loadAvailablePengajar(
+        selectedId = ""
+      ) {
+        const resPengajar = await fetch(
+          "/api/users?role=pengajar",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem(
+                "token"
+              )}`,
+            },
+          }
+        );
+
+        const result =
+          await resPengajar.json();
+        const pengajar =
+          result.data || result;
+
+        const select =
+          document.getElementById(
+            "pengajarSelect"
+          );
+
+        select.innerHTML =
+          '<option value="">-- Pilih Pengajar --</option>';
+
+        pengajar.forEach((p) => {
+          const opt =
+            document.createElement("option");
+
+          opt.value = p.id;
+
+          opt.textContent = p.nama;
+
+          if (selectedId == p.id) {
+            opt.selected = true;
+          }
+
+          select.appendChild(opt);
+        });
+      }
+
+      // LOAD PELAJARAN
+      async function loadPelajaran() {
+        const res = await fetch(
+          "/api/mata-pelajaran"
+        );
+
+        const result = await res.json();
+        const pelajaran = result.data || result;
+
+        const tbody = document.querySelector(
+          "#pelajaranTable tbody"
+        );
+
+        tbody.innerHTML = pelajaran
+          .map(
+            (p) => `
+            <tr>
+              <td>${p.id}</td>
+
+              <td>${p.nama_mapel}</td>
+
+              <td>
+                ${
+                  p.User
+                    ? p.User.nama
+                    : "-"
+                }
+              </td>
+              
+              <td>
+                ${
+                  p.User
+                    ? p.User.email
+                    : "-"
+                }
+
+              <td>
+                ${
+                  p.deskripsi || "-"
+                }
+              </td>
+
+              <td>
+                <button
+                  onclick="editPelajaran(
+                    ${p.id},
+                    '${p.nama_mapel}',
+                    '${p.deskripsi || ""}',
+                    '${p.pengajarId}'
+                  )"
+                >
+                  ✏ Edit
+                </button>
+              </td>
+            </tr>
+          `
+          )
+          .join("");
+      }
+
+      // EDIT PELAJARAN
+      function editPelajaran(
+        id,
+        nama_mapel,
+        deskripsi,
+        pengajarId
+      ) {
+        document.getElementById(
+          "pelajaranId"
+        ).value = id;
+
+        document.getElementById(
+          "namaPelajaran"
+        ).value = nama_mapel;
+
+        document.getElementById(
+          "deskripsiPelajaran"
+        ).value = deskripsi;
+
+        loadAvailablePengajar(
+          pengajarId
+        );
+
+        document.getElementById(
+          "submitPelajaranBtn"
+        ).textContent = "Update";
+
+        document.getElementById(
+          "cancelEditBtn"
+        ).style.display = "inline-block";
+      }
+
+      // CANCEL EDIT
+      function cancelEditPelajaran() {
+        document.getElementById(
+          "pelajaranId"
+        ).value = "";
+
+        document
+          .getElementById(
+            "addPelajaranForm"
+          )
+          .reset();
+
+        document.getElementById(
+          "submitPelajaranBtn"
+        ).textContent = "Tambah";
+
+        document.getElementById(
+          "cancelEditBtn"
+        ).style.display = "none";
+
+        loadAvailablePengajar();
+      }
+
+      // TAMBAH / UPDATE PELAJARAN
+      document
+        .getElementById(
+          "addPelajaranForm"
+        )
+        .addEventListener(
+          "submit",
+          async (e) => {
+            e.preventDefault();
+
+            const id =
+              document.getElementById(
+                "pelajaranId"
+              ).value;
+
+            const nama_mapel =
+              document.getElementById(
+                "namaPelajaran"
+              ).value;
+
+            const deskripsi =
+              document.getElementById(
+                "deskripsiPelajaran"
+              ).value;
+
+            const pengajarId =
+              document.getElementById(
+                "pengajarSelect"
+              ).value;
+
+            let url =
+              "/api/mata-pelajaran";
+
+            let method = "POST";
+
+            // UPDATE
+            if (id) {
+              url = `/api/mata-pelajaran/${id}`;
+
+              method = "PUT";
+            }
+
+            const res = await fetch(
+              url,
+              {
+                method,
+
+                headers: {
+                  "Content-Type":
+                    "application/json",
+
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "token"
+                  )}`,
+                },
+
+                body: JSON.stringify({
+                  nama_mapel,
+                  deskripsi,
+                  pengajarId,
+                }),
+              }
+            );
+
+            const data =
+              await res.json();
+
+            alert(
+              data.message ||
+                "Berhasil!"
+            );
+
+            loadPelajaran();
+            loadAvailablePengajar();
+
+            document.getElementById(
+              "pelajaranId"
+            ).value = "";
+
+            document.getElementById(
+              "submitPelajaranBtn"
+            ).textContent = "Tambah";
+
+            document.getElementById(
+              "cancelEditBtn"
+            ).style.display = "none";
+
+            e.target.reset();
+          }
+        );
+
+      // TAMBAH USER
+      document
+        .getElementById("addUserForm")
+        .addEventListener(
+          "submit",
+          async (e) => {
+            e.preventDefault();
+
+            const data = {
+              nama:
+                document.getElementById(
+                  "namaUser"
+                ).value,
+
+              email:
+                document.getElementById(
+                  "emailUser"
+                ).value,
+
+              password:
+                document.getElementById(
+                  "passwordUser"
+                ).value,
+
+              role:
+                document.getElementById(
+                  "roleUser"
+                ).value,
+            };
+
+            const res = await fetch(
+              "/api/users/admin/create",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json",
+
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "token"
+                  )}`,
+                },
+
+                body: JSON.stringify(data),
+              }
+            );
+
+            const result =
+              await res.json();
+
+            alert(
+              result.message ||
+                "User berhasil ditambahkan!"
+            );
+
+            loadUsers();
+            loadAvailablePengajar();
+
+            e.target.reset();
+          }
+        );
+
+      // INIT
+      loadUsers();
+      loadPelajaran();
+      loadAvailablePengajar();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Pengajar</title>
+    <link rel="stylesheet" href="css/dashpengajar.css" />
+  </head>
+   <body>
+    <h1>Selamat datang, <span id="nama"></span> 👨‍🏫</h1>
+    <p>Anda login sebagai <b>Pengajar</b>.</p>
+
+    <nav class="menu">
+      <button onclick="addmateri()">📂 Kelola Materi</button>
+      <button onclick="viewTugasPage()">📁 Tugas Siswa</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </nav>
+
+    <div class="mapel-box">
+      <h2>📚 Mata Pelajaran yang Diampu</h2>
+      <div id="listMapel"></div>
+    </div>
+
+    <main class="content">
+    <h1>📂 Daftar Materi</h1>
+
+    <!-- FILTER -->
+    <div class="filter-container">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Cari materi..."
+        oninput="filterMateri()"
+      />
+
+      <select id="filterMapel" onchange="filterMateri()">
+        <option value="">Semua Mata Pelajaran</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <table id="materiTable">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Judul</th>
+          <th>Mata Pelajaran</th>
+          <th>File</th>
+          <th>Forum</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+    <script>
+      const nama = localStorage.getItem("nama");
+      const role = localStorage.getItem("role");
+      const pengajarId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+
+      if (!nama || role !== "pengajar") {
+        alert("Akses ditolak. Anda bukan pengajar!");
+        globalThis.location.href = "/login";
+      } else {
+        document.getElementById("nama").textContent = nama;
+      }
+       async function loadMapel() {
+        try {
+          const response = await fetch(`/api/mata-pelajaran/pengajar/${pengajarId}`);
+          const result = await response.json();
+          const data = result.data || result;
+
+          const container = document.getElementById("listMapel");
+          container.innerHTML = "";
+
+          if (!data || data.length === 0) {
+            container.innerHTML = "<p>Belum ada mata pelajaran.</p>";
+            return;
+          }
+
+          data.forEach((mapel) => {
+            container.innerHTML += `
+              <div class="mapel-item">
+                <h3>${mapel.nama_mapel}</h3>
+              </div>
+            `;
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+       function addmateri() {
+        globalThis.location.href = "/materi";
+      }
+
+      function viewTugasPage() {
+        globalThis.location.href = "/tugas-pengajar";
+      }
+
+      function logout() {
+        localStorage.clear();
+        globalThis.location.href = "/login";
+      }
+
+      loadMapel();
+
+      let allMateri = [];
+
+/* ================= LOAD DATA ================= */
+async function loadMateri() {
+  const res = await fetch("/api/materi", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  const result = await res.json();
+  allMateri = result.data || result;
+  renderMateri(allMateri);
+  loadMataPelajaran();
+}
+
+async function loadMataPelajaran() {
+  const res = await fetch("/api/mata-pelajaran");
+  const result = await res.json();
+  const mapel = result.data || result;
+
+  const select = document.getElementById("filterMapel");
+
+  mapel.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.nama_mapel;
+    opt.textContent = m.nama_mapel;
+    select.appendChild(opt);
+  });
+}
+
+/* ================= RENDER ================= */
+function renderMateri(data) {
+  const tbody = document.querySelector("#materiTable tbody");
+  tbody.innerHTML = "";
+
+  data.forEach((m, i) => {
+    const isOwner = m.MataPelajaran?.pengajarId == pengajarId;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${m.judul}</td>
+      <td>${m.MataPelajaran?.nama_mapel || "-"}</td>
+      <td>
+        <a href="${m.filePath}" target="_blank">📄 Lihat</a>
+      </td>
+      <td>
+        <button onclick="openForum(${m.id})">💬 Diskusi</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+/* ================= FILTER ================= */
+function filterMateri() {
+  const keyword = document
+    .getElementById("searchInput")
+    .value.toLowerCase();
+
+  const mapel = document.getElementById("filterMapel").value;
+
+  const filtered = allMateri.filter(m =>
+    m.judul.toLowerCase().includes(keyword) &&
+    (mapel === "" || m.MataPelajaran?.nama_mapel === mapel)
+  );
+
+  renderMateri(filtered);
+}
+
+/* ================= FORUM ================= */
+function openForum(materiId) {
+  globalThis.location.href = `/diskusi.html?materiId=${materiId}`;
+}
+
+/* ================= INIT ================= */
+loadMateri();
+    </script>
+  </body>
+</html>

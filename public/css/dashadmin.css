@@ -1,0 +1,394 @@
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f4f7fb;
+  color: #1f2937;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+.header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+.menu {
+  width: 92%;
+  max-width: 1200px;
+  margin: -25px auto 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.menu button {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.menu button:hover {
+  background: #4f46e5;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   SECTION
+========================= */
+.section {
+  width: 92%;
+  max-width: 1200px;
+  margin: 25px auto;
+  background: white;
+  padding: 28px;
+  border-radius: 22px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  animation: fade 0.3s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+.section h2 {
+  color: #4f46e5;
+  margin-bottom: 22px;
+  font-size: 28px;
+}
+
+.section h3 {
+  margin-top: 30px;
+  margin-bottom: 18px;
+  color: #374151;
+}
+
+/* =========================
+   FORM
+========================= */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 14px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.3s;
+  background: #fafafa;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #4f46e5;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(79,70,229,0.12);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* =========================
+   FORM BUTTON
+========================= */
+form button {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+/* =========================
+   TABLE
+========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+table thead {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+}
+
+table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+table tbody tr {
+  transition: 0.2s;
+}
+
+table tbody tr:hover {
+  background: #f9fafc;
+}
+
+/* =========================
+   BUTTON
+========================= */
+button {
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+.edit-btn,
+table button:not(.delete-btn) {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.edit-btn:hover,
+table button:not(.delete-btn):hover {
+  background: #d97706;
+}
+
+/* =========================
+   ROLE BADGE
+========================= */
+.role {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.role.admin {
+  background: #ef4444;
+}
+
+.role.pengajar {
+  background: #3b82f6;
+}
+
+.role.siswa {
+  background: #10b981;
+}
+
+/* =========================
+   LINK
+========================= */
+a {
+  text-decoration: none;
+  color: #4f46e5;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: #4338ca;
+  text-decoration: underline;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   DARK MODE
+========================= */
+body.dark {
+  background: #111827;
+  color: white;
+}
+
+body.dark .section,
+body.dark .menu {
+  background: #1f2937;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #374151;
+  color: white;
+  border: 1px solid #4b5563;
+}
+
+body.dark table tbody tr:hover {
+  background: #374151;
+}
+
+body.dark .section h2,
+body.dark .section h3 {
+  color: #93c5fd;
+}
+
+body.dark a {
+  color: #93c5fd;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+  .header {
+    padding: 30px 20px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .menu button {
+    width: 100%;
+  }
+
+  .section {
+    width: 95%;
+    padding: 20px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  table th,
+  table td {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  input,
+  select,
+  textarea,
+  form button {
+    font-size: 14px;
+  }
+}

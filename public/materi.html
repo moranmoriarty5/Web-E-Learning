@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Materi Pengajar</title>
+  <link rel="stylesheet" href="css/materiStyle.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <h1>📚 Upload Materi</h1>
+
+  <div id="infoMapel"></div>
+
+  <form id="uploadForm" enctype="multipart/form-data">
+
+    <input
+      type="text"
+      name="judul"
+      placeholder="Judul Materi"
+      required
+    />
+
+    <input
+      type="file"
+      name="filePath"
+      accept=".ppt,.pptx,.pdf"
+      required
+    />
+
+    <button type="submit">
+      Upload
+    </button>
+
+    <a href="/dashboard-pengajar">
+      Kembali
+    </a>
+
+  </form>
+
+  <!-- EDIT FORM -->
+  <div class="edit-form" id="editForm">
+    <h3>Edit Materi</h3>
+    <input
+      type="hidden"
+      id="editMateriId"
+    />
+    <input
+      type="text"
+      id="editJudul"
+      placeholder="Judul Materi"
+      required
+    />
+    <input
+      type="file"
+      id="editFilePath"
+      accept=".ppt,.pptx,.pdf"
+    />
+    <p style="font-size: 12px; color: #666;">Kosongkan file jika tidak ingin mengubah file</p>
+    <button onclick="submitEdit()">Simpan</button>
+    <button onclick="cancelEdit()">Batal</button>
+  </div>
+
+  <h2>Daftar Materi</h2>
+
+  <table id="materiTable">
+
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Judul</th>
+        <th>Mata Pelajaran</th>
+        <th>File</th>
+        <th>Forum</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+    <tbody></tbody>
+
+  </table>
+
+</div>
+
+<script>
+
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
+let mataPelajaranId = null;
+
+// ambil mapel pengajar login
+async function loadMataPelajaran() {
+
+  try {
+
+    const res = await fetch(
+      `/api/mata-pelajaran/pengajar/${userId}`
+    );
+
+    const result = await res.json();
+    const data = result.data || result;
+
+    // jika pengajar belum punya mapel
+    if (!data || data.length === 0) {
+
+      document.getElementById("infoMapel").innerHTML = `
+        <p style="color:red;">
+          Anda belum memiliki mata pelajaran
+        </p>
+      `;
+
+      return;
+    }
+
+    // otomatis ambil mapel pertama
+    mataPelajaranId = data[0].id;
+
+    document.getElementById("infoMapel").innerHTML = `
+      <h3>
+        Mata Pelajaran:
+        ${data[0].nama_mapel}
+      </h3>
+    `;
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+uploadForm.addEventListener("submit", async e => {
+
+  e.preventDefault();
+
+  // belum punya mapel
+  if (!mataPelajaranId) {
+    alert("Anda belum memiliki mata pelajaran");
+    return;
+  }
+
+  const formData = new FormData(uploadForm);
+
+  formData.append(
+    "mataPelajaranId",
+    mataPelajaranId
+  );
+
+  formData.append(
+    "userId",
+    userId
+  );
+
+  const res = await fetch(
+    "/api/materi/upload",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
+  );
+
+  const result = await res.json();
+
+  alert(result.message);
+
+  if (res.ok) {
+    uploadForm.reset();
+    loadMateri();
+  }
+});
+
+async function loadMateri() {
+
+  const res = await fetch("/api/materi");
+
+  const result = await res.json();
+  const materi = result.data || result;
+
+  const tbody =
+    document.querySelector("#materiTable tbody");
+
+  tbody.innerHTML = "";
+
+  materi.forEach((m, i) => {
+    // Filter: hanya tampilkan materi milik pengajar login
+    const isOwner = m.MataPelajaran?.pengajarId === Number.parseInt(userId);
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${i + 1}</td>
+
+        <td>${m.judul}</td>
+
+        <td>
+          ${m.MataPelajaran?.nama_mapel || "-"}
+        </td>
+
+        <td>
+          <a href="${m.filePath}" target="_blank">
+            Lihat
+          </a>
+        </td>
+
+        <td>
+          <button onclick="openForum(${m.id})">
+            💬 Diskusi
+          </button>
+        </td>
+
+        <td>
+          ${isOwner ? `
+            <div class="action-buttons">
+              <button onclick="editMateri(${m.id}, '${m.judul.replaceAll("'", "\\'")}')">
+                ✏️ Edit
+              </button>
+              <button onclick="deleteMateri(${m.id})">
+                🗑️ Hapus
+              </button>
+            </div>
+          ` : "-"}
+        </td>
+
+      </tr>
+    `;
+  });
+}
+
+function openForum(materiId) {
+  globalThis.location.href =
+    `/diskusi.html?materiId=${materiId}`;
+}
+
+function editMateri(id, judul) {
+  document.getElementById("editMateriId").value = id;
+  document.getElementById("editJudul").value = judul;
+  document.getElementById("editForm").classList.add("active");
+}
+
+function cancelEdit() {
+  document.getElementById("editForm").classList.remove("active");
+  document.getElementById("editMateriId").value = "";
+  document.getElementById("editJudul").value = "";
+  document.getElementById("editFilePath").value = "";
+}
+
+async function submitEdit() {
+  const id = document.getElementById("editMateriId").value;
+  const judul = document.getElementById("editJudul").value.trim();
+  const fileInput = document.getElementById("editFilePath");
+
+  if (!judul && !fileInput.files.length) {
+    alert("Judul atau file harus diisi");
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("judul", judul);
+    formData.append("userId", userId);
+    if (fileInput.files.length > 0) {
+      formData.append("filePath", fileInput.files[0]);
+    }
+
+    const res = await fetch(`/api/materi/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const result = await res.json();
+    alert(result.message);
+
+    if (res.ok) {
+      cancelEdit();
+      loadMateri();
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Gagal mengupdate materi");
+  }
+}
+
+async function deleteMateri(id) {
+  if (!confirm("Yakin ingin menghapus materi ini?")) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/materi/${id}?userId=${userId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await res.json();
+    alert(result.message);
+
+    if (res.ok) {
+      loadMateri();
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Gagal menghapus materi");
+  }
+}
+
+loadMataPelajaran();
+loadMateri();
+
+</script>
+
+
+</body>
+</html>

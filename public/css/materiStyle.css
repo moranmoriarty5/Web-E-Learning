@@ -1,0 +1,260 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  padding: 30px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+h1 {
+  text-align: center;
+  color: #4f46e5;
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin-top: 35px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+#infoMapel {
+  margin-bottom: 20px;
+}
+
+#infoMapel h3 {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+/* FORM */
+
+#uploadForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+#uploadForm input[type="text"],
+#uploadForm input[type="file"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+#uploadForm button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#uploadForm button:hover {
+  background: #4338ca;
+}
+
+#uploadForm a {
+  text-decoration: none;
+  background: #6b7280;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+#uploadForm a:hover {
+  background: #4b5563;
+}
+
+/* TABLE */
+
+#materiTable {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+#materiTable thead {
+  background: #4f46e5;
+  color: white;
+}
+
+#materiTable th,
+#materiTable td {
+  padding: 14px;
+  text-align: center;
+}
+
+#materiTable tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: 0.3s;
+}
+
+#materiTable tbody tr:hover {
+  background: #f8f9ff;
+}
+
+#materiTable a {
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#materiTable a:hover {
+  text-decoration: underline;
+}
+
+/* BUTTONS */
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-buttons button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.action-buttons button:first-child {
+  background: #f59e0b;
+  color: white;
+}
+
+.action-buttons button:first-child:hover {
+  background: #d97706;
+}
+
+.action-buttons button:last-child {
+  background: #ef4444;
+  color: white;
+}
+
+.action-buttons button:last-child:hover {
+  background: #dc2626;
+}
+
+/* DISKUSI BUTTON */
+
+td button {
+  border: none;
+  background: #10b981;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+td button:hover {
+  background: #059669;
+}
+
+/* EDIT FORM */
+
+.edit-form {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.edit-form.active {
+  display: block;
+}
+
+.edit-form h3 {
+  margin-bottom: 15px;
+  color: #374151;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="file"] {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.edit-form button {
+  border: none;
+  padding: 10px 16px;
+  margin-right: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-form button:first-of-type {
+  background: #2563eb;
+  color: white;
+}
+
+.edit-form button:first-of-type:hover {
+  background: #1d4ed8;
+}
+
+.edit-form button:last-of-type {
+  background: #6b7280;
+  color: white;
+}
+
+.edit-form button:last-of-type:hover {
+  background: #4b5563;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  body {
+    padding: 15px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  #uploadForm {
+    flex-direction: column;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  #materiTable {
+    display: block;
+    overflow-x: auto;
+  }
+}
