@@ -1,336 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 /* =========================
-   GOOGLE FONT
+   ROOT
 ========================= */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root{
+  --primary:#2a5298;
+  --primary-dark:#1e3c72;
+
+  --background:#f4f7fb;
+  --card:#ffffff;
+
+  --text:#1f2937;
+  --text-light:#64748b;
+
+  --border:#e2e8f0;
+
+  --success:#16a34a;
+  --danger:#dc2626;
+
+  --shadow:
+    0 8px 20px rgba(0,0,0,.08);
+}
 
 /* =========================
    RESET
 ========================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+
+  background:var(--background);
+
+  color:var(--text);
+
+  padding:30px 20px;
+
+  max-width:1000px;
+  margin:auto;
 }
 
 /* =========================
-   BODY
+   HEADER
 ========================= */
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
-  padding: 40px 20px;
-  color: #1f2937;
-}
 
-/* =========================
-   CONTAINER EFFECT
-========================= */
-body::before {
-  content: "";
-  position: fixed;
-  width: 350px;
-  height: 350px;
-  background: rgba(79, 70, 229, 0.08);
-  border-radius: 50%;
-  top: -120px;
-  right: -120px;
-  z-index: -1;
-}
+h2{
+  text-align:center;
 
-body::after {
-  content: "";
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  background: rgba(99, 102, 241, 0.08);
-  border-radius: 50%;
-  bottom: -120px;
-  left: -120px;
-  z-index: -1;
-}
+  color:var(--primary-dark);
 
-/* =========================
-   TITLE
-========================= */
-h2 {
-  max-width: 900px;
-  margin: auto;
-  margin-bottom: 25px;
-  font-size: 36px;
-  color: #312e81;
-  font-weight: 700;
+  margin-bottom:25px;
+
+  font-size:32px;
 }
 
 /* =========================
    INFO
 ========================= */
-#info {
-  max-width: 900px;
-  margin: auto;
-  margin-bottom: 20px;
+
+#info{
+  margin-bottom:20px;
 }
 
 /* =========================
-   TEXTAREA
+   FORM DISKUSI
 ========================= */
-textarea {
-  display: block;
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
-  min-height: 140px;
-  padding: 18px;
-  border-radius: 18px;
-  border: 1px solid #d1d5db;
-  outline: none;
-  resize: vertical;
-  font-size: 15px;
-  background: rgba(255,255,255,0.95);
-  transition: 0.3s;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+
+textarea{
+  width:100%;
+
+  min-height:140px;
+
+  resize:vertical;
+
+  padding:16px;
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  font-size:15px;
+
+  font-family:'Poppins',sans-serif;
+
+  background:white;
+
+  transition:.3s;
 }
 
-textarea:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 5px rgba(79,70,229,0.12);
+textarea:focus{
+  outline:none;
+
+  border-color:var(--primary);
+
+  box-shadow:
+    0 0 0 4px rgba(42,82,152,.15);
 }
 
 /* =========================
    BUTTON
 ========================= */
-button {
-  display: block;
-  margin: 18px auto 28px auto;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  box-shadow: 0 8px 20px rgba(79,70,229,0.25);
+
+.button-group{
+  display:flex;
+
+  gap:12px;
+
+  margin-top:15px;
+  margin-bottom:25px;
+
+  flex-wrap:wrap;
 }
 
-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(79,70,229,0.35);
+button{
+  border:none;
+
+  cursor:pointer;
+
+  font-family:'Poppins',sans-serif;
+
+  font-weight:600;
+
+  transition:.3s;
+}
+
+.send-btn{
+  background:var(--primary);
+
+  color:white;
+
+  padding:12px 24px;
+
+  border-radius:12px;
+}
+
+.send-btn:hover{
+  background:var(--primary-dark);
+
+  transform:translateY(-2px);
+}
+
+.back-btn{
+  background:#e2e8f0;
+
+  color:#334155;
+
+  padding:12px 24px;
+
+  border-radius:12px;
+}
+
+.back-btn:hover{
+  background:#cbd5e1;
+
+  transform:translateY(-2px);
 }
 
 /* =========================
    DIVIDER
 ========================= */
-hr {
-  max-width: 900px;
-  margin: auto;
-  margin-bottom: 25px;
-  border: none;
-  height: 1px;
-  background: #dbe3f0;
+
+hr{
+  border:none;
+
+  height:1px;
+
+  background:var(--border);
+
+  margin-bottom:25px;
 }
 
 /* =========================
-   DISKUSI LIST
+   LIST DISKUSI
 ========================= */
-#diskusiList {
-  max-width: 900px;
-  margin: auto;
+
+#diskusiList{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
 }
 
 /* =========================
-   DISKUSI CARD
+   ITEM DISKUSI
 ========================= */
-#diskusiList > div {
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 18px;
-  border: 1px solid rgba(255,255,255,0.4);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
-  transition: 0.3s ease;
-  animation: fadeIn 0.4s ease;
+
+#diskusiList > div{
+  background:var(--card);
+
+  border-radius:16px;
+
+  padding:18px;
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow);
 }
 
-#diskusiList > div:hover {
-  transform: translateY(-4px);
+#diskusiList b{
+  display:block;
+
+  color:var(--primary-dark);
+
+  margin-bottom:8px;
+
+  font-size:15px;
+}
+
+#diskusiList p{
+  color:var(--text);
+
+  line-height:1.7;
+
+  word-wrap:break-word;
 }
 
 /* =========================
-   USER NAME
+   EMPTY STATE
 ========================= */
-#diskusiList b {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #4338ca;
-  font-size: 16px;
+
+#diskusiList p:first-child{
+  margin:0;
 }
 
 /* =========================
-   MESSAGE
+   MOBILE
 ========================= */
-#diskusiList p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: #374151;
-}
 
-/* =========================
-   EMPTY MESSAGE
-========================= */
-#diskusiList > p {
-  text-align: center;
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  color: #6b7280;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
+@media (max-width:768px){
 
-/* =========================
-   SCROLLBAR
-========================= */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c7d2fe;
-  border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a5b4fc;
-}
-
-/* =========================
-   ANIMATION
-========================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+  body{
+    padding:20px 15px;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-
-  body {
-    padding: 25px 15px;
+  h2{
+    font-size:26px;
   }
 
-  h2 {
-    font-size: 28px;
+  textarea{
+    min-height:120px;
   }
 
-  textarea {
-    min-height: 120px;
-    padding: 16px;
-  }
-
-  button {
-    width: 100%;
-    max-width: 900px;
-  }
-
-  #diskusiList > div {
-    padding: 18px;
-  }
-}
-
-@media (max-width: 500px) {
-
-  h2 {
-    font-size: 24px;
-  }
-
-  textarea {
-    font-size: 14px;
-  }
-
-  #diskusiList p {
-    font-size: 14px;
-  }
-}
-
-/* =========================
-   BUTTON GROUP
-========================= */
-.button-group {
-  max-width: 900px;
-  margin: 20px auto 30px auto;
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-/* =========================
-   SEND BUTTON
-========================= */
-.send-btn {
-  border: none;
-  padding: 14px 26px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  box-shadow: 0 8px 20px rgba(79,70,229,0.25);
-}
-
-.send-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(79,70,229,0.35);
-}
-
-/* =========================
-   BACK BUTTON
-========================= */
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 24px;
-  border-radius: 14px;
-  background: white;
-  color: #4f46e5;
-  text-decoration: none;
-  font-weight: 600;
-  border: 2px solid #c7d2fe;
-  transition: 0.3s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-}
-
-.back-btn:hover {
-  background: #4f46e5;
-  color: white;
-  border-color: #4f46e5;
-  transform: translateY(-3px);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 600px) {
-
-  .button-group {
-    flex-direction: column;
+  .button-group{
+    flex-direction:column;
   }
 
   .send-btn,
-  .back-btn {
-    width: 100%;
+  .back-btn{
+    width:100%;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width:480px){
+
+  h2{
+    font-size:22px;
+  }
+
+  textarea{
+    font-size:14px;
+    padding:14px;
+  }
+
+  #diskusiList > div{
+    padding:15px;
   }
 }

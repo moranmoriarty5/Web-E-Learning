@@ -71,11 +71,11 @@ async function loadDiskusi() {
       const user = d.User ? d.User.nama : "Anonim";
 
       container.innerHTML += `
-        <div style="border:1px solid #ccc;padding:8px;margin-bottom:8px">
-          <b>${user}</b><br>
-          <p>${d.isi_pesan}</p>
-        </div>
-      `;
+  <div class="chat-card">
+    <b>👤 ${user}</b>
+    <p>${d.isi_pesan}</p>
+  </div>
+`;
     });
 
   } catch (err) {

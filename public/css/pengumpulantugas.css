@@ -1,0 +1,283 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f4f7fb;
+  color: #1f2937;
+  min-height: 100vh;
+  padding: 25px;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.tugas-page {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.top-bar {
+  background: linear-gradient(
+    135deg,
+    #1e3c72,
+    #2a5298
+  );
+  color: white;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.12);
+}
+
+.top-bar h1 {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+#infoNama {
+  opacity: .9;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.top-bar button,
+.actions button,
+.button {
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px 18px;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: .3s;
+}
+
+.top-bar button {
+  background: white;
+  color: #2a5298;
+}
+
+.top-bar button:hover {
+  transform: translateY(-2px);
+}
+
+/* =========================
+   MATERI LIST
+========================= */
+
+#materiList {
+  display: grid;
+  gap: 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.materi-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,.08);
+
+  transition: .3s;
+}
+
+.materi-card:hover {
+  transform: translateY(-4px);
+}
+
+.materi-card h3 {
+  color: #2563eb;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.meta {
+  color: #64748b;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.button {
+  background: #2563eb;
+  color: white;
+}
+
+.button:hover {
+  background: #1d4ed8;
+}
+
+.actions button {
+  background: #16a34a;
+  color: white;
+}
+
+.actions button:hover {
+  background: #15803d;
+}
+
+/* =========================
+   SUBMISSION LIST
+========================= */
+
+.submission-list {
+  margin-top: 10px;
+}
+
+.submission-item {
+  background: #f8fafc;
+  border-left: 4px solid #2563eb;
+
+  padding: 15px;
+  border-radius: 10px;
+
+  margin-bottom: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+
+  flex-wrap: wrap;
+}
+
+.submission-item b {
+  color: #1f2937;
+}
+
+.submission-item a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.submission-item a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   EMPTY MESSAGE
+========================= */
+
+#materiList > p,
+.submission-list > p {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,.08);
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.submission-list p {
+  color: #64748b;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  body {
+    padding: 15px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top-bar h1 {
+    font-size: 24px;
+  }
+
+  .top-bar button {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button,
+  .button {
+    width: 100%;
+  }
+
+  .submission-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .materi-card {
+    padding: 20px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+  .top-bar h1 {
+    font-size: 20px;
+  }
+
+  .materi-card h3 {
+    font-size: 18px;
+  }
+
+  .submission-item {
+    font-size: 14px;
+  }
+}
