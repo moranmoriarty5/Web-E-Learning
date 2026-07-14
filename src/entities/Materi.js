@@ -13,6 +13,5 @@ export const Materi = sequelize.define("Materi", {
   },
 });
 
-// Relasi 1 mata pelajaran memiliki banyak materi
 Materi.belongsTo(MataPelajaran, { foreignKey: "mataPelajaranId" });
 MataPelajaran.hasMany(Materi, { foreignKey: "mataPelajaranId" });

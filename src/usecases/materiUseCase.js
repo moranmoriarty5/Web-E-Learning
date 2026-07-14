@@ -1,8 +1,8 @@
 import { Materi } from "../entities/Materi.js";
 import { MataPelajaran } from "../entities/MataPelajaran.js";
 import { Tugas } from "../entities/Tugas.js";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 export const uploadMateri = async ({ judul, mataPelajaranId, userId, filePath }) => {
   const mapel = await MataPelajaran.findOne({

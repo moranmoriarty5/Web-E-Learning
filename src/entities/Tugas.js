@@ -18,10 +18,8 @@ export const Tugas = sequelize.define("Tugas", {
   },
 });
 
-// Relasi: 1 materi dapat memiliki banyak tugas
 Tugas.belongsTo(Materi, { foreignKey: "materiId" });
 Materi.hasMany(Tugas, { foreignKey: "materiId" });
 
-// Relasi ke User (siswa)
 Tugas.belongsTo(User, { foreignKey: "siswaId" });
 User.hasMany(Tugas, { foreignKey: "siswaId" });

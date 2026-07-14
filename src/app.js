@@ -27,7 +27,6 @@ app.use("/api/tugas", tugasRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/diskusi", diskusiRoutes);
 
-// Routing ke halaman utama
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });

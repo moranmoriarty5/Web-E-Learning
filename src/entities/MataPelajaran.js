@@ -6,7 +6,7 @@ export const MataPelajaran = sequelize.define("MataPelajaran", {
   nama_mapel: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // nama mapel tidak boleh duplikat
+    unique: true,
   },
 
   deskripsi: {
@@ -17,7 +17,7 @@ export const MataPelajaran = sequelize.define("MataPelajaran", {
   pengajarId: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    unique: true, // 1 pengajar hanya bisa punya 1 mapel
+    unique: true,
   },
 });
 

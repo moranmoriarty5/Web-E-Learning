@@ -8,12 +8,11 @@ export const verifyToken = (req, res, next) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(401).json({ message: "Token tidak valid" });
 
-    req.user = decoded; // simpan data user di request
+    req.user = decoded;
     next();
   });
 };
 
-// Middleware khusus role
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

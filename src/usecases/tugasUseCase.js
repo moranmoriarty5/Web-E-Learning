@@ -1,8 +1,8 @@
 import { Tugas } from "../entities/Tugas.js";
 import { Materi } from "../entities/Materi.js";
 import { User } from "../entities/User.js";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 export const submitTugas = async ({ judul, materiId, siswaId, filePath }) => {
   const materi = await Materi.findByPk(materiId);

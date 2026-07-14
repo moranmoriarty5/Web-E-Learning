@@ -15,7 +15,7 @@ export const create = async (req, res) => {
   try {
     await DiskusiUseCase.createDiskusi(
       req.body.materiId,
-      req.user.id,          // ✅ JWT
+      req.user.id,
       req.body.isi_pesan,
       req.body.parent_id || null
     );
@@ -30,7 +30,7 @@ export const update = async (req, res) => {
   try {
     await DiskusiUseCase.updateDiskusi(
       req.params.id,
-      req.user.id,          // ✅ JWT
+      req.user.id,  
       req.body.isi_pesan
     );
 

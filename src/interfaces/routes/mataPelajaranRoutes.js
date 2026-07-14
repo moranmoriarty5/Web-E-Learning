@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get("/", mataPelajaranController.getAll);
 
-// endpoint mapel berdasarkan pengajar
 router.get(
   "/pengajar/:userId",
   mataPelajaranController.getByPengajar

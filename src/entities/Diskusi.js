@@ -14,13 +14,11 @@ export const Diskusi = sequelize.define("Diskusi", {
   },
 });
 
-// RELASI
 User.hasMany(Diskusi, { foreignKey: "userId" });
 Diskusi.belongsTo(User, { foreignKey: "userId" });
 
 Materi.hasMany(Diskusi, { foreignKey: "materiId" });
 Diskusi.belongsTo(Materi, { foreignKey: "materiId" });
 
-// REPLY
 Diskusi.hasMany(Diskusi, { foreignKey: "parent_id", as: "replies" });
 Diskusi.belongsTo(Diskusi, { foreignKey: "parent_id", as: "parent" });

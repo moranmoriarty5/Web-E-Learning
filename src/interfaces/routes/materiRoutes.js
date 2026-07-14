@@ -8,7 +8,6 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "../../../uploads/materi"),
   filename: (req, file, cb) => {
@@ -18,7 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
-// Upload & ambil data materi
 router.post("/upload", upload.single("filePath"), materiController.uploadMateri);
 router.get("/", materiController.getMateri);
 router.get("/:id", materiController.getMateriById);
@@ -26,5 +24,3 @@ router.put("/:id", upload.single("filePath"), materiController.update);
 router.delete("/:id", materiController.delete_);
 
 export default router;
-
-

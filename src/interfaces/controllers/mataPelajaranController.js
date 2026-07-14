@@ -20,7 +20,6 @@ export const getByPengajar = async (req, res) => {
   }
 };
 
-// Tambah mata pelajaran baru
 export const create = async (req, res) => {
   try {
     const newPelajaran = await mataPelajaranUseCase.createMataPelajaran(req.body);
