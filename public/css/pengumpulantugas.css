@@ -152,8 +152,8 @@ body {
 }
 
 .actions button {
-  background: #16a34a;
-  color: white;
+  background: #124f28;
+  color: rgb(255, 255, 255);
 }
 
 .actions button:hover {

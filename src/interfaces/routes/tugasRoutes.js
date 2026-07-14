@@ -3,6 +3,10 @@ import multer from "multer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as tugasController from "../controllers/tugasController.js";
+import {
+  verifyToken,
+  authorizeRoles
+} from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -10,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 // storage
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../uploads"),
+  destination: path.join(__dirname, "../../../uploads/tugas"),
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
@@ -29,5 +33,11 @@ const upload = multer({
 
 router.post("/submit", upload.single("file"), tugasController.submit);
 router.get("/materi/:materiId", tugasController.listByMateri);
+router.delete(
+    "/submit/:materiId",
+    verifyToken,
+    authorizeRoles("siswa"),
+    tugasController.deleteSubmit
+);
 
 export default router;

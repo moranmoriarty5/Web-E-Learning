@@ -17,7 +17,7 @@ export const submit = async (req, res) => {
       judul,
       materiId,
       siswaId,
-      filePath: `/uploads/${req.file.filename}`,
+      filePath: `/uploads/tugas/${req.file.filename}`,
     });
 
     res.status(201).json({ status: "success", message: "Tugas berhasil dikumpulkan", data: tugas });
@@ -35,3 +35,28 @@ export const listByMateri = async (req, res) => {
     error(res, err.message);
   }
 };
+
+export const deleteSubmit = async (req,res)=>{
+
+    try{
+
+        const materiId = req.params.materiId;
+
+        const siswaId = req.user.id;
+
+        await tugasUseCase.deleteTugas(
+            materiId,
+            siswaId
+        );
+
+        success(
+            res,
+            null,
+            "Pengumpulan berhasil dihapus"
+        );
+
+    }catch(err){
+        error(res,err.message);
+    }
+
+}

@@ -96,8 +96,6 @@
 </div>
 
 <script>
-/* ================= AUTH ================= */
-
 const nama = localStorage.getItem("nama");
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
@@ -240,8 +238,6 @@ function updateStatistics(
     totalTugasSelesai;
 }
 
-/* ================= RENDER ================= */
-
 async function renderMateri(
   data
 ) {
@@ -373,6 +369,15 @@ async function renderMateri(
               >
                 Lihat File
               </a>
+
+              <br><br>
+
+              <button
+                onclick="hapusTugas(${m.id})"
+                class="delete-btn"
+              >
+                🗑 Hapus Pengumpulan
+              </button>
             `
               : `
               <button
@@ -453,7 +458,39 @@ function openTugas(
     `/tugas?materiId=${materiId}`;
 }
 
-/* ================= INIT ================= */
+async function hapusTugas(materiId){
+
+    if(!confirm("Hapus tugas yang sudah dikumpulkan?")){
+        return;
+    }
+
+    try{
+
+        const res = await fetch(
+            `/api/tugas/submit/${materiId}`,
+            {
+                method:"DELETE",
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            }
+        );
+
+        const result = await res.json();
+
+        alert(result.message);
+
+        loadMateri();
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Gagal menghapus tugas");
+
+    }
+
+}
 
 loadMateri();
 </script>

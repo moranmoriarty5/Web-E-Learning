@@ -23,7 +23,7 @@ export const loginUser = async (email, password) => {
       nama: user.nama,
       email: user.email,
     },
-    process.env.JWT_SECRET || "rahasiaSuperKuat123", // fallback kalau .env belum ada
+    process.env.JWT_SECRET,
     { expiresIn: "2h" }
   );
 

@@ -133,7 +133,6 @@ async function loadMataPelajaran() {
   });
 }
 
-/* ================= RENDER ================= */
 function renderMateri(data) {
   const tbody = document.querySelector("#materiTable tbody");
   tbody.innerHTML = "";
@@ -174,12 +173,10 @@ function filterMateri() {
   renderMateri(filtered);
 }
 
-/* ================= FORUM ================= */
 function openForum(materiId) {
   globalThis.location.href = `/diskusi.html?materiId=${materiId}`;
 }
 
-/* ================= INIT ================= */
 loadMateri();
     </script>
   </body>

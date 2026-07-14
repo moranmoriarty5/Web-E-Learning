@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 // Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../../uploads"),
+  destination: path.join(__dirname, "../../../uploads/materi"),
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },

@@ -12,7 +12,7 @@ export const uploadMateri = async (req, res) => {
       judul,
       mataPelajaranId,
       userId,
-      filePath: `/uploads/${req.file.filename}`,
+      filePath: `/uploads/materi/${req.file.filename}`,
     });
 
     res.status(201).json({
@@ -62,7 +62,7 @@ export const update = async (req, res) => {
 
     const updateData = { judul };
     if (req.file) {
-      updateData.filePath = `/uploads/${req.file.filename}`;
+      updateData.filePath = `/uploads/materi/${req.file.filename}`;
     }
 
     const updatedMateri = await materiUseCase.updateMateri(id, updateData, userId);

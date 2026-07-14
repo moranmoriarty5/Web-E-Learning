@@ -90,7 +90,6 @@ const userId = localStorage.getItem("userId");
 
 let mataPelajaranId = null;
 
-// ambil mapel pengajar login
 async function loadMataPelajaran() {
 
   try {
@@ -185,7 +184,6 @@ async function loadMateri() {
   tbody.innerHTML = "";
 
   materi.forEach((m, i) => {
-    // Filter: hanya tampilkan materi milik pengajar login
     const isOwner = m.MataPelajaran?.pengajarId === Number.parseInt(userId);
 
     tbody.innerHTML += `

@@ -1,5 +1,8 @@
 import { Materi } from "../entities/Materi.js";
 import { MataPelajaran } from "../entities/MataPelajaran.js";
+import { Tugas } from "../entities/Tugas.js";
+import fs from "fs";
+import path from "path";
 
 export const uploadMateri = async ({ judul, mataPelajaranId, userId, filePath }) => {
   const mapel = await MataPelajaran.findOne({
@@ -48,14 +51,32 @@ export const updateMateri = async (materiId, { judul, filePath }, userId) => {
     throw new Error("Materi tidak ditemukan");
   }
 
-  // Verify pengajar owns this materi
   if (materi.MataPelajaran.pengajarId !== Number.parseInt(userId)) {
     throw new Error("Anda tidak memiliki akses untuk mengubah materi ini");
   }
 
   const updateData = {};
-  if (judul) updateData.judul = judul;
-  if (filePath) updateData.filePath = filePath;
+
+  if (judul) {
+    updateData.judul = judul;
+  }
+
+  if (filePath) {
+
+    if (materi.filePath) {
+
+      const oldFilePath = path.join(
+        process.cwd(),
+        materi.filePath.substring(1)
+      );
+
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+      }
+    }
+
+    updateData.filePath = filePath;
+  }
 
   return await materi.update(updateData);
 };
@@ -69,7 +90,30 @@ export const deleteMateri = async (materiId, userId) => {
     throw new Error("Materi tidak ditemukan");
   }
 
-  // Verify pengajar owns this materi
+  const jumlahTugas = await Tugas.count({
+        where: {
+            materiId: materiId
+        }
+    });
+
+    if (jumlahTugas > 0) {
+        throw new Error(
+            "Materi tidak dapat dihapus karena masih memiliki tugas."
+        );
+    }
+
+  if (materi.filePath) {
+
+    const filePath = path.join(
+      process.cwd(),
+      materi.filePath.substring(1)
+    );
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+  }
+
   if (materi.MataPelajaran.pengajarId !== Number.parseInt(userId)) {
     throw new Error("Anda tidak memiliki akses untuk menghapus materi ini");
   }
