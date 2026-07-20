@@ -289,9 +289,7 @@
 
         const result = await resPengajar.json();
         const pengajar = result.data || result;
-
         const select = document.getElementById("pengajarSelect");
-
         select.innerHTML = '<option value="">-- Pilih Pengajar --</option>';
 
         pengajar.forEach((p) => {
@@ -353,23 +351,10 @@
       }
 
       async function cancelUserEdit(){
-
-          document.getElementById(
-              "userId"
-          ).value="";
-
-          document.getElementById(
-              "addUserForm"
-          ).reset();
-
-          document.querySelector(
-              "#addUserForm button[type='submit']"
-          ).textContent="Tambah Pengguna";
-
-          document.getElementById(
-              "cancelUserEditBtn"
-          ).style.display="none";
-
+          document.getElementById("userId").value="";
+          document.getElementById("addUserForm").reset();
+          document.querySelector("#addUserForm button[type='submit']").textContent="Tambah Pengguna";
+          document.getElementById("cancelUserEditBtn").style.display="none";
       }
 
       // EDIT PELAJARAN
@@ -407,7 +392,6 @@
         if (id) {
           url = `/api/mata-pelajaran/${id}`; method = "PUT";
         }
-
             const res = await fetch(
               url,
               {
@@ -425,7 +409,6 @@
 
             const data =await res.json();
             alert(data.message || "Berhasil!");
-
             loadPelajaran();
             loadAvailablePengajar();
 
@@ -473,10 +456,8 @@
 
           // Kembalikan form ke mode tambah
           cancelUserEdit();
-
           loadUsers();
           loadAvailablePengajar();
-
         });
 
       // INIT

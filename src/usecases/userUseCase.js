@@ -52,54 +52,6 @@ export const createUserByAdmin = async ({ nama, email, password, role }) => {
   };
 };
 
-export const updateProfile = async ({
-    id,
-    nama,
-    email,
-    password
-}) => {
-
-    const user = await User.findByPk(id);
-
-    if (!user) {
-        throw new Error("User tidak ditemukan");
-    }
-
-    // cek email jika berubah
-    if (email && email !== user.email) {
-
-        const existing = await User.findOne({
-            where: { email }
-        });
-
-        if (existing) {
-            throw new Error("Email sudah digunakan");
-        }
-
-    }
-
-    const updateData = {};
-
-    if (nama) updateData.nama = nama;
-    if (email) updateData.email = email;
-
-    if (password && password.trim() !== "") {
-        updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    // role tidak pernah diubah
-
-    await user.update(updateData);
-
-    return {
-        id: user.id,
-        nama: user.nama,
-        email: user.email,
-        role: user.role
-    };
-
-};
-
 export const updateUserByAdmin = async ({
     id,
     nama,

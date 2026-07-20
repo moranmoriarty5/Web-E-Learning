@@ -22,11 +22,6 @@ router.post(
   userController.createUserByAdmin
 );
 router.put(
-    "/profile",
-    verifyToken,
-    userController.updateProfile
-);
-router.put(
     "/:id",
     verifyToken,
     authorizeRoles("admin"),
