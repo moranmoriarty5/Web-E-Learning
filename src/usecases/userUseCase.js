@@ -15,7 +15,7 @@ export const loginUser = async (email, password) => {
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw new Error("Password salah");
 
-  // ✅ Buat JWT token
+  // Buat JWT token
   const token = jwt.sign(
     {
       id: user.id,
@@ -50,6 +50,99 @@ export const createUserByAdmin = async ({ nama, email, password, role }) => {
     email: user.email,
     role: user.role,
   };
+};
+
+export const updateProfile = async ({
+    id,
+    nama,
+    email,
+    password
+}) => {
+
+    const user = await User.findByPk(id);
+
+    if (!user) {
+        throw new Error("User tidak ditemukan");
+    }
+
+    // cek email jika berubah
+    if (email && email !== user.email) {
+
+        const existing = await User.findOne({
+            where: { email }
+        });
+
+        if (existing) {
+            throw new Error("Email sudah digunakan");
+        }
+
+    }
+
+    const updateData = {};
+
+    if (nama) updateData.nama = nama;
+    if (email) updateData.email = email;
+
+    if (password && password.trim() !== "") {
+        updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    // role tidak pernah diubah
+
+    await user.update(updateData);
+
+    return {
+        id: user.id,
+        nama: user.nama,
+        email: user.email,
+        role: user.role
+    };
+
+};
+
+export const updateUserByAdmin = async ({
+    id,
+    nama,
+    email,
+    password,
+    role
+}) => {
+
+    const user = await User.findByPk(id);
+
+    if (!user) {
+        throw new Error("User tidak ditemukan");
+    }
+
+    if (user.role === "admin") {
+        throw new Error("Admin tidak boleh diubah.");
+    }
+
+    if (email && email !== user.email) {
+
+        const existing = await User.findOne({
+            where: { email }
+        });
+
+        if (existing) {
+            throw new Error("Email sudah digunakan");
+        }
+
+    }
+
+    const updateData = {};
+
+    if (nama) updateData.nama = nama;
+    if (email) updateData.email = email;
+    if (role) updateData.role = role;
+
+    if (password && password.trim() !== "") {
+        updateData.password = await bcrypt.hash(password,10);
+    }
+
+    await user.update(updateData);
+
+    return user;
 };
 
 export const deleteUserById = async (id) => {

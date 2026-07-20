@@ -58,6 +58,59 @@ export const createUserByAdmin = async (req, res) => {
   }
 };
 
+export const updateProfile = async (req, res) => {
+
+    try {
+
+        const result = await userUseCase.updateProfile({
+
+            id: req.user.id,
+            nama: req.body.nama,
+            email: req.body.email,
+            password: req.body.password
+
+        });
+
+        success(
+            res,
+            result,
+            "Profil berhasil diperbarui"
+        );
+
+    } catch (err) {
+
+        error(res, err.message);
+
+    }
+
+};
+
+export const updateUserByAdmin = async (req, res) => {
+
+    try {
+
+        const result = await userUseCase.updateUserByAdmin({
+            id: req.params.id,
+            nama: req.body.nama,
+            email: req.body.email,
+            password: req.body.password,
+            role: req.body.role
+        });
+
+        success(
+            res,
+            result,
+            "User berhasil diperbarui oleh admin"
+        );
+
+    } catch (err) {
+
+        error(res, err.message);
+
+    }
+
+};
+
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
