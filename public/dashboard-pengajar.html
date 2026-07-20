@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <title>Dashboard Pengajar</title>
     <link rel="stylesheet" href="css/dashpengajar.css" />
   </head>
-   <body>
+  <body>
     <h1>Selamat datang, <span id="nama"></span> 👨‍🏫</h1>
     <p>Anda login sebagai <b>Pengajar</b>.</p>
 
@@ -21,36 +21,36 @@
     </div>
 
     <main class="content">
-    <h1>📂 Daftar Materi</h1>
+      <h1>📂 Daftar Materi</h1>
 
-    <!-- FILTER -->
-    <div class="filter-container">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="🔍 Cari materi..."
-        oninput="filterMateri()"
-      />
+      <!-- FILTER -->
+      <div class="filter-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Cari materi..."
+          oninput="filterMateri()"
+        />
 
-      <select id="filterMapel" onchange="filterMateri()">
-        <option value="">Semua Mata Pelajaran</option>
-      </select>
-    </div>
+        <select id="filterMapel" onchange="filterMateri()">
+          <option value="">Semua Mata Pelajaran</option>
+        </select>
+      </div>
 
-    <!-- TABLE -->
-    <table id="materiTable">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Judul</th>
-          <th>Mata Pelajaran</th>
-          <th>File</th>
-          <th>Forum</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </main>
+      <!-- TABLE -->
+      <table id="materiTable">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Judul</th>
+            <th>Mata Pelajaran</th>
+            <th>File</th>
+            <th>Forum</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
 
     <script>
       const nama = localStorage.getItem("nama");
@@ -102,82 +102,80 @@
         globalThis.location.href = "/login";
       }
 
-      loadMapel();
+      await loadMapel();
 
       let allMateri = [];
 
-/* ================= LOAD DATA ================= */
-async function loadMateri() {
-  const res = await fetch("/api/materi", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+      async function loadMateri() {
+        const res = await fetch("/api/materi", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-  const result = await res.json();
-  allMateri = result.data || result;
-  renderMateri(allMateri);
-  loadMataPelajaran();
-}
+        const result = await res.json();
+        allMateri = result.data || result;
+        renderMateri(allMateri);
+        loadMataPelajaran();
+      }
 
-async function loadMataPelajaran() {
-  const res = await fetch("/api/mata-pelajaran");
-  const result = await res.json();
-  const mapel = result.data || result;
+      async function loadMataPelajaran() {
+        const res = await fetch("/api/mata-pelajaran");
+        const result = await res.json();
+        const mapel = result.data || result;
 
-  const select = document.getElementById("filterMapel");
+        const select = document.getElementById("filterMapel");
 
-  mapel.forEach(m => {
-    const opt = document.createElement("option");
-    opt.value = m.nama_mapel;
-    opt.textContent = m.nama_mapel;
-    select.appendChild(opt);
-  });
-}
+        mapel.forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m.nama_mapel;
+          opt.textContent = m.nama_mapel;
+          select.appendChild(opt);
+        });
+      }
 
-function renderMateri(data) {
-  const tbody = document.querySelector("#materiTable tbody");
-  tbody.innerHTML = "";
+      function renderMateri(data) {
+        const tbody = document.querySelector("#materiTable tbody");
+        tbody.innerHTML = "";
 
-  data.forEach((m, i) => {
-    const isOwner = m.MataPelajaran?.pengajarId == pengajarId;
+        data.forEach((m, i) => {
+          const isOwner = m.MataPelajaran?.pengajarId == pengajarId;
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${m.judul}</td>
-      <td>${m.MataPelajaran?.nama_mapel || "-"}</td>
-      <td>
-        <a href="${m.filePath}" target="_blank">📄 Lihat</a>
-      </td>
-      <td>
-        <button onclick="openForum(${m.id})">💬 Diskusi</button>
-      </td>
-    `;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${m.judul}</td>
+            <td>${m.MataPelajaran?.nama_mapel || "-"}</td>
+            <td>
+              <a href="${m.filePath}" target="_blank">📄 Lihat</a>
+            </td>
+            <td>
+              <button onclick="openForum(${m.id})">💬 Diskusi</button>
+            </td>
+          `;
 
-    tbody.appendChild(tr);
-  });
-}
+          tbody.appendChild(tr);
+        });
+      }
 
-/* ================= FILTER ================= */
-function filterMateri() {
-  const keyword = document
-    .getElementById("searchInput")
-    .value.toLowerCase();
+      function filterMateri() {
+        const keyword = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
 
-  const mapel = document.getElementById("filterMapel").value;
+        const mapel = document.getElementById("filterMapel").value;
 
-  const filtered = allMateri.filter(m =>
-    m.judul.toLowerCase().includes(keyword) &&
-    (mapel === "" || m.MataPelajaran?.nama_mapel === mapel)
-  );
+        const filtered = allMateri.filter(m =>
+          m.judul.toLowerCase().includes(keyword) &&
+          (mapel === "" || m.MataPelajaran?.nama_mapel === mapel)
+        );
 
-  renderMateri(filtered);
-}
+        renderMateri(filtered);
+      }
 
-function openForum(materiId) {
-  globalThis.location.href = `/diskusi.html?materiId=${materiId}`;
-}
+      function openForum(materiId) {
+        globalThis.location.href = `/diskusi.html?materiId=${materiId}`;
+      }
 
-loadMateri();
+      await loadMateri();
     </script>
   </body>
 </html>

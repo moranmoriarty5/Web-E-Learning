@@ -1,11 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Dashboard Admin</title>
 
@@ -24,9 +21,7 @@
     </div>
 
     <nav class="menu">
-      <button onclick="showSection('users')">
-        👥 Kelola Pengguna
-      </button>
+      <button onclick="showSection('users')">👥 Kelola Pengguna</button>
 
       <button onclick="showSection('pelajaran')">
         📚 Kelola Mata Pelajaran
@@ -56,20 +51,10 @@
       <h3>Tambah Pengguna Baru</h3>
 
       <form id="addUserForm">
-        <input type="hidden" id="userId">
-        <input
-          type="text"
-          id="namaUser"
-          placeholder="Nama"
-          required
-        />
+        <input type="hidden" id="userId" />
+        <input type="text" id="namaUser" placeholder="Nama" required />
 
-        <input
-          type="email"
-          id="emailUser"
-          placeholder="Email"
-          required
-        />
+        <input type="email" id="emailUser" placeholder="Email" required />
 
         <input
           type="password"
@@ -83,13 +68,11 @@
           <option value="pengajar">Pengajar</option>
         </select>
 
-        <button type="submit">
-          Tambah Pengguna
-        </button>
+        <button type="submit">Tambah Pengguna</button>
         <button
           type="button"
           id="cancelUserEditBtn"
-          style="display:none"
+          style="display: none"
           onclick="cancelUserEdit()"
         >
           Batal Edit
@@ -112,22 +95,12 @@
         />
 
         <select id="pengajarSelect" required>
-          <option value="">
-            -- Pilih Pengajar --
-          </option>
+          <option value="">-- Pilih Pengajar --</option>
         </select>
 
-        <textarea
-          id="deskripsiPelajaran"
-          placeholder="Deskripsi"
-        ></textarea>
+        <textarea id="deskripsiPelajaran" placeholder="Deskripsi"></textarea>
 
-        <button
-          type="submit"
-          id="submitPelajaranBtn"
-        >
-          Tambah
-        </button>
+        <button type="submit" id="submitPelajaranBtn">Tambah</button>
 
         <button
           type="button"
@@ -182,64 +155,32 @@
 
       // LOAD USERS
       async function loadUsers() {
-        const response = await fetch(
-          "/api/users",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem(
-                "token"
-              )}`,
-            },
+        const response = await fetch("/api/users",{
+          headers: {Authorization: `Bearer ${
+          localStorage.getItem("token")}`,},
           }
         );
 
         const result = await response.json();
         const users = result.data || result;
-
-        const tbody = document.querySelector(
-          "#userTable tbody"
-        );
-
+        const tbody = document.querySelector("#userTable tbody");
         tbody.innerHTML = users.map((u) => `
-            <tr>
-              <td>${u.id}</td>
-              <td>${u.nama}</td>
-              <td>${u.email}</td>
+          <tr>
+            <td>${u.id}</td>
+            <td>${u.nama}</td>
+            <td>${u.email}</td>
+            <td><span class="role ${u.role}">${u.role}</span></td>
 
-              <td>
-                <span class="role ${u.role}">
-                  ${u.role}
-                </span>
-              </td>
-
-              <td>
-                ${
-                  u.role === "admin"
-                    ? "-"
-                    : `
-                      <button
-                        onclick="editUser(
-                          ${u.id},
-                          '${u.nama}',
-                          '${u.email}',
-                          '${u.role}'
-                        )"
-                      >
-                        ✏ Edit
-                      </button>
-                      <button
-                        class="delete-btn"
-                        onclick="deleteUser(${u.id})"
-                      >
-                        🗑 Hapus
-                      </button>
-                    `
-                }
-              </td>
-            </tr>
-          `
-          )
-          .join("");
+            <td>${u.role === "admin"? "-":
+              `<button class="delete-btn" onclick="editUser(${u.id},'${u.nama}','${u.email}','${u.role}')">
+                ✏ Edit
+              </button>
+              <button class="delete-btn" onclick="deleteUser(${u.id})">
+                🗑 Hapus
+              </button>` }
+            </td>
+          </tr>`
+        ).join("");
       }
 
       // DELETE USER
@@ -248,20 +189,12 @@
         if (!confirmDelete) return;
         try {
           const res = await fetch(
-            `/api/users/${id}`,
-            {
-              method: "DELETE",
-
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem(
-                  "token"
-                )}`,
-              },
+            `/api/users/${id}`,{
+              method: "DELETE",headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,},
             }
           );
 
           const result = await res.json();
-
           alert(result.message || "User berhasil dihapus!");
 
           loadUsers();
@@ -269,7 +202,6 @@
           loadPelajaran();
         } catch (error) {
           console.error(error);
-
           alert("Gagal menghapus user");
         }
       }
@@ -277,14 +209,7 @@
       // LOAD PENGAJAR
       async function loadAvailablePengajar(selectedId = "") {
         const resPengajar = await fetch(
-          "/api/users?role=pengajar",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem(
-                "token"
-              )}`,
-            },
-          }
+          "/api/users?role=pengajar",{headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,},}
         );
 
         const result = await resPengajar.json();
@@ -339,7 +264,7 @@
           `
           ).join("");
       }
-      
+
       async function editUser(id,nama,email,role){
         document.getElementById("userId").value=id;
         document.getElementById("namaUser").value=nama;
@@ -380,7 +305,7 @@
       // TAMBAH / UPDATE PELAJARAN
       document.getElementById("addPelajaranForm").addEventListener("submit",async (e) => {
         e.preventDefault();
-            
+
         const id = document.getElementById("pelajaranId").value;
         const nama_mapel = document.getElementById("namaPelajaran").value;
         const deskripsi = document.getElementById("deskripsiPelajaran").value;
@@ -461,8 +386,8 @@
         });
 
       // INIT
-      loadUsers();
-      loadPelajaran();
+      await loadUsers();
+      await loadPelajaran();
       loadAvailablePengajar();
     </script>
   </body>

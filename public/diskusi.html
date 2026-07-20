@@ -1,131 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Forum Diskusi</title>
-  <link rel="stylesheet" href="css/diskusi.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Forum Diskusi</title>
+    <link rel="stylesheet" href="css/diskusi.css" />
+  </head>
+  <body>
+    <h2>💬 Forum Diskusi Materi</h2>
 
-<h2>💬 Forum Diskusi Materi</h2>
+    <div id="info"></div>
 
-<div id="info"></div>
+    <textarea id="isi_pesan" placeholder="Tulis komentar..."></textarea>
+    <br />
+    <div class="button-group">
+      <button onclick="kirimDiskusi()" class="send-btn">🚀 Kirim</button>
 
-<textarea id="isi_pesan" placeholder="Tulis komentar..."></textarea>
-<br>
-<div class="button-group">
-  <button onclick="kirimDiskusi()" class="send-btn">
-    🚀 Kirim
-  </button>
+      <button onclick="kembali()" class="back-btn">← Kembali</button>
+    </div>
 
-  <button onclick="kembali()" class="back-btn">
-  ← Kembali
-</button>
-</div>
+    <hr />
 
-<hr>
+    <div id="diskusiList"></div>
 
-<div id="diskusiList"></div>
+    <script>
+      /* ================= VALIDASI ================= */
+      const params = new URLSearchParams(globalThis.location.search);
+      const materiId = params.get("materiId");
+      const token = localStorage.getItem("token");
 
-<script>
-/* ================= VALIDASI ================= */
-const params = new URLSearchParams(globalThis.location.search);
-const materiId = params.get("materiId");
-const token = localStorage.getItem("token");
-
-if (!materiId) {
-  document.body.innerHTML = "<h3>❌ Materi tidak ditemukan</h3>";
-  throw new Error("materiId null");
-}
-
-if (!token) {
-  alert("Akses ditolak, silakan login");
-  globalThis.location.href = "/login";
-}
-
-/* ================= LOAD ================= */
-async function loadDiskusi() {
-  try {
-    const res = await fetch(`/api/diskusi/${materiId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+      if (!materiId) {
+        document.body.innerHTML = "<h3>❌ Materi tidak ditemukan</h3>";
+        throw new Error("materiId null");
       }
-    });
 
-    if (!res.ok) {
-      throw new Error("Gagal mengambil diskusi");
-    }
+      if (!token) {
+        alert("Akses ditolak, silakan login");
+        globalThis.location.href = "/login";
+      }
 
-    const result = await res.json();
-    const data = result.data || result;
+      /* ================= LOAD ================= */
+      async function loadDiskusi() {
+        try {
+          const res = await fetch(`/api/diskusi/${materiId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
 
-    const container = document.getElementById("diskusiList");
-    container.innerHTML = "";
+          if (!res.ok) {
+            throw new Error("Gagal mengambil diskusi");
+          }
 
-    if (!data || data.length === 0) {
-      container.innerHTML = "<p>Belum ada diskusi.</p>";
-      return;
-    }
+          const result = await res.json();
+          const data = result.data || result;
 
-    data.forEach(d => {
-      const user = d.User ? d.User.nama : "Anonim";
+          const container = document.getElementById("diskusiList");
+          container.innerHTML = "";
 
-      container.innerHTML += `
-  <div class="chat-card">
-    <b>👤 ${user}</b>
-    <p>${d.isi_pesan}</p>
-  </div>
-`;
-    });
+          if (!data || data.length === 0) {
+            container.innerHTML = "<p>Belum ada diskusi.</p>";
+            return;
+          }
 
-  } catch (err) {
-    document.getElementById("diskusiList").innerHTML =
-      "<p style='color:red'>❌ Error memuat diskusi</p>";
-    console.error(err);
-  }
-}
+          data.forEach(d => {
+            const user = d.User ? d.User.nama : "Anonim";
 
-/* ================= KIRIM ================= */
-async function kirimDiskusi() {
-  const isi = document.getElementById("isi_pesan").value.trim();
-  if (!isi) return alert("Pesan kosong");
+            container.innerHTML += `
+        <div class="chat-card">
+          <b>👤 ${user}</b>
+          <p>${d.isi_pesan}</p>
+        </div>
+      `;
+          });
 
-  try {
-    const res = await fetch("/api/diskusi", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        materiId,
-        isi_pesan: isi
-      })
-    });
+        } catch (err) {
+          document.getElementById("diskusiList").innerHTML =
+            "<p style='color:red'>❌ Error memuat diskusi</p>";
+          console.error(err);
+        }
+      }
 
-    if (!res.ok) throw new Error("Gagal kirim");
+      /* ================= KIRIM ================= */
+      async function kirimDiskusi() {
+        const isi = document.getElementById("isi_pesan").value.trim();
+        if (!isi) return alert("Pesan kosong");
 
-    document.getElementById("isi_pesan").value = "";
-    loadDiskusi();
+        try {
+          const res = await fetch("/api/diskusi", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              materiId,
+              isi_pesan: isi
+            })
+          });
 
-  } catch (err) {
-    alert("Gagal mengirim diskusi");
-    console.error(err);
-  }
-}
+          if (!res.ok) throw new Error("Gagal kirim");
 
-function kembali() {
-    const role = localStorage.getItem("role");
+          document.getElementById("isi_pesan").value = "";
+          loadDiskusi();
 
-    if (role === "pengajar") {
-        globalThis.history.back();
-    } else {
-        globalThis.location.href = "/dashboard-siswa";
-    }
-}
+        } catch (err) {
+          alert("Gagal mengirim diskusi");
+          console.error(err);
+        }
+      }
 
-loadDiskusi();
-</script>
+      function kembali() {
+          const role = localStorage.getItem("role");
 
-</body>
+          if (role === "pengajar") {
+              globalThis.history.back();
+          } else {
+              globalThis.location.href = "/dashboard-siswa";
+          }
+      }
+
+      await loadDiskusi();
+    </script>
+  </body>
 </html>

@@ -1,94 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Daftar Tugas - Pengajar</title>
-  <link rel="stylesheet" href="css/pengumpulantugas.css" />
-</head>
-<body>
-  <div class="tugas-page">
-    <div class="top-bar">
-      <div>
-        <h1>Daftar Tugas yang Terkumpul</h1>
-        <p id="infoNama"></p>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Daftar Tugas - Pengajar</title>
+    <link rel="stylesheet" href="css/pengumpulantugas.css" />
+  </head>
+  <body>
+    <div class="tugas-page">
+      <div class="top-bar">
+        <div>
+          <h1>Daftar Tugas yang Terkumpul</h1>
+          <p id="infoNama"></p>
+        </div>
+        <button onclick="goBack()">Kembali</button>
       </div>
-      <button onclick="goBack()">Kembali</button>
+
+      <div id="materiList"></div>
     </div>
 
-    <div id="materiList"></div>
-  </div>
+    <script>
+      const userId = localStorage.getItem('userId');
+      const nama = localStorage.getItem('nama');
+      const role = localStorage.getItem('role');
+      const token = localStorage.getItem('token');
 
-  <script>
-    const userId = localStorage.getItem('userId');
-    const nama = localStorage.getItem('nama');
-    const role = localStorage.getItem('role');
-    const token = localStorage.getItem('token');
-
-    if (!nama || role !== 'pengajar') {
-      alert('Akses ditolak. Anda bukan pengajar!');
-      globalThis.location.href = '/login';
-    }
-
-    document.getElementById('infoNama').textContent = `👨‍🏫 ${nama}`;
-
-    async function loadMateriPengajar() {
-      // load all materi and filter by MataPelajaran.pengajarId
-      const res = await fetch('/api/materi', { headers: { Authorization: `Bearer ${token}` } });
-      const result = await res.json();
-      const materi = result.data || result;
-
-      const myMateri = materi.filter(m => m.MataPelajaran?.pengajarId == userId);
-
-      const container = document.getElementById('materiList');
-      if (myMateri.length === 0) {
-        container.innerHTML = '<p>Belum ada materi untuk pengajar ini.</p>';
-        return;
+      if (!nama || role !== 'pengajar') {
+        alert('Akses ditolak. Anda bukan pengajar!');
+        globalThis.location.href = '/login';
       }
 
-      container.innerHTML = myMateri.map(m => `
-        <div class="materi-card">
-          <h3>${m.judul}</h3>
-          <p class="meta">${m.MataPelajaran?.nama_mapel || '-'}</p>
-          <div class="actions">
-            <a class="button" href="${m.filePath}" target="_blank">Lihat Materi</a>
-            <button onclick="viewSubmissions(${m.id})">Lihat Pengumpulan</button>
-          </div>
-          <div id="submissions-${m.id}" class="submission-list"></div>
-        </div>
-      `).join('');
-    }
+      document.getElementById('infoNama').textContent = `👨‍🏫 ${nama}`;
 
-    async function viewSubmissions(materiId) {
-      const container = document.getElementById(`submissions-${materiId}`);
-      container.innerHTML = '<p>Memuat...</p>';
-
-      try {
-        const res = await fetch(`/api/tugas/materi/${materiId}`, { headers: { Authorization: `Bearer ${token}` } });
+      async function loadMateriPengajar() {
+        // load all materi and filter by MataPelajaran.pengajarId
+        const res = await fetch('/api/materi', { headers: { Authorization: `Bearer ${token}` } });
         const result = await res.json();
-        const list = result.data || result;
+        const materi = result.data || result;
 
-        if (!list || list.length === 0) {
-          container.innerHTML = '<p>Belum ada pengumpulan.</p>';
+        const myMateri = materi.filter(m => m.MataPelajaran?.pengajarId == userId);
+
+        const container = document.getElementById('materiList');
+        if (myMateri.length === 0) {
+          container.innerHTML = '<p>Belum ada materi untuk pengajar ini.</p>';
           return;
         }
 
-        container.innerHTML = list.map(t => `
-          <div class="submission-item">
-            <b>${t.User?.nama || t.siswaId}</b> (${t.User?.email || '—'})
-            — <a href="${t.filePath}" target="_blank">Unduh</a>
+        container.innerHTML = myMateri.map(m => `
+          <div class="materi-card">
+            <h3>${m.judul}</h3>
+            <p class="meta">${m.MataPelajaran?.nama_mapel || '-'}</p>
+            <div class="actions">
+              <a class="button" href="${m.filePath}" target="_blank">Lihat Materi</a>
+              <button onclick="viewSubmissions(${m.id})">Lihat Pengumpulan</button>
+            </div>
+            <div id="submissions-${m.id}" class="submission-list"></div>
           </div>
         `).join('');
-      } catch (err) {
-        console.error(err);
-        container.innerHTML = '<p style="color:red">Gagal memuat pengumpulan</p>';
       }
-    }
 
-    function goBack() {
-      globalThis.location.href = '/dashboard-pengajar';
-    }
+      async function viewSubmissions(materiId) {
+        const container = document.getElementById(`submissions-${materiId}`);
+        container.innerHTML = '<p>Memuat...</p>';
 
-    loadMateriPengajar();
-  </script>
-</body>
+        try {
+          const res = await fetch(`/api/tugas/materi/${materiId}`, { headers: { Authorization: `Bearer ${token}` } });
+          const result = await res.json();
+          const list = result.data || result;
+
+          if (!list || list.length === 0) {
+            container.innerHTML = '<p>Belum ada pengumpulan.</p>';
+            return;
+          }
+
+          container.innerHTML = list.map(t => `
+            <div class="submission-item">
+              <b>${t.User?.nama || t.siswaId}</b> (${t.User?.email || '—'})
+              — <a href="${t.filePath}" target="_blank">Unduh</a>
+            </div>
+          `).join('');
+        } catch (err) {
+          console.error(err);
+          container.innerHTML = '<p style="color:red">Gagal memuat pengumpulan</p>';
+        }
+      }
+
+      function goBack() {
+        globalThis.location.href = '/dashboard-pengajar';
+      }
+
+      await loadMateriPengajar();
+    </script>
+  </body>
 </html>

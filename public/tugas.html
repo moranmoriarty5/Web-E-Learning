@@ -1,105 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Submit Tugas</title>
-  <link rel="stylesheet" href="css/tugas.css" />
-</head>
-<body>
-  <div class="tugas-container">
-    <h1>Submit Tugas</h1>
-    <p id="materiInfo"></p>
-    <form id="tugasForm">
-      <input type="hidden" id="materiId" />
-      <label for="judulTugas">Judul Tugas</label>
-      <input type="text" id="judulTugas" required />
-      <label for="fileTugas">File (pdf, ppt, pptx, doc, docx)</label>
-      <input type="file" id="fileTugas" accept=".pdf,.ppt,.pptx,.doc,.docx" required />
-      <div style="margin-top:16px; display:flex; align-items:center;">
-        <button type="button" onclick="submitTugas()">Kirim Tugas</button>
-        <button type="button" class="cancel" onclick="goBack()">Batal</button>
-      </div>
-    </form>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Submit Tugas</title>
+    <link rel="stylesheet" href="css/tugas.css" />
+  </head>
+  <body>
+    <div class="tugas-container">
+      <h1>Submit Tugas</h1>
+      <p id="materiInfo"></p>
+      <form id="tugasForm">
+        <input type="hidden" id="materiId" />
+        <label for="judulTugas">Judul Tugas</label>
+        <input type="text" id="judulTugas" required />
+        <label for="fileTugas">File (pdf, ppt, pptx, doc, docx)</label>
+        <input
+          type="file"
+          id="fileTugas"
+          accept=".pdf,.ppt,.pptx,.doc,.docx"
+          required
+        />
+        <div style="margin-top: 16px; display: flex; align-items: center">
+          <button type="button" onclick="submitTugas()">Kirim Tugas</button>
+          <button type="button" class="cancel" onclick="goBack()">Batal</button>
+        </div>
+      </form>
+    </div>
 
-  <script>
-    const token = localStorage.getItem('token');
-    const nama = localStorage.getItem('nama');
-    const role = localStorage.getItem('role');
-    const siswaId = localStorage.getItem('userId');
+    <script>
+      const token = localStorage.getItem('token');
+      const nama = localStorage.getItem('nama');
+      const role = localStorage.getItem('role');
+      const siswaId = localStorage.getItem('userId');
 
-    if (!nama || role !== 'siswa') {
-      alert('Akses ditolak!');
-      globalThis.location.href = '/login';
-    }
-
-    const urlParams = new URLSearchParams(globalThis.location.search);
-    const materiId = urlParams.get('materiId');
-
-    document.getElementById('materiId').value = materiId;
-
-    async function loadMateriInfo() {
-      if (!materiId) {
-        document.getElementById('materiInfo').textContent = 'Materi tidak ditemukan.';
-        return;
+      if (!nama || role !== 'siswa') {
+        alert('Akses ditolak!');
+        globalThis.location.href = '/login';
       }
 
-      try {
-        const res = await fetch(`/api/materi/${materiId}`);
-        if (!res.ok) {
-          throw new Error('Materi tidak ditemukan');
+      const urlParams = new URLSearchParams(globalThis.location.search);
+      const materiId = urlParams.get('materiId');
+
+      document.getElementById('materiId').value = materiId;
+
+      async function loadMateriInfo() {
+        if (!materiId) {
+          document.getElementById('materiInfo').textContent = 'Materi tidak ditemukan.';
+          return;
         }
-        const result = await res.json();
-        const materi = result.data || result;
-        document.getElementById('materiInfo').textContent = materi?.judul ? `Materi: ${materi.judul}` : `Materi ID: ${materiId}`;
-      } catch (err) {
-        console.error(err);
-        document.getElementById('materiInfo').textContent = 'Materi tidak ditemukan.';
-      }
-    }
 
-    function goBack() {
-      globalThis.location.href = '/dashboard-siswa';
-    }
-
-    loadMateriInfo();
-
-    async function submitTugas() {
-      if (!materiId) {
-        return alert('Materi tidak tersedia untuk submit tugas.');
-      }
-
-      const judul = document.getElementById('judulTugas').value.trim();
-      const fileInput = document.getElementById('fileTugas');
-
-      if (!judul) return alert('Judul tugas wajib diisi');
-      if (!fileInput.files.length) return alert('Pilih file tugas terlebih dahulu');
-
-      const fd = new FormData();
-      fd.append('judul', judul);
-      fd.append('materiId', materiId);
-      fd.append('siswaId', siswaId);
-      fd.append('file', fileInput.files[0]);
-
-      try {
-        const res = await fetch('/api/tugas/submit', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: fd,
-        });
-
-        const result = await res.json();
-        alert(result.message || 'Tugas terkirim');
-        if (res.ok) {
-          globalThis.location.href = '/dashboard-siswa';
+        try {
+          const res = await fetch(`/api/materi/${materiId}`);
+          if (!res.ok) {
+            throw new Error('Materi tidak ditemukan');
+          }
+          const result = await res.json();
+          const materi = result.data || result;
+          document.getElementById('materiInfo').textContent = materi?.judul ? `Materi: ${materi.judul}` : `Materi ID: ${materiId}`;
+        } catch (err) {
+          console.error(err);
+          document.getElementById('materiInfo').textContent = 'Materi tidak ditemukan.';
         }
-      } catch (err) {
-        console.error(err);
-        alert('Gagal mengirim tugas');
       }
-    }
-  </script>
-</body>
+
+      function goBack() {
+        globalThis.location.href = '/dashboard-siswa';
+      }
+
+      await loadMateriInfo();
+
+      async function submitTugas() {
+        if (!materiId) {
+          return alert('Materi tidak tersedia untuk submit tugas.');
+        }
+
+        const judul = document.getElementById('judulTugas').value.trim();
+        const fileInput = document.getElementById('fileTugas');
+
+        if (!judul) return alert('Judul tugas wajib diisi');
+        if (!fileInput.files.length) return alert('Pilih file tugas terlebih dahulu');
+
+        const fd = new FormData();
+        fd.append('judul', judul);
+        fd.append('materiId', materiId);
+        fd.append('siswaId', siswaId);
+        fd.append('file', fileInput.files[0]);
+
+        try {
+          const res = await fetch('/api/tugas/submit', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: fd,
+          });
+
+          const result = await res.json();
+          alert(result.message || 'Tugas terkirim');
+          if (res.ok) {
+            globalThis.location.href = '/dashboard-siswa';
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Gagal mengirim tugas');
+        }
+      }
+    </script>
+  </body>
 </html>
