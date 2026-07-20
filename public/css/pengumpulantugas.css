@@ -30,11 +30,7 @@ body {
 ========================= */
 
 .top-bar {
-  background: linear-gradient(
-    135deg,
-    #1e3c72,
-    #2a5298
-  );
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
   padding: 25px;
   border-radius: 20px;
@@ -45,8 +41,7 @@ body {
   align-items: center;
   gap: 20px;
 
-  box-shadow:
-    0 10px 25px rgba(0,0,0,.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
 .top-bar h1 {
@@ -55,7 +50,7 @@ body {
 }
 
 #infoNama {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 /* =========================
@@ -79,7 +74,7 @@ body {
   font-size: 14px;
   font-weight: 600;
 
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .top-bar button {
@@ -109,10 +104,9 @@ body {
   border-radius: 18px;
   padding: 25px;
 
-  box-shadow:
-    0 5px 15px rgba(0,0,0,.08);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .materi-card:hover {
@@ -209,8 +203,7 @@ body {
   padding: 20px;
   border-radius: 15px;
 
-  box-shadow:
-    0 5px 15px rgba(0,0,0,.08);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================
@@ -226,7 +219,6 @@ body {
 ========================= */
 
 @media (max-width: 768px) {
-
   body {
     padding: 15px;
   }
@@ -268,7 +260,6 @@ body {
 ========================= */
 
 @media (max-width: 480px) {
-
   .top-bar h1 {
     font-size: 20px;
   }

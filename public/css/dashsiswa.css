@@ -42,11 +42,7 @@ body {
 ========================= */
 .sidebar {
   width: 280px;
-  background: linear-gradient(
-    180deg,
-    var(--sidebar-start),
-    var(--sidebar-end)
-  );
+  background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
   color: white;
   padding: 30px 20px;
   box-shadow: var(--shadow);
@@ -59,7 +55,7 @@ body {
 }
 
 .sidebar p {
-  background: rgba(255,255,255,.12);
+  background: rgba(255, 255, 255, 0.12);
   padding: 12px;
   border-radius: 12px;
   text-align: center;
@@ -81,7 +77,7 @@ body {
   color: rgb(0, 0, 0);
   font-size: 15px;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .sidebar button:hover {
@@ -112,10 +108,7 @@ body {
 ========================= */
 .stats {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(220px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -125,7 +118,7 @@ body {
   border-radius: 18px;
   padding: 20px;
   box-shadow: var(--shadow);
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .card:hover {
@@ -217,12 +210,12 @@ td button {
   padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   font-size: 13px;
 }
 
 td button:hover {
-  opacity: .9;
+  opacity: 0.9;
   transform: translateY(-2px);
 }
 
@@ -293,7 +286,6 @@ body.dark a {
    TABLET
 ========================= */
 @media (max-width: 992px) {
-
   .sidebar {
     width: 240px;
   }
@@ -307,7 +299,6 @@ body.dark a {
    MOBILE
 ========================= */
 @media (max-width: 768px) {
-
   .container {
     flex-direction: column;
   }
@@ -355,7 +346,6 @@ body.dark a {
    SMALL MOBILE
 ========================= */
 @media (max-width: 480px) {
-
   .content h1 {
     font-size: 24px;
   }

@@ -18,7 +18,11 @@ export const getMataPelajaranByPengajar = async (userId) => {
   });
 };
 
-export const createMataPelajaran = async ({ nama_mapel, deskripsi, pengajarId }) => {
+export const createMataPelajaran = async ({
+  nama_mapel,
+  deskripsi,
+  pengajarId,
+}) => {
   if (!nama_mapel || !pengajarId) {
     throw new Error("Nama mata pelajaran dan pengajar wajib diisi");
   }
@@ -51,7 +55,10 @@ export const createMataPelajaran = async ({ nama_mapel, deskripsi, pengajarId })
   return await MataPelajaran.create({ nama_mapel, deskripsi, pengajarId });
 };
 
-export const updateMataPelajaran = async (id, { nama_mapel, deskripsi, pengajarId }) => {
+export const updateMataPelajaran = async (
+  id,
+  { nama_mapel, deskripsi, pengajarId },
+) => {
   const mapel = await MataPelajaran.findByPk(id);
   if (!mapel) {
     throw new Error("Mata pelajaran tidak ditemukan");

@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import * as tugasController from "../controllers/tugasController.js";
 import {
   verifyToken,
-  authorizeRoles
+  authorizeRoles,
 } from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -34,10 +34,10 @@ const upload = multer({
 router.post("/submit", upload.single("file"), tugasController.submit);
 router.get("/materi/:materiId", tugasController.listByMateri);
 router.delete(
-    "/submit/:materiId",
-    verifyToken,
-    authorizeRoles("siswa"),
-    tugasController.deleteSubmit
+  "/submit/:materiId",
+  verifyToken,
+  authorizeRoles("siswa"),
+  tugasController.deleteSubmit,
 );
 
 export default router;

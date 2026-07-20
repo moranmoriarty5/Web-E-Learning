@@ -1,258 +1,255 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 /* =========================
    ROOT
 ========================= */
 
-:root{
-  --primary:#2a5298;
-  --primary-dark:#1e3c72;
+:root {
+  --primary: #2a5298;
+  --primary-dark: #1e3c72;
 
-  --background:#f4f7fb;
-  --card:#ffffff;
+  --background: #f4f7fb;
+  --card: #ffffff;
 
-  --text:#1f2937;
-  --text-light:#64748b;
+  --text: #1f2937;
+  --text-light: #64748b;
 
-  --border:#e2e8f0;
+  --border: #e2e8f0;
 
-  --success:#16a34a;
-  --danger:#dc2626;
+  --success: #16a34a;
+  --danger: #dc2626;
 
-  --shadow:
-    0 8px 20px rgba(0,0,0,.08);
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================
    RESET
 ========================= */
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-  font-family:'Poppins',sans-serif;
+body {
+  font-family: "Poppins", sans-serif;
 
-  background:var(--background);
+  background: var(--background);
 
-  color:var(--text);
+  color: var(--text);
 
-  padding:30px 20px;
+  padding: 30px 20px;
 
-  max-width:1000px;
-  margin:auto;
+  max-width: 1000px;
+  margin: auto;
 }
 
 /* =========================
    HEADER
 ========================= */
 
-h2{
-  text-align:center;
+h2 {
+  text-align: center;
 
-  color:var(--primary-dark);
+  color: var(--primary-dark);
 
-  margin-bottom:25px;
+  margin-bottom: 25px;
 
-  font-size:32px;
+  font-size: 32px;
 }
 
 /* =========================
    INFO
 ========================= */
 
-#info{
-  margin-bottom:20px;
+#info {
+  margin-bottom: 20px;
 }
 
 /* =========================
    FORM DISKUSI
 ========================= */
 
-textarea{
-  width:100%;
+textarea {
+  width: 100%;
 
-  min-height:140px;
+  min-height: 140px;
 
-  resize:vertical;
+  resize: vertical;
 
-  padding:16px;
+  padding: 16px;
 
-  border:1px solid var(--border);
+  border: 1px solid var(--border);
 
-  border-radius:16px;
+  border-radius: 16px;
 
-  font-size:15px;
+  font-size: 15px;
 
-  font-family:'Poppins',sans-serif;
+  font-family: "Poppins", sans-serif;
 
-  background:white;
+  background: white;
 
-  transition:.3s;
+  transition: 0.3s;
 }
 
-textarea:focus{
-  outline:none;
+textarea:focus {
+  outline: none;
 
-  border-color:var(--primary);
+  border-color: var(--primary);
 
-  box-shadow:
-    0 0 0 4px rgba(42,82,152,.15);
+  box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.15);
 }
 
 /* =========================
    BUTTON
 ========================= */
 
-.button-group{
-  display:flex;
+.button-group {
+  display: flex;
 
-  gap:12px;
+  gap: 12px;
 
-  margin-top:15px;
-  margin-bottom:25px;
+  margin-top: 15px;
+  margin-bottom: 25px;
 
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 
-button{
-  border:none;
+button {
+  border: none;
 
-  cursor:pointer;
+  cursor: pointer;
 
-  font-family:'Poppins',sans-serif;
+  font-family: "Poppins", sans-serif;
 
-  font-weight:600;
+  font-weight: 600;
 
-  transition:.3s;
+  transition: 0.3s;
 }
 
-.send-btn{
-  background:var(--primary);
+.send-btn {
+  background: var(--primary);
 
-  color:white;
+  color: white;
 
-  padding:12px 24px;
+  padding: 12px 24px;
 
-  border-radius:12px;
+  border-radius: 12px;
 }
 
-.send-btn:hover{
-  background:var(--primary-dark);
+.send-btn:hover {
+  background: var(--primary-dark);
 
-  transform:translateY(-2px);
+  transform: translateY(-2px);
 }
 
-.back-btn{
-  background:#e2e8f0;
+.back-btn {
+  background: #e2e8f0;
 
-  color:#334155;
+  color: #334155;
 
-  padding:12px 24px;
+  padding: 12px 24px;
 
-  border-radius:12px;
+  border-radius: 12px;
 }
 
-.back-btn:hover{
-  background:#cbd5e1;
+.back-btn:hover {
+  background: #cbd5e1;
 
-  transform:translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* =========================
    DIVIDER
 ========================= */
 
-hr{
-  border:none;
+hr {
+  border: none;
 
-  height:1px;
+  height: 1px;
 
-  background:var(--border);
+  background: var(--border);
 
-  margin-bottom:25px;
+  margin-bottom: 25px;
 }
 
 /* =========================
    LIST DISKUSI
 ========================= */
 
-#diskusiList{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
+#diskusiList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 /* =========================
    ITEM DISKUSI
 ========================= */
 
-#diskusiList > div{
-  background:var(--card);
+#diskusiList > div {
+  background: var(--card);
 
-  border-radius:16px;
+  border-radius: 16px;
 
-  padding:18px;
+  padding: 18px;
 
-  border:1px solid var(--border);
+  border: 1px solid var(--border);
 
-  box-shadow:var(--shadow);
+  box-shadow: var(--shadow);
 }
 
-#diskusiList b{
-  display:block;
+#diskusiList b {
+  display: block;
 
-  color:var(--primary-dark);
+  color: var(--primary-dark);
 
-  margin-bottom:8px;
+  margin-bottom: 8px;
 
-  font-size:15px;
+  font-size: 15px;
 }
 
-#diskusiList p{
-  color:var(--text);
+#diskusiList p {
+  color: var(--text);
 
-  line-height:1.7;
+  line-height: 1.7;
 
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 
 /* =========================
    EMPTY STATE
 ========================= */
 
-#diskusiList p:first-child{
-  margin:0;
+#diskusiList p:first-child {
+  margin: 0;
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media (max-width:768px){
-
-  body{
-    padding:20px 15px;
+@media (max-width: 768px) {
+  body {
+    padding: 20px 15px;
   }
 
-  h2{
-    font-size:26px;
+  h2 {
+    font-size: 26px;
   }
 
-  textarea{
-    min-height:120px;
+  textarea {
+    min-height: 120px;
   }
 
-  .button-group{
-    flex-direction:column;
+  .button-group {
+    flex-direction: column;
   }
 
   .send-btn,
-  .back-btn{
-    width:100%;
+  .back-btn {
+    width: 100%;
   }
 }
 
@@ -260,18 +257,17 @@ hr{
    SMALL MOBILE
 ========================= */
 
-@media (max-width:480px){
-
-  h2{
-    font-size:22px;
+@media (max-width: 480px) {
+  h2 {
+    font-size: 22px;
   }
 
-  textarea{
-    font-size:14px;
-    padding:14px;
+  textarea {
+    font-size: 14px;
+    padding: 14px;
   }
 
-  #diskusiList > div{
-    padding:15px;
+  #diskusiList > div {
+    padding: 15px;
   }
 }

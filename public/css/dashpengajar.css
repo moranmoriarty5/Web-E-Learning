@@ -18,17 +18,13 @@ body {
    HEADER
 ========================= */
 body > h1:first-of-type {
-  background: linear-gradient(
-    135deg,
-    #1e3c72,
-    #2a5298
-  );
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
   padding: 25px;
   border-radius: 15px;
   text-align: center;
   margin-bottom: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 body > p {
@@ -56,7 +52,7 @@ body > p {
   background: #2a5298;
   color: white;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   font-weight: 600;
 }
 
@@ -73,7 +69,7 @@ body > p {
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 25px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .mapel-box h2 {
@@ -83,23 +79,16 @@ body > p {
 
 #listMapel {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(250px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
 }
 
 .mapel-item {
-  background: linear-gradient(
-    135deg,
-    #2a5298,
-    #1e3c72
-  );
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
   color: white;
   padding: 18px;
   border-radius: 12px;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .mapel-item:hover {
@@ -117,7 +106,7 @@ body > p {
   background: white;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .content h1 {
@@ -191,7 +180,7 @@ td button {
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 td button:hover {
@@ -215,7 +204,6 @@ td a:hover {
    MOBILE
 ========================= */
 @media (max-width: 768px) {
-
   body {
     padding: 10px;
   }
@@ -263,7 +251,6 @@ td a:hover {
    EXTRA SMALL DEVICE
 ========================= */
 @media (max-width: 480px) {
-
   .mapel-item h3 {
     font-size: 16px;
   }

@@ -4,9 +4,9 @@ import { User } from "../../entities/User.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const { role } = req.query; 
+    const { role } = req.query;
 
-    const whereClause = role ? { role } : {}; 
+    const whereClause = role ? { role } : {};
     const users = await User.findAll({
       where: whereClause,
       attributes: ["id", "nama", "email", "role"],
@@ -42,7 +42,10 @@ export const createUserByAdmin = async (req, res) => {
     const { nama, email, password, role } = req.body;
 
     if (!nama || !email || !password || !role) {
-      return error(res, "Semua field wajib diisi (nama, email, password, role)");
+      return error(
+        res,
+        "Semua field wajib diisi (nama, email, password, role)",
+      );
     }
 
     const newUser = await userUseCase.createUserByAdmin({
@@ -59,29 +62,19 @@ export const createUserByAdmin = async (req, res) => {
 };
 
 export const updateUserByAdmin = async (req, res) => {
+  try {
+    const result = await userUseCase.updateUserByAdmin({
+      id: req.params.id,
+      nama: req.body.nama,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role,
+    });
 
-    try {
-
-        const result = await userUseCase.updateUserByAdmin({
-            id: req.params.id,
-            nama: req.body.nama,
-            email: req.body.email,
-            password: req.body.password,
-            role: req.body.role
-        });
-
-        success(
-            res,
-            result,
-            "User berhasil diperbarui oleh admin"
-        );
-
-    } catch (err) {
-
-        error(res, err.message);
-
-    }
-
+    success(res, result, "User berhasil diperbarui oleh admin");
+  } catch (err) {
+    error(res, err.message);
+  }
 };
 
 export const deleteUser = async (req, res) => {

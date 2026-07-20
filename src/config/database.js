@@ -11,5 +11,5 @@ export const sequelize = new Sequelize(
     port: process.env.DB_PORT, // || 5432,
     dialect: process.env.DB_DIALECT || "mysql",
     // dialect: process.env.DB_DIALECT || "postgres",
-  }
+  },
 );

@@ -23,7 +23,6 @@
     <div id="diskusiList"></div>
 
     <script>
-      /* ================= VALIDASI ================= */
       const params = new URLSearchParams(globalThis.location.search);
       const materiId = params.get("materiId");
       const token = localStorage.getItem("token");
@@ -38,7 +37,6 @@
         globalThis.location.href = "/login";
       }
 
-      /* ================= LOAD ================= */
       async function loadDiskusi() {
         try {
           const res = await fetch(`/api/diskusi/${materiId}`, {
@@ -80,7 +78,6 @@
         }
       }
 
-      /* ================= KIRIM ================= */
       async function kirimDiskusi() {
         const isi = document.getElementById("isi_pesan").value.trim();
         if (!isi) return alert("Pesan kosong");

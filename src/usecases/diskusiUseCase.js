@@ -5,13 +5,13 @@ export const createDiskusi = async (
   materiId,
   userId,
   isi_pesan,
-  parent_id = null
+  parent_id = null,
 ) => {
   return await Diskusi.create({
     materiId,
     userId,
     isi_pesan,
-    parent_id
+    parent_id,
   });
 };
 
@@ -21,18 +21,17 @@ export const getDiskusiByMateri = async (materiId) => {
     include: [
       {
         model: User,
-        attributes: ["nama", "role"]
-      }
+        attributes: ["nama", "role"],
+      },
     ],
-    order: [["createdAt", "ASC"]]
+    order: [["createdAt", "ASC"]],
   });
 };
 
 export const deleteDiskusi = async (id, userId) => {
   const diskusi = await Diskusi.findByPk(id);
   if (!diskusi) throw new Error("Diskusi tidak ditemukan");
-  if (diskusi.userId !== userId)
-    throw new Error("Tidak punya akses");
+  if (diskusi.userId !== userId) throw new Error("Tidak punya akses");
 
   await diskusi.destroy();
 };
@@ -40,10 +39,8 @@ export const deleteDiskusi = async (id, userId) => {
 export const updateDiskusi = async (id, userId, isi_pesan) => {
   const diskusi = await Diskusi.findByPk(id);
   if (!diskusi) throw new Error("Diskusi tidak ditemukan");
-  if (diskusi.userId !== userId)
-    throw new Error("Tidak punya akses");
+  if (diskusi.userId !== userId) throw new Error("Tidak punya akses");
 
   diskusi.isi_pesan = isi_pesan;
   await diskusi.save();
 };
-

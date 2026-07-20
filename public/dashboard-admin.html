@@ -141,19 +141,16 @@
           nama;
       }
 
-      // LOGOUT
       function logout() {
         localStorage.clear();
 
         globalThis.location.href = "/login";
       }
 
-      // SHOW SECTION
       function showSection(sectionId) {
         document.querySelectorAll(".section").forEach((sec) => {sec.classList.add("hidden");});
         document.getElementById(sectionId).classList.remove("hidden");}
 
-      // LOAD USERS
       async function loadUsers() {
         const response = await fetch("/api/users",{
           headers: {Authorization: `Bearer ${
@@ -183,7 +180,6 @@
         ).join("");
       }
 
-      // DELETE USER
       async function deleteUser(id) {
         const confirmDelete = confirm("Yakin ingin menghapus user ini?");
         if (!confirmDelete) return;
@@ -206,7 +202,6 @@
         }
       }
 
-      // LOAD PENGAJAR
       async function loadAvailablePengajar(selectedId = "") {
         const resPengajar = await fetch(
           "/api/users?role=pengajar",{headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,},}
@@ -228,7 +223,6 @@
         });
       }
 
-      // LOAD PELAJARAN
       async function loadPelajaran() {
         const res = await fetch(
           "/api/mata-pelajaran"
@@ -282,7 +276,6 @@
           document.getElementById("cancelUserEditBtn").style.display="none";
       }
 
-      // EDIT PELAJARAN
       async function editPelajaran(id,nama_mapel,deskripsi,pengajarId) {
         document.getElementById("pelajaranId").value = id;
         document.getElementById("namaPelajaran").value = nama_mapel;
@@ -292,7 +285,6 @@
         document.getElementById("cancelEditBtn").style.display = "inline-block";
       }
 
-      // CANCEL EDIT
       async function cancelEditPelajaran() {
         document.getElementById("pelajaranId").value = "";
         document.getElementById("addPelajaranForm").reset();
@@ -302,7 +294,6 @@
         loadAvailablePengajar();
       }
 
-      // TAMBAH / UPDATE PELAJARAN
       document.getElementById("addPelajaranForm").addEventListener("submit",async (e) => {
         e.preventDefault();
 
@@ -313,7 +304,6 @@
         let url = "/api/mata-pelajaran";
         let method = "POST";
 
-        // UPDATE
         if (id) {
           url = `/api/mata-pelajaran/${id}`; method = "PUT";
         }
@@ -343,7 +333,6 @@
           }
         );
 
-      // TAMBAH / UPDATE USER
       document.getElementById("addUserForm").addEventListener("submit", async (e) => {
 
           e.preventDefault();
@@ -360,7 +349,6 @@
           let url = "/api/users/admin/create";
           let method = "POST";
 
-          // Jika sedang edit
           if (id) {
             url = `/api/users/${id}`;
             method = "PUT";
@@ -379,13 +367,11 @@
 
           alert(result.message || "Berhasil");
 
-          // Kembalikan form ke mode tambah
           cancelUserEdit();
           loadUsers();
           loadAvailablePengajar();
         });
 
-      // INIT
       await loadUsers();
       await loadPelajaran();
       loadAvailablePengajar();

@@ -13,9 +13,9 @@ export const submitTugas = async ({ judul, materiId, siswaId, filePath }) => {
 
   const existing = await Tugas.findOne({
     where: {
-        materiId,
-        siswaId
-    }
+      materiId,
+      siswaId,
+    },
   });
 
   if (existing) {
@@ -33,32 +33,26 @@ export const getTugasByMateri = async (materiId) => {
 };
 
 export const deleteTugas = async (materiId, siswaId) => {
+  const tugas = await Tugas.findOne({
+    where: {
+      materiId,
+      siswaId,
+    },
+  });
 
-    const tugas = await Tugas.findOne({
-        where: {
-            materiId,
-            siswaId
-        }
-    });
+  if (!tugas) {
+    throw new Error("Tugas tidak ditemukan");
+  }
 
-    if (!tugas) {
-        throw new Error("Tugas tidak ditemukan");
+  if (tugas.filePath) {
+    const filePath = path.join(process.cwd(), tugas.filePath.substring(1));
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
     }
+  }
 
-    if (tugas.filePath) {
+  await tugas.destroy();
 
-        const filePath = path.join(
-            process.cwd(),
-            tugas.filePath.substring(1)
-        );
-
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
-
-    }
-
-    await tugas.destroy();
-
-    return true;
-}
+  return true;
+};

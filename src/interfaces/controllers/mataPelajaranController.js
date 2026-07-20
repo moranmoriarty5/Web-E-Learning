@@ -22,7 +22,9 @@ export const getByPengajar = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const newPelajaran = await mataPelajaranUseCase.createMataPelajaran(req.body);
+    const newPelajaran = await mataPelajaranUseCase.createMataPelajaran(
+      req.body,
+    );
     success(res, newPelajaran, "Mata pelajaran berhasil ditambahkan");
   } catch (err) {
     error(res, err.message);
@@ -33,7 +35,10 @@ export const update = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
-    const updatedPelajaran = await mataPelajaranUseCase.updateMataPelajaran(id, updatedData);
+    const updatedPelajaran = await mataPelajaranUseCase.updateMataPelajaran(
+      id,
+      updatedData,
+    );
     success(res, updatedPelajaran, "Mata pelajaran berhasil diupdate");
   } catch (err) {
     error(res, err.message);

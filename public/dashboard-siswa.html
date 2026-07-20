@@ -8,7 +8,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- SIDEBAR -->
       <aside class="sidebar">
         <h2>📘 E-Learning</h2>
 
@@ -21,11 +20,9 @@
         </nav>
       </aside>
 
-      <!-- CONTENT -->
       <main class="content">
         <h1>📚 Dashboard Siswa</h1>
 
-        <!-- STATISTIK -->
         <div class="stats">
           <div class="card">
             <h3>Total Materi</h3>
@@ -45,7 +42,6 @@
 
         <h2>📂 Daftar Materi</h2>
 
-        <!-- FILTER -->
         <div class="filter-container">
           <input
             type="text"
@@ -92,8 +88,6 @@
         "studentName"
       ).textContent = "👩‍🎓 " + nama;
 
-      /* ================= UTIL ================= */
-
       function logout() {
         localStorage.clear();
         globalThis.location.href = "/login";
@@ -115,11 +109,7 @@
         document.body.classList.add("dark");
       }
 
-      /* ================= DATA ================= */
-
       let allMateri = [];
-
-      /* ================= LOAD MATERI ================= */
 
       async function loadMateri() {
         try {
@@ -152,8 +142,6 @@
           );
         }
       }
-
-      /* ================= LOAD MAPEL ================= */
 
       async function loadMataPelajaran() {
 

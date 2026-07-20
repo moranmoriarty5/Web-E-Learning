@@ -2,7 +2,7 @@
    GOOGLE FONT
 ========================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 /* =========================
    ROOT COLORS
@@ -24,8 +24,7 @@
 
   --border: #e2e8f0;
 
-  --shadow:
-    0 8px 20px rgba(0,0,0,.08);
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================
@@ -87,11 +86,7 @@ h3 {
 ========================= */
 
 #infoMapel {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark),
-    var(--primary)
-  );
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
 
   color: white;
 
@@ -170,7 +165,7 @@ h3 {
 
   cursor: pointer;
 
-  transition: .3s;
+  transition: 0.3s;
   text-decoration: none;
 }
 
@@ -228,11 +223,7 @@ h3 {
 }
 
 #materiTable thead {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark),
-    var(--primary)
-  );
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
 
   color: white;
 }
@@ -248,7 +239,7 @@ h3 {
 }
 
 #materiTable tbody tr {
-  transition: .2s;
+  transition: 0.2s;
 }
 
 #materiTable tbody tr:hover {
@@ -290,7 +281,7 @@ td > button {
 
   cursor: pointer;
 
-  transition: .3s;
+  transition: 0.3s;
 }
 
 td > button:hover {
@@ -318,7 +309,7 @@ td > button:hover {
 
   color: white;
 
-  transition: .3s;
+  transition: 0.3s;
 }
 
 /* Edit */
@@ -403,7 +394,7 @@ td > button:hover {
 
   margin-right: 10px;
 
-  transition: .3s;
+  transition: 0.3s;
 }
 
 /* Simpan */
@@ -439,7 +430,6 @@ td > button:hover {
 ========================= */
 
 @media (max-width: 992px) {
-
   h1 {
     font-size: 28px;
   }
@@ -461,7 +451,6 @@ td > button:hover {
 ========================= */
 
 @media (max-width: 768px) {
-
   body {
     padding: 12px;
   }
@@ -501,7 +490,6 @@ td > button:hover {
 ========================= */
 
 @media (max-width: 480px) {
-
   h1 {
     font-size: 22px;
   }

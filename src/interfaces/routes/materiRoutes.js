@@ -17,7 +17,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
-router.post("/upload", upload.single("filePath"), materiController.uploadMateri);
+router.post(
+  "/upload",
+  upload.single("filePath"),
+  materiController.uploadMateri,
+);
 router.get("/", materiController.getMateri);
 router.get("/:id", materiController.getMateriById);
 router.put("/:id", upload.single("filePath"), materiController.update);

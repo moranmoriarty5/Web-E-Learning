@@ -24,7 +24,7 @@ export const loginUser = async (email, password) => {
       email: user.email,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "2h" }
+    { expiresIn: "2h" },
   );
 
   return {
@@ -53,48 +53,45 @@ export const createUserByAdmin = async ({ nama, email, password, role }) => {
 };
 
 export const updateUserByAdmin = async ({
-    id,
-    nama,
-    email,
-    password,
-    role
+  id,
+  nama,
+  email,
+  password,
+  role,
 }) => {
+  const user = await User.findByPk(id);
 
-    const user = await User.findByPk(id);
+  if (!user) {
+    throw new Error("User tidak ditemukan");
+  }
 
-    if (!user) {
-        throw new Error("User tidak ditemukan");
+  if (user.role === "admin") {
+    throw new Error("Admin tidak boleh diubah.");
+  }
+
+  if (email && email !== user.email) {
+    const existing = await User.findOne({
+      where: { email },
+    });
+
+    if (existing) {
+      throw new Error("Email sudah digunakan");
     }
+  }
 
-    if (user.role === "admin") {
-        throw new Error("Admin tidak boleh diubah.");
-    }
+  const updateData = {};
 
-    if (email && email !== user.email) {
+  if (nama) updateData.nama = nama;
+  if (email) updateData.email = email;
+  if (role) updateData.role = role;
 
-        const existing = await User.findOne({
-            where: { email }
-        });
+  if (password && password.trim() !== "") {
+    updateData.password = await bcrypt.hash(password, 10);
+  }
 
-        if (existing) {
-            throw new Error("Email sudah digunakan");
-        }
+  await user.update(updateData);
 
-    }
-
-    const updateData = {};
-
-    if (nama) updateData.nama = nama;
-    if (email) updateData.email = email;
-    if (role) updateData.role = role;
-
-    if (password && password.trim() !== "") {
-        updateData.password = await bcrypt.hash(password,10);
-    }
-
-    await user.update(updateData);
-
-    return user;
+  return user;
 };
 
 export const deleteUserById = async (id) => {

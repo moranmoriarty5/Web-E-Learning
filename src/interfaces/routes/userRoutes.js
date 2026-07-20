@@ -2,7 +2,7 @@ import express from "express";
 import * as userController from "../controllers/userController.js";
 import {
   verifyToken,
-  authorizeRoles
+  authorizeRoles,
 } from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get(
   "/",
   verifyToken,
   authorizeRoles("admin"),
-  userController.getAllUsers
+  userController.getAllUsers,
 );
 router.post("/register", userController.register);
 router.post("/login", userController.login);
@@ -19,19 +19,19 @@ router.post(
   "/admin/create",
   verifyToken,
   authorizeRoles("admin"),
-  userController.createUserByAdmin
+  userController.createUserByAdmin,
 );
 router.put(
-    "/:id",
-    verifyToken,
-    authorizeRoles("admin"),
-    userController.updateUserByAdmin
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin"),
+  userController.updateUserByAdmin,
 );
 router.delete(
   "/:id",
   verifyToken,
   authorizeRoles("admin"),
-  userController.deleteUser
+  userController.deleteUser,
 );
 
 export default router;

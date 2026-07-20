@@ -4,7 +4,12 @@ import { Tugas } from "../entities/Tugas.js";
 import fs from "node:fs";
 import path from "node:path";
 
-export const uploadMateri = async ({ judul, mataPelajaranId, userId, filePath }) => {
+export const uploadMateri = async ({
+  judul,
+  mataPelajaranId,
+  userId,
+  filePath,
+}) => {
   const mapel = await MataPelajaran.findOne({
     where: {
       id: mataPelajaranId,
@@ -13,7 +18,9 @@ export const uploadMateri = async ({ judul, mataPelajaranId, userId, filePath })
   });
 
   if (!mapel) {
-    throw new Error("Anda hanya bisa upload materi ke mata pelajaran yang diampu");
+    throw new Error(
+      "Anda hanya bisa upload materi ke mata pelajaran yang diampu",
+    );
   }
 
   return await Materi.create({
@@ -25,7 +32,9 @@ export const uploadMateri = async ({ judul, mataPelajaranId, userId, filePath })
 
 export const getAllMateri = async () => {
   return await Materi.findAll({
-    include: [{ model: MataPelajaran, attributes: ["nama_mapel", "pengajarId"] }],
+    include: [
+      { model: MataPelajaran, attributes: ["nama_mapel", "pengajarId"] },
+    ],
   });
 };
 
@@ -62,12 +71,10 @@ export const updateMateri = async (materiId, { judul, filePath }, userId) => {
   }
 
   if (filePath) {
-
     if (materi.filePath) {
-
       const oldFilePath = path.join(
         process.cwd(),
-        materi.filePath.substring(1)
+        materi.filePath.substring(1),
       );
 
       if (fs.existsSync(oldFilePath)) {
@@ -91,23 +98,17 @@ export const deleteMateri = async (materiId, userId) => {
   }
 
   const jumlahTugas = await Tugas.count({
-        where: {
-            materiId: materiId
-        }
-    });
+    where: {
+      materiId: materiId,
+    },
+  });
 
-    if (jumlahTugas > 0) {
-        throw new Error(
-            "Materi tidak dapat dihapus karena masih memiliki tugas."
-        );
-    }
+  if (jumlahTugas > 0) {
+    throw new Error("Materi tidak dapat dihapus karena masih memiliki tugas.");
+  }
 
   if (materi.filePath) {
-
-    const filePath = path.join(
-      process.cwd(),
-      materi.filePath.substring(1)
-    );
+    const filePath = path.join(process.cwd(), materi.filePath.substring(1));
 
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
@@ -121,4 +122,3 @@ export const deleteMateri = async (materiId, userId) => {
   await materi.destroy();
   return { message: "Materi berhasil dihapus" };
 };
-

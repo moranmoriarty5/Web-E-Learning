@@ -27,10 +27,8 @@ export const uploadMateri = async (req, res) => {
 
 export const getMateri = async (req, res) => {
   try {
-
     const materiList = await materiUseCase.getAllMateri();
     success(res, materiList, "Data materi berhasil diambil");
-
   } catch (err) {
     error(res, err.message);
   }
@@ -65,7 +63,11 @@ export const update = async (req, res) => {
       updateData.filePath = `/uploads/materi/${req.file.filename}`;
     }
 
-    const updatedMateri = await materiUseCase.updateMateri(id, updateData, userId);
+    const updatedMateri = await materiUseCase.updateMateri(
+      id,
+      updateData,
+      userId,
+    );
     success(res, updatedMateri, "Materi berhasil diupdate");
   } catch (err) {
     error(res, err.message);

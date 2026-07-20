@@ -9,11 +9,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(
-    135deg,
-    #eef4ff,
-    #f8fafc
-  );
+  background: linear-gradient(135deg, #eef4ff, #f8fafc);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -31,8 +27,8 @@ body {
   border-radius: 24px;
   padding: 35px;
   box-shadow:
-    0 20px 40px rgba(0,0,0,.08),
-    0 8px 16px rgba(0,0,0,.05);
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.05);
 }
 
 /* =========================
@@ -76,13 +72,13 @@ input[type="text"] {
   border: 1px solid #dbe2ea;
   border-radius: 12px;
   font-size: 15px;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 input[type="text"]:focus {
   outline: none;
   border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37,99,235,.1);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 /* =========================
@@ -94,7 +90,7 @@ input[type="file"] {
   border-radius: 12px;
   background: #f8fafc;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 input[type="file"]:hover {
@@ -122,7 +118,7 @@ button {
   cursor: pointer;
   font-weight: 600;
   font-size: 15px;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 button:first-child {
@@ -149,7 +145,6 @@ button.cancel:hover {
    MOBILE
 ========================= */
 @media (max-width: 768px) {
-
   .tugas-container {
     padding: 25px;
   }
@@ -171,7 +166,6 @@ button.cancel:hover {
    SMALL MOBILE
 ========================= */
 @media (max-width: 480px) {
-
   body {
     padding: 12px;
   }
