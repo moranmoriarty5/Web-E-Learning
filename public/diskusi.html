@@ -116,7 +116,9 @@
           }
       }
 
-      await loadDiskusi();
+      (async () => {
+        await loadDiskusi();
+      })();
     </script>
   </body>
 </html>

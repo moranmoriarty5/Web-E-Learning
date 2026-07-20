@@ -30,7 +30,6 @@
       <button onclick="logout()">🚪 Logout</button>
     </nav>
 
-    <!-- USERS -->
     <section id="users" class="section">
       <h2>Daftar Pengguna</h2>
 
@@ -137,8 +136,7 @@
 
         globalThis.location.href = "/login";
       } else {
-        document.getElementById("nama").textContent =
-          nama;
+        document.getElementById("nama").textContent = nama;
       }
 
       function logout() {
@@ -148,47 +146,55 @@
       }
 
       function showSection(sectionId) {
-        document.querySelectorAll(".section").forEach((sec) => {sec.classList.add("hidden");});
-        document.getElementById(sectionId).classList.remove("hidden");}
+        document.querySelectorAll(".section").forEach((sec) => {
+          sec.classList.add("hidden");
+        });
+        document.getElementById(sectionId).classList.remove("hidden");
+      }
 
       async function loadUsers() {
-        const response = await fetch("/api/users",{
-          headers: {Authorization: `Bearer ${
-          localStorage.getItem("token")}`,},
-          }
-        );
+        const response = await fetch("/api/users", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
 
         const result = await response.json();
         const users = result.data || result;
         const tbody = document.querySelector("#userTable tbody");
-        tbody.innerHTML = users.map((u) => `
+        tbody.innerHTML = users
+          .map(
+            (u) => `
           <tr>
             <td>${u.id}</td>
             <td>${u.nama}</td>
             <td>${u.email}</td>
             <td><span class="role ${u.role}">${u.role}</span></td>
 
-            <td>${u.role === "admin"? "-":
-              `<button class="delete-btn" onclick="editUser(${u.id},'${u.nama}','${u.email}','${u.role}')">
+            <td>${
+              u.role === "admin"
+                ? "-"
+                : `<button class="delete-btn" onclick="editUser(${u.id},'${u.nama}','${u.email}','${u.role}')">
                 ✏ Edit
               </button>
               <button class="delete-btn" onclick="deleteUser(${u.id})">
                 🗑 Hapus
-              </button>` }
+              </button>`
+            }
             </td>
-          </tr>`
-        ).join("");
+          </tr>`,
+          )
+          .join("");
       }
 
       async function deleteUser(id) {
         const confirmDelete = confirm("Yakin ingin menghapus user ini?");
         if (!confirmDelete) return;
         try {
-          const res = await fetch(
-            `/api/users/${id}`,{
-              method: "DELETE",headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,},
-            }
-          );
+          const res = await fetch(`/api/users/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
 
           const result = await res.json();
           alert(result.message || "User berhasil dihapus!");
@@ -203,9 +209,9 @@
       }
 
       async function loadAvailablePengajar(selectedId = "") {
-        const resPengajar = await fetch(
-          "/api/users?role=pengajar",{headers: {Authorization: `Bearer ${localStorage.getItem("token")}`,},}
-        );
+        const resPengajar = await fetch("/api/users?role=pengajar", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
 
         const result = await resPengajar.json();
         const pengajar = result.data || result;
@@ -224,18 +230,16 @@
       }
 
       async function loadPelajaran() {
-        const res = await fetch(
-          "/api/mata-pelajaran"
-        );
+        const res = await fetch("/api/mata-pelajaran");
 
         const result = await res.json();
         const pelajaran = result.data || result;
 
-        const tbody = document.querySelector(
-          "#pelajaranTable tbody"
-        );
+        const tbody = document.querySelector("#pelajaranTable tbody");
 
-        tbody.innerHTML = pelajaran.map((p) => `
+        tbody.innerHTML = pelajaran
+          .map(
+            (p) => `
             <tr>
               <td>${p.id}</td>
               <td>${p.nama_mapel}</td>
@@ -255,28 +259,34 @@
                 </button>
               </td>
             </tr>
-          `
-          ).join("");
+          `,
+          )
+          .join("");
       }
 
-      async function editUser(id,nama,email,role){
-        document.getElementById("userId").value=id;
-        document.getElementById("namaUser").value=nama;
-        document.getElementById("emailUser").value=email;
-        document.getElementById("passwordUser").value="";
-        document.getElementById("roleUser").value=role;
-        document.querySelector("#addUserForm button[type='submit']").textContent="Update Pengguna";
-        document.getElementById("cancelUserEditBtn").style.display="inline-block";
+      async function editUser(id, nama, email, role) {
+        document.getElementById("userId").value = id;
+        document.getElementById("namaUser").value = nama;
+        document.getElementById("emailUser").value = email;
+        document.getElementById("passwordUser").value = "";
+        document.getElementById("roleUser").value = role;
+        document.querySelector(
+          "#addUserForm button[type='submit']",
+        ).textContent = "Update Pengguna";
+        document.getElementById("cancelUserEditBtn").style.display =
+          "inline-block";
       }
 
-      async function cancelUserEdit(){
-          document.getElementById("userId").value="";
-          document.getElementById("addUserForm").reset();
-          document.querySelector("#addUserForm button[type='submit']").textContent="Tambah Pengguna";
-          document.getElementById("cancelUserEditBtn").style.display="none";
+      async function cancelUserEdit() {
+        document.getElementById("userId").value = "";
+        document.getElementById("addUserForm").reset();
+        document.querySelector(
+          "#addUserForm button[type='submit']",
+        ).textContent = "Tambah Pengguna";
+        document.getElementById("cancelUserEditBtn").style.display = "none";
       }
 
-      async function editPelajaran(id,nama_mapel,deskripsi,pengajarId) {
+      async function editPelajaran(id, nama_mapel, deskripsi, pengajarId) {
         document.getElementById("pelajaranId").value = id;
         document.getElementById("namaPelajaran").value = nama_mapel;
         document.getElementById("deskripsiPelajaran").value = deskripsi;
@@ -294,47 +304,49 @@
         loadAvailablePengajar();
       }
 
-      document.getElementById("addPelajaranForm").addEventListener("submit",async (e) => {
-        e.preventDefault();
+      document
+        .getElementById("addPelajaranForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        const id = document.getElementById("pelajaranId").value;
-        const nama_mapel = document.getElementById("namaPelajaran").value;
-        const deskripsi = document.getElementById("deskripsiPelajaran").value;
-        const pengajarId = document.getElementById("pengajarSelect").value;
-        let url = "/api/mata-pelajaran";
-        let method = "POST";
+          const id = document.getElementById("pelajaranId").value;
+          const nama_mapel = document.getElementById("namaPelajaran").value;
+          const deskripsi = document.getElementById("deskripsiPelajaran").value;
+          const pengajarId = document.getElementById("pengajarSelect").value;
+          let url = "/api/mata-pelajaran";
+          let method = "POST";
 
-        if (id) {
-          url = `/api/mata-pelajaran/${id}`; method = "PUT";
-        }
-            const res = await fetch(
-              url,
-              {
-                method,
-                headers: {"Content-Type":"application/json",
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                body: JSON.stringify({
-                  nama_mapel,
-                  deskripsi,
-                  pengajarId,
-                }),
-              }
-            );
-
-            const data =await res.json();
-            alert(data.message || "Berhasil!");
-            loadPelajaran();
-            loadAvailablePengajar();
-
-            document.getElementById("pelajaranId").value = "";
-            document.getElementById("submitPelajaranBtn").textContent = "Tambah";
-            document.getElementById("cancelEditBtn").style.display = "none";e.target.reset();
+          if (id) {
+            url = `/api/mata-pelajaran/${id}`;
+            method = "PUT";
           }
-        );
+          const res = await fetch(url, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+              nama_mapel,
+              deskripsi,
+              pengajarId,
+            }),
+          });
 
-      document.getElementById("addUserForm").addEventListener("submit", async (e) => {
+          const data = await res.json();
+          alert(data.message || "Berhasil!");
+          loadPelajaran();
+          loadAvailablePengajar();
 
+          document.getElementById("pelajaranId").value = "";
+          document.getElementById("submitPelajaranBtn").textContent = "Tambah";
+          document.getElementById("cancelEditBtn").style.display = "none";
+          e.target.reset();
+        });
+
+      document
+        .getElementById("addUserForm")
+        .addEventListener("submit", async (e) => {
           e.preventDefault();
 
           const id = document.getElementById("userId").value;
@@ -372,9 +384,11 @@
           loadAvailablePengajar();
         });
 
-      await loadUsers();
-      await loadPelajaran();
-      loadAvailablePengajar();
+      (async () => {
+        await loadUsers();
+        await loadPelajaran();
+        await loadAvailablePengajar();
+      })();
     </script>
   </body>
 </html>

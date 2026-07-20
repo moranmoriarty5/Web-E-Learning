@@ -276,9 +276,10 @@
           alert("Gagal menghapus materi");
         }
       }
-
-      await loadMataPelajaran();
-      await loadMateri();
+      (async () => {
+        await loadMataPelajaran();
+        await loadMateri();
+      })();
     </script>
   </body>
 </html>

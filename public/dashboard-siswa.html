@@ -458,7 +458,9 @@
 
       }
 
-      await loadMateri();
+      (async () => {
+        await loadMateri();
+      })();
     </script>
   </body>
 </html>
