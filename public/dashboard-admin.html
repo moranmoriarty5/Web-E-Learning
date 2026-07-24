@@ -384,11 +384,9 @@
           loadAvailablePengajar();
         });
 
-      (async () => {
-        await loadUsers();
-        await loadPelajaran();
-        await loadAvailablePengajar();
-      })();
+      loadUsers();
+      loadPelajaran();
+      loadAvailablePengajar();
     </script>
   </body>
 </html>
