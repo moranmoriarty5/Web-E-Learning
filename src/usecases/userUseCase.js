@@ -100,6 +100,8 @@ export const updateUserByAdmin = async ({
 
   if (password && password.trim() !== "") {
     updateData.password = await bcrypt.hash(password, 10);
+  } else {
+    console.log("Password tidak diubah karena kosong atau hanya spasi.");
   }
 
   await user.update(updateData);
@@ -122,7 +124,7 @@ export const deleteUserById = async (id) => {
 
   if (jumlahMapel > 0) {
     throw new Error(
-      "Gagal menghapus user karena masih mengampu mata pelajaran."
+      "Gagal menghapus user karena masih mengampu mata pelajaran.",
     );
   }
 
@@ -133,9 +135,7 @@ export const deleteUserById = async (id) => {
   });
 
   if (jumlahTugas > 0) {
-    throw new Error(
-      "Gagal menghapus user karena masih memiliki tugas."
-    );
+    throw new Error("Gagal menghapus user karena masih memiliki tugas.");
   }
 
   if (user.role === "admin") {
@@ -145,4 +145,59 @@ export const deleteUserById = async (id) => {
   await user.destroy();
 
   return true;
+};
+
+export const getProfile = async (id) => {
+
+  const user = await User.findByPk(id, {
+    attributes: ["id", "nama", "email", "role"],
+  });
+
+  if (!user) {
+    throw new Error("User tidak ditemukan");
+  }
+
+  return user;
+};
+
+export const updateProfile = async ({
+  id,
+  nama,
+  email,
+  password,
+}) => {
+
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    throw new Error("User tidak ditemukan");
+  }
+
+  // Cek email sudah dipakai user lain
+  const emailExist = await User.findOne({
+    where: {
+      email,
+    },
+  });
+
+  if (emailExist && emailExist.id != id) {
+    throw new Error("Email sudah digunakan.");
+  }
+
+  user.nama = nama;
+  user.email = email;
+
+  // Password hanya diubah jika diisi
+  if (password && password.trim() !== "") {
+    user.password = await bcrypt.hash(password, 10);
+  }
+
+  await user.save();
+
+  return {
+    id: user.id,
+    nama: user.nama,
+    email: user.email,
+    role: user.role,
+  };
 };

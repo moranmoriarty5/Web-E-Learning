@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Profil</title>
+
+    <link rel="stylesheet" href="css/edit-profile.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Edit Profil</h1>
+
+      <form id="editProfileForm">
+        <input type="hidden" id="userId" />
+
+        <label for="nama">Nama Lengkap</label>
+        <input type="text" id="nama" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
+
+        <label for="role">Role</label>
+        <input type="text" id="role" readonly />
+
+        <label for="password">Password Baru</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Kosongkan jika tidak ingin mengubah password"
+        />
+
+        <label for="confirmPassword">Konfirmasi Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Masukkan kembali password baru"
+        />
+
+        <button type="submit">💾 Simpan Perubahan</button>
+
+        <button type="button" onclick="kembali()">← Kembali</button>
+      </form>
+    </div>
+
+    <script>
+      const role = localStorage.getItem("role");
+
+      if (!localStorage.getItem("token")) {
+        alert("Silakan login terlebih dahulu");
+        location.href = "/login";
+      }
+
+      async function loadProfile() {
+        const res = await fetch("/api/users/profile", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          alert(result.message);
+          return;
+        }
+
+        const user = result.data;
+
+        document.getElementById("userId").value = user.id;
+        document.getElementById("nama").value = user.nama;
+        document.getElementById("email").value = user.email;
+        document.getElementById("role").value = user.role;
+      }
+
+      document
+        .getElementById("editProfileForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const password = document.getElementById("password").value;
+          const confirm = document.getElementById("confirmPassword").value;
+
+          if (password !== confirm) {
+            alert("Konfirmasi password tidak sesuai.");
+            return;
+          }
+
+          const body = {
+            nama: document.getElementById("nama").value,
+            email: document.getElementById("email").value,
+            password,
+          };
+
+          const res = await fetch("/api/users/profile", {
+            method: "PUT",
+
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+
+            body: JSON.stringify(body),
+          });
+
+          const result = await res.json();
+
+          alert(result.message);
+
+          if (res.ok) {
+            localStorage.setItem("nama", body.nama);
+
+            document.getElementById("password").value = "";
+            document.getElementById("confirmPassword").value = "";
+          }
+        });
+
+      function kembali() {
+        if (role === "admin") {
+          location.href = "/dashboard-admin";
+        } else if (role === "pengajar") {
+          location.href = "/dashboard-pengajar";
+        } else {
+          location.href = "/dashboard-siswa";
+        }
+      }
+
+      loadProfile();
+    </script>
+  </body>
+</html>

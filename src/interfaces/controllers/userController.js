@@ -83,3 +83,28 @@ export const deleteUser = async (req, res) => {
     error(res, err.message, 400);
   }
 };
+
+export const getProfile = async (req, res) => {
+  try {
+    const profile = await userUseCase.getProfile(req.user.id);
+
+    success(res, profile, "Profil berhasil diambil");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const result = await userUseCase.updateProfile({
+      id: req.user.id,
+      nama: req.body.nama,
+      email: req.body.email,
+      password: req.body.password,
+    });
+
+    success(res, result, "Profil berhasil diperbarui");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};

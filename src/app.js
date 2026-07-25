@@ -63,6 +63,10 @@ app.get("/materi", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/materi.html"));
 });
 
+app.get("/edit-profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/edit-profile.html"));
+});
+
 try {
   await sequelize.sync();
 

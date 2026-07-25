@@ -14,19 +14,27 @@ router.get(
   userController.getAllUsers,
 );
 router.post("/register", userController.register);
+
 router.post("/login", userController.login);
+
+router.get("/profile", verifyToken, userController.getProfile);
+
+router.put("/profile", verifyToken, userController.updateProfile);
+
 router.post(
   "/admin/create",
   verifyToken,
   authorizeRoles("admin"),
   userController.createUserByAdmin,
 );
+
 router.put(
   "/:id",
   verifyToken,
   authorizeRoles("admin"),
   userController.updateUserByAdmin,
 );
+
 router.delete(
   "/:id",
   verifyToken,

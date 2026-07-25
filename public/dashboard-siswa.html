@@ -14,8 +14,8 @@
         <p id="studentName"></p>
 
         <nav>
+          <button onclick="location.href='/edit-profile'">👤 Edit Profil</button>
           <button onclick="toggleDarkMode()">🌙 Mode Gelap</button>
-
           <button onclick="logout()">🚪 Logout</button>
         </nav>
       </aside>
@@ -441,21 +441,14 @@
               );
 
               const result = await res.json();
-
               alert(result.message);
-
               loadMateri();
 
           }catch(err){
-
               console.error(err);
-
               alert("Gagal menghapus tugas");
-
           }
-
       }
-
       loadMateri();
     </script>
   </body>

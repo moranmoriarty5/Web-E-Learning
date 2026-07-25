@@ -21,8 +21,8 @@
     </div>
 
     <nav class="menu">
+      <button onclick="location.href='/edit-profile'">👤 Edit Profil</button>
       <button onclick="showSection('users')">👥 Kelola Pengguna</button>
-
       <button onclick="showSection('pelajaran')">
         📚 Kelola Mata Pelajaran
       </button>
@@ -279,6 +279,7 @@
         document.getElementById("emailUser").value = email;
         document.getElementById("passwordUser").value = "";
         document.getElementById("roleUser").value = role;
+        document.getElementById("passwordUser").required = false;
         document.querySelector(
           "#addUserForm button[type='submit']",
         ).textContent = "Update Pengguna";
@@ -289,6 +290,7 @@
       async function cancelUserEdit() {
         document.getElementById("userId").value = "";
         document.getElementById("addUserForm").reset();
+        document.getElementById("passwordUser").required = true;
         document.querySelector(
           "#addUserForm button[type='submit']",
         ).textContent = "Tambah Pengguna";
