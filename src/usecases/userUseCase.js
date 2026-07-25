@@ -2,6 +2,17 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../entities/User.js";
 
+export const getAllUsers = async (role) => {
+  const whereClause = role ? { role } : {};
+
+  const users = await User.findAll({
+    where: whereClause,
+    attributes: ["id", "nama", "email", "role"],
+  });
+
+  return users;
+};
+
 export const registerUser = async (data) => {
   const { nama, email, password, role } = data;
   const hashed = await bcrypt.hash(password, 10);

@@ -1,16 +1,11 @@
 import * as userUseCase from "../../usecases/userUseCase.js";
 import { success, error } from "../../shared/helpers/response.js";
-import { User } from "../../entities/User.js";
 
 export const getAllUsers = async (req, res) => {
   try {
     const { role } = req.query;
 
-    const whereClause = role ? { role } : {};
-    const users = await User.findAll({
-      where: whereClause,
-      attributes: ["id", "nama", "email", "role"],
-    });
+    const users = await userUseCase.getAllUsers(role);
 
     success(res, users, "Data user berhasil diambil");
   } catch (err) {
