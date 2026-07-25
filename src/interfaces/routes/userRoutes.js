@@ -13,6 +13,7 @@ router.get(
   authorizeRoles("admin"),
   userController.getAllUsers,
 );
+
 router.post("/register", userController.register);
 
 router.post("/login", userController.login);

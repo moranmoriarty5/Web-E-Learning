@@ -32,6 +32,31 @@ export const login = async (req, res) => {
   }
 };
 
+export const getProfile = async (req, res) => {
+  try {
+    const profile = await userUseCase.getProfile(req.user.id);
+
+    success(res, profile, "Profil berhasil diambil");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const result = await userUseCase.updateProfile({
+      id: req.user.id,
+      nama: req.body.nama,
+      email: req.body.email,
+      password: req.body.password,
+    });
+
+    success(res, result, "Profil berhasil diperbarui");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};
+
 export const createUserByAdmin = async (req, res) => {
   try {
     const { nama, email, password, role } = req.body;
@@ -79,31 +104,6 @@ export const deleteUser = async (req, res) => {
     await userUseCase.deleteUserById(id);
 
     success(res, null, "User berhasil dihapus");
-  } catch (err) {
-    error(res, err.message, 400);
-  }
-};
-
-export const getProfile = async (req, res) => {
-  try {
-    const profile = await userUseCase.getProfile(req.user.id);
-
-    success(res, profile, "Profil berhasil diambil");
-  } catch (err) {
-    error(res, err.message, 400);
-  }
-};
-
-export const updateProfile = async (req, res) => {
-  try {
-    const result = await userUseCase.updateProfile({
-      id: req.user.id,
-      nama: req.body.nama,
-      email: req.body.email,
-      password: req.body.password,
-    });
-
-    success(res, result, "Profil berhasil diperbarui");
   } catch (err) {
     error(res, err.message, 400);
   }

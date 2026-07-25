@@ -51,6 +51,59 @@ export const loginUser = async (email, password) => {
   };
 };
 
+export const getProfile = async (id) => {
+
+  const user = await User.findByPk(id, {
+    attributes: ["id", "nama", "email", "role"],
+  });
+
+  if (!user) {
+    throw new Error("User tidak ditemukan");
+  }
+
+  return user;
+};
+
+export const updateProfile = async ({
+  id,
+  nama,
+  email,
+  password,
+}) => {
+
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    throw new Error("User tidak ditemukan");
+  }
+
+  const emailExist = await User.findOne({
+    where: {
+      email,
+    },
+  });
+
+  if (emailExist && emailExist.id != id) {
+    throw new Error("Email sudah digunakan.");
+  }
+
+  user.nama = nama;
+  user.email = email;
+
+  if (password && password.trim() !== "") {
+    user.password = await bcrypt.hash(password, 10);
+  }
+
+  await user.save();
+
+  return {
+    id: user.id,
+    nama: user.nama,
+    email: user.email,
+    role: user.role,
+  };
+};
+
 export const createUserByAdmin = async ({ nama, email, password, role }) => {
   const existing = await User.findOne({ where: { email } });
   if (existing) throw new Error("Email sudah digunakan");
@@ -145,59 +198,4 @@ export const deleteUserById = async (id) => {
   await user.destroy();
 
   return true;
-};
-
-export const getProfile = async (id) => {
-
-  const user = await User.findByPk(id, {
-    attributes: ["id", "nama", "email", "role"],
-  });
-
-  if (!user) {
-    throw new Error("User tidak ditemukan");
-  }
-
-  return user;
-};
-
-export const updateProfile = async ({
-  id,
-  nama,
-  email,
-  password,
-}) => {
-
-  const user = await User.findByPk(id);
-
-  if (!user) {
-    throw new Error("User tidak ditemukan");
-  }
-
-  // Cek email sudah dipakai user lain
-  const emailExist = await User.findOne({
-    where: {
-      email,
-    },
-  });
-
-  if (emailExist && emailExist.id != id) {
-    throw new Error("Email sudah digunakan.");
-  }
-
-  user.nama = nama;
-  user.email = email;
-
-  // Password hanya diubah jika diisi
-  if (password && password.trim() !== "") {
-    user.password = await bcrypt.hash(password, 10);
-  }
-
-  await user.save();
-
-  return {
-    id: user.id,
-    nama: user.nama,
-    email: user.email,
-    role: user.role,
-  };
 };

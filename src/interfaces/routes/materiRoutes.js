@@ -22,9 +22,13 @@ router.post(
   upload.single("filePath"),
   materiController.uploadMateri,
 );
+
 router.get("/", materiController.getMateri);
+
 router.get("/:id", materiController.getMateriById);
+
 router.put("/:id", upload.single("filePath"), materiController.update);
+
 router.delete("/:id", materiController.delete_);
 
 export default router;
