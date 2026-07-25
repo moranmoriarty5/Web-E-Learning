@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../entities/User.js";
+import { MataPelajaran } from "../entities/MataPelajaran.js";
+import { Tugas } from "../entities/Tugas.js";
 
 export const getAllUsers = async (role) => {
   const whereClause = role ? { role } : {};
@@ -110,6 +112,30 @@ export const deleteUserById = async (id) => {
 
   if (!user) {
     throw new Error("User tidak ditemukan");
+  }
+
+  const jumlahMapel = await MataPelajaran.count({
+    where: {
+      pengajarId: id,
+    },
+  });
+
+  if (jumlahMapel > 0) {
+    throw new Error(
+      "Gagal menghapus user karena masih mengampu mata pelajaran."
+    );
+  }
+
+  const jumlahTugas = await Tugas.count({
+    where: {
+      siswaId: id,
+    },
+  });
+
+  if (jumlahTugas > 0) {
+    throw new Error(
+      "Gagal menghapus user karena masih memiliki tugas."
+    );
   }
 
   if (user.role === "admin") {

@@ -18,7 +18,7 @@ export const register = async (req, res) => {
     const user = await userUseCase.registerUser(req.body);
     success(res, user, "Registrasi berhasil");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
@@ -28,7 +28,7 @@ export const login = async (req, res) => {
     const result = await userUseCase.loginUser(email, password);
     success(res, result, "Login berhasil");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
@@ -52,7 +52,7 @@ export const createUserByAdmin = async (req, res) => {
 
     success(res, newUser, "User baru berhasil dibuat oleh admin");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
@@ -68,7 +68,7 @@ export const updateUserByAdmin = async (req, res) => {
 
     success(res, result, "User berhasil diperbarui oleh admin");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
@@ -80,6 +80,6 @@ export const deleteUser = async (req, res) => {
 
     success(res, null, "User berhasil dihapus");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };

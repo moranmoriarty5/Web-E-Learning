@@ -188,6 +188,7 @@
       async function deleteUser(id) {
         const confirmDelete = confirm("Yakin ingin menghapus user ini?");
         if (!confirmDelete) return;
+
         try {
           const res = await fetch(`/api/users/${id}`, {
             method: "DELETE",
@@ -197,14 +198,22 @@
           });
 
           const result = await res.json();
-          alert(result.message || "User berhasil dihapus!");
+
+          // Jika request gagal
+          if (!res.ok) {
+            alert(result.message);
+            return;
+          }
+
+          // Jika berhasil
+          alert(result.message);
 
           loadUsers();
           loadAvailablePengajar();
           loadPelajaran();
         } catch (error) {
           console.error(error);
-          alert("Gagal menghapus user");
+          alert("Terjadi kesalahan saat menghubungi server.");
         }
       }
 

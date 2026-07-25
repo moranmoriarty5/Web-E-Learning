@@ -7,28 +7,22 @@ export const submit = async (req, res) => {
       return error(res, "File tidak ditemukan", 400);
     }
 
-    const { judul, materiId, siswaId } = req.body;
+    const { judul, materiId } = req.body;
 
-    if (!judul || !materiId || !siswaId) {
-      return error(res, "Field judul, materiId, dan siswaId wajib diisi", 400);
+    if (!judul || !materiId) {
+      return error(res, "Field judul dan materiId wajib diisi", 400);
     }
 
     const tugas = await tugasUseCase.submitTugas({
       judul,
       materiId,
-      siswaId,
+      siswaId: req.user.id,
       filePath: `/uploads/tugas/${req.file.filename}`,
     });
 
-    res
-      .status(201)
-      .json({
-        status: "success",
-        message: "Tugas berhasil dikumpulkan",
-        data: tugas,
-      });
+    success(res, tugas, "Tugas berhasil dikumpulkan", 201);
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
