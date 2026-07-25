@@ -35,36 +35,40 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
+app.get("/edit-profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/edit-profile.html"));
+});
+
 app.get("/dashboard-admin", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/dashboard-admin.html"));
-});
-
-app.get("/dashboard-siswa", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/dashboard-siswa.html"));
-});
-
-app.get("/dashboard-pengajar", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/dashboard-pengajar.html"));
-});
-
-app.get("/tugas-pengajar", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/tugas-pengajar.html"));
-});
-
-app.get("/tugas", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/tugas.html"));
 });
 
 app.get("/mata-pelajaran", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/mata-pelajaran.html"));
 });
 
+app.get("/dashboard-pengajar", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/dashboard-pengajar.html"));
+});
+
 app.get("/materi", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/materi.html"));
 });
 
-app.get("/edit-profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/edit-profile.html"));
+app.get("/tugas-pengajar", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/tugas-pengajar.html"));
+});
+
+app.get("/dashboard-siswa", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/dashboard-siswa.html"));
+});
+
+app.get("/tugas", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/tugas.html"));
+});
+
+app.get("/diskusi", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/diskusi.html"));
 });
 
 try {
