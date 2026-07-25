@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as materiController from "../controllers/materiController.js";
+import { verifyToken } from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -23,12 +24,12 @@ router.post(
   materiController.uploadMateri,
 );
 
-router.get("/", materiController.getMateri);
+router.get("/", verifyToken, materiController.getMateri);
 
-router.get("/:id", materiController.getMateriById);
+router.get("/:id", verifyToken, materiController.getMateriById);
 
-router.put("/:id", upload.single("filePath"), materiController.update);
+router.put("/:id", verifyToken, upload.single("filePath"), materiController.update);
 
-router.delete("/:id", materiController.delete_);
+router.delete("/:id", verifyToken, materiController.delete_);
 
 export default router;

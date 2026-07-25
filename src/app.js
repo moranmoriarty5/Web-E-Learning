@@ -43,10 +43,6 @@ app.get("/dashboard-admin", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/dashboard-admin.html"));
 });
 
-app.get("/mata-pelajaran", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/mata-pelajaran.html"));
-});
-
 app.get("/dashboard-pengajar", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/dashboard-pengajar.html"));
 });

@@ -19,10 +19,6 @@ body {
   padding: 30px;
 }
 
-/* =======================
-        CARD
-======================= */
-
 .container {
   width: 100%;
   max-width: 560px;
@@ -37,10 +33,6 @@ body {
 
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
-
-/* =======================
-        HEADER
-======================= */
 
 .profile-header {
   text-align: center;
@@ -89,10 +81,6 @@ body {
   font-size: 14px;
 }
 
-/* =======================
-        FORM
-======================= */
-
 form {
   padding: 35px;
 }
@@ -112,10 +100,6 @@ label {
 
   font-size: 14px;
 }
-
-/* =======================
-        INPUT
-======================= */
 
 .input-box {
   position: relative;
@@ -159,12 +143,8 @@ label {
 .input-box input[readonly] {
   background: #f1f5f9;
 
-  color: #64748b;
+  color: #000000;
 }
-
-/* =======================
-        BUTTON
-======================= */
 
 .button-group {
   display: flex;
@@ -192,8 +172,6 @@ button {
   transition: 0.25s;
 }
 
-/* Simpan */
-
 button[type="submit"] {
   background: #2563eb;
 
@@ -208,8 +186,6 @@ button[type="submit"]:hover {
   box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
-/* Kembali */
-
 button[type="button"] {
   background: #f1f5f9;
 
@@ -219,10 +195,6 @@ button[type="button"] {
 button[type="button"]:hover {
   background: #e2e8f0;
 }
-
-/* =======================
-        MOBILE
-======================= */
 
 @media (max-width: 768px) {
   body {

@@ -57,6 +57,11 @@
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
 
+      if (!localStorage.getItem("token")) {
+        alert("Silakan login terlebih dahulu");
+        location.href = "/login";
+      }
+
       let mataPelajaranId = null;
 
       async function loadMataPelajaran() {
