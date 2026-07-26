@@ -8,114 +8,215 @@
   <body>
     <h2>💬 Forum Diskusi Materi</h2>
 
-    <div id="info"></div>
-
     <textarea id="isi_pesan" placeholder="Tulis komentar..."></textarea>
-    <br />
+
     <div class="button-group">
-      <button onclick="kirimDiskusi()" class="send-btn">🚀 Kirim</button>
+      <button id="btnKirim" onclick="kirimDiskusi()" class="send-btn">
+        🚀 Kirim
+      </button>
+
+      <button
+        id="btnBatal"
+        onclick="batalEdit()"
+        class="back-btn"
+        style="display: none"
+      >
+        ❌ Batal
+      </button>
 
       <button onclick="kembali()" class="back-btn">← Kembali</button>
     </div>
 
     <hr />
 
-    <div id="diskusiList"></div>
+    <div id="diskusiList">Memuat diskusi...</div>
 
     <script>
-      const params = new URLSearchParams(globalThis.location.search);
+      const params = new URLSearchParams(location.search);
+
       const materiId = params.get("materiId");
+
       const token = localStorage.getItem("token");
 
+      const userId = Number(localStorage.getItem("userId"));
+
+      let editId = null;
+
       if (!materiId) {
-        document.body.innerHTML = "<h3>❌ Materi tidak ditemukan</h3>";
+        document.body.innerHTML = "<h3>Materi tidak ditemukan</h3>";
         throw new Error("materiId null");
       }
 
       if (!token) {
-        alert("Akses ditolak, silakan login");
-        globalThis.location.href = "/login";
+        alert("Silakan login");
+
+        location.href = "/login";
       }
+
+      // ==========================
+      // LOAD DISKUSI
+      // ==========================
 
       async function loadDiskusi() {
         try {
           const res = await fetch(`/api/diskusi/${materiId}`, {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
 
-          if (!res.ok) {
-            throw new Error("Gagal mengambil diskusi");
-          }
+          if (res.status === 401) {
+            alert("Session habis");
 
-          const result = await res.json();
-          const data = result.data || result;
+            localStorage.clear();
 
-          const container = document.getElementById("diskusiList");
-          container.innerHTML = "";
+            location.href = "/login";
 
-          if (!data || data.length === 0) {
-            container.innerHTML = "<p>Belum ada diskusi.</p>";
             return;
           }
 
-          data.forEach(d => {
-            const user = d.User ? d.User.nama : "Anonim";
+          const result = await res.json();
 
-            container.innerHTML += `
-        <div class="chat-card">
-          <b>👤 ${user}</b>
-          <p>${d.isi_pesan}</p>
-        </div>
-      `;
+          if (!res.ok) {
+            return alert(result.message);
+          }
+
+          const data = result.data || result;
+
+          const container = document.getElementById("diskusiList");
+
+          if (data.length === 0) {
+            container.innerHTML = "<p>Belum ada diskusi.</p>";
+
+            return;
+          }
+
+          let html = "";
+
+          data.forEach((d) => {
+            const isOwner = d.userId === userId;
+
+            const nama = d.User ? d.User.nama : "Anonim";
+
+            html += `
+
+            <div class="chat-wrapper ${isOwner ? "self" : "other"}">
+              <div class="chat-card">
+                <b>${nama}</b>
+                <p>${d.isi_pesan}</p>
+                ${
+                  isOwner
+                    ? `<div class="action-btn">
+                        <button
+                        onclick="editDiskusi(${d.id},'${d.isi_pesan.replaceAll("'", "\\'")}')">
+                        ✏ Edit
+                        </button>
+                        <button
+                        onclick="hapusDiskusi(${d.id})">
+                        🗑 Hapus
+                        </button>
+                    </div>`
+                    : ""
+                }
+              </div>
+            </div>
+            `;
           });
 
+          container.innerHTML = html;
         } catch (err) {
-          document.getElementById("diskusiList").innerHTML =
-            "<p style='color:red'>❌ Error memuat diskusi</p>";
           console.error(err);
+
+          document.getElementById("diskusiList").innerHTML =
+            "<p style='color:red'>Gagal memuat diskusi</p>";
         }
       }
 
       async function kirimDiskusi() {
         const isi = document.getElementById("isi_pesan").value.trim();
-        if (!isi) return alert("Pesan kosong");
+
+        if (!isi) {
+          return alert("Komentar tidak boleh kosong");
+        }
+        let url = "/api/diskusi";
+        let method = "POST";
+        if (editId) {
+          url = `/api/diskusi/${editId}`;
+          method = "PUT";
+        }
 
         try {
-          const res = await fetch("/api/diskusi", {
-            method: "POST",
+          const res = await fetch(url, {
+            method,
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               materiId,
-              isi_pesan: isi
-            })
+              isi_pesan: isi,
+            }),
           });
 
-          if (!res.ok) throw new Error("Gagal kirim");
-
-          document.getElementById("isi_pesan").value = "";
+          const result = await res.json();
+          if (!res.ok) {
+            return alert(result.message);
+          }
+          batalEdit();
           loadDiskusi();
-
         } catch (err) {
-          alert("Gagal mengirim diskusi");
           console.error(err);
+          alert("Terjadi kesalahan");
+        }
+      }
+
+      function editDiskusi(id, isi) {
+        editId = id;
+        document.getElementById("isi_pesan").value = isi;
+        document.getElementById("isi_pesan").focus();
+        document.getElementById("btnKirim").innerHTML = "💾 Update";
+        document.getElementById("btnBatal").style.display = "inline-block";
+      }
+
+      function batalEdit() {
+        editId = null;
+        document.getElementById("isi_pesan").value = "";
+        document.getElementById("btnKirim").innerHTML = "🚀 Kirim";
+        document.getElementById("btnBatal").style.display = "none";
+      }
+
+      async function hapusDiskusi(id) {
+        if (!confirm("Yakin ingin menghapus komentar?")) {
+          return;
+        }
+        try {
+          const res = await fetch(`/api/diskusi/${id}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const result = await res.json();
+          if (!res.ok) {
+            return alert(result.message);
+          }
+
+          loadDiskusi();
+        } catch (err) {
+          console.error(err);
+          alert("Gagal menghapus komentar");
         }
       }
 
       function kembali() {
-          const role = localStorage.getItem("role");
-
-          if (role === "pengajar") {
-              globalThis.history.back();
-          } else {
-              globalThis.location.href = "/dashboard-siswa";
-          }
+        const role = localStorage.getItem("role");
+        if (role === "pengajar") {
+          location.href = "/dashboard-pengajar";
+        } else {
+          location.href = "/dashboard-siswa";
+        }
       }
-
       loadDiskusi();
     </script>
   </body>

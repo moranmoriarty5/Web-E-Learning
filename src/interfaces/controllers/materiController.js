@@ -7,11 +7,11 @@ export const uploadMateri = async (req, res) => {
       return error(res, "File tidak ditemukan", 400);
     }
 
-    const { judul, mataPelajaranId, userId } = req.body;
+    const { judul, mataPelajaranId } = req.body;
     const materi = await materiUseCase.uploadMateri({
       judul,
       mataPelajaranId,
-      userId,
+      userId: req.user.id,
       filePath: `/uploads/materi/${req.file.filename}`,
     });
 
@@ -45,7 +45,7 @@ export const getMateriById = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
+export const updateMateri = async (req, res) => {
   try {
     const { id } = req.params;
     const { judul, userId } = req.body;
@@ -74,7 +74,7 @@ export const update = async (req, res) => {
   }
 };
 
-export const delete_ = async (req, res) => {
+export const deleteMateri = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.query.userId;

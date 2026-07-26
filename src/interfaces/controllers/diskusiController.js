@@ -1,26 +1,27 @@
 import * as DiskusiUseCase from "../../usecases/diskusiUseCase.js";
+import { success, error } from "../../shared/helpers/response.js";
 
 export const getByMateri = async (req, res) => {
   try {
     const data = await DiskusiUseCase.getDiskusiByMateri(req.params.materiId);
-    res.json(data);
+    success(res, data, "Data diskusi berhasil diambil");
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    error(res, err.message, 400);
   }
 };
 
 export const create = async (req, res) => {
   try {
-    await DiskusiUseCase.createDiskusi(
+    const diskusi = await DiskusiUseCase.createDiskusi(
       req.body.materiId,
       req.user.id,
       req.body.isi_pesan,
       req.body.parent_id || null,
     );
 
-    res.json({ message: "Komentar ditambahkan" });
+    success(res, diskusi, "Komentar ditambahkan");
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    error(res, err.message, 400);
   }
 };
 
@@ -32,9 +33,9 @@ export const update = async (req, res) => {
       req.body.isi_pesan,
     );
 
-    res.json({ message: "Komentar diperbarui" });
+    success(res, null, "Komentar diperbarui");
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    error(res, err.message, 400);
   }
 };
 
@@ -42,8 +43,8 @@ export const remove = async (req, res) => {
   try {
     await DiskusiUseCase.deleteDiskusi(req.params.id, req.user.id);
 
-    res.json({ message: "Komentar dihapus" });
+    success(res, null, "Komentar dihapus");
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    error(res, err.message, 400);
   }
 };

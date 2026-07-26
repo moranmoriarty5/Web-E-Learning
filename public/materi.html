@@ -147,7 +147,11 @@
 
       async function loadMateri() {
 
-        const res = await fetch("/api/materi");
+        const res = await fetch("/api/materi", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
 
         const result = await res.json();
         const materi = result.data || result;

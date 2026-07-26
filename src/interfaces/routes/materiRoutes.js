@@ -28,8 +28,8 @@ router.get("/", verifyToken, materiController.getMateri);
 
 router.get("/:id", verifyToken, materiController.getMateriById);
 
-router.put("/:id", verifyToken, upload.single("filePath"), materiController.update);
+router.put("/:id", verifyToken, upload.single("filePath"), materiController.updateMateri);
 
-router.delete("/:id", verifyToken, materiController.delete_);
+router.delete("/:id", verifyToken, materiController.deleteMateri);
 
 export default router;

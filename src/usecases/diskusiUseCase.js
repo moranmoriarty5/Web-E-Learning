@@ -7,6 +7,11 @@ export const createDiskusi = async (
   isi_pesan,
   parent_id = null,
 ) => {
+
+  if(!isi_pesan){
+    throw new Error("Isi komentar wajib diisi");
+  }
+
   return await Diskusi.create({
     materiId,
     userId,
