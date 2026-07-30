@@ -52,7 +52,6 @@ export const loginUser = async (email, password) => {
 };
 
 export const getProfile = async (id) => {
-
   const user = await User.findByPk(id, {
     attributes: ["id", "nama", "email", "role"],
   });
@@ -64,13 +63,7 @@ export const getProfile = async (id) => {
   return user;
 };
 
-export const updateProfile = async ({
-  id,
-  nama,
-  email,
-  password,
-}) => {
-
+export const updateProfile = async ({ id, nama, email, password }) => {
   const user = await User.findByPk(id);
 
   if (!user) {
@@ -87,10 +80,18 @@ export const updateProfile = async ({
     throw new Error("Email sudah digunakan.");
   }
 
-  user.nama = nama;
-  user.email = email;
+  if (nama && nama.trim() !== "") {
+    user.nama = nama;
+  }
+
+  if (email && email.trim() !== "") {
+    user.email = email;
+  }
 
   if (password && password.trim() !== "") {
+    if (password.length < 6) {
+      throw new Error("Password minimal 6 karakter.");
+    }
     user.password = await bcrypt.hash(password, 10);
   }
 
@@ -107,6 +108,10 @@ export const updateProfile = async ({
 export const createUserByAdmin = async ({ nama, email, password, role }) => {
   const existing = await User.findOne({ where: { email } });
   if (existing) throw new Error("Email sudah digunakan");
+
+  if (password.length < 6) {
+      throw new Error("Password minimal 6 karakter.");
+    }
 
   const hashed = await bcrypt.hash(password, 10);
   const user = await User.create({ nama, email, password: hashed, role });
@@ -140,7 +145,7 @@ export const updateUserByAdmin = async ({
       where: { email },
     });
 
-    if (existing) {
+    if (existing && existing.id != id) {
       throw new Error("Email sudah digunakan");
     }
   }
@@ -152,6 +157,9 @@ export const updateUserByAdmin = async ({
   if (role) updateData.role = role;
 
   if (password && password.trim() !== "") {
+    if (password.length < 6) {
+      throw new Error("Password minimal 6 karakter.");
+    }
     updateData.password = await bcrypt.hash(password, 10);
   } else {
     console.log("Password tidak diubah karena kosong atau hanya spasi.");
@@ -159,7 +167,12 @@ export const updateUserByAdmin = async ({
 
   await user.update(updateData);
 
-  return user;
+  return {
+    id: user.id,
+    nama: user.nama,
+    email: user.email,
+    role: user.role,
+  };
 };
 
 export const deleteUserById = async (id) => {
@@ -167,6 +180,10 @@ export const deleteUserById = async (id) => {
 
   if (!user) {
     throw new Error("User tidak ditemukan");
+  }
+
+  if (user.role === "admin") {
+    throw new Error("Admin tidak boleh dihapus");
   }
 
   const jumlahMapel = await MataPelajaran.count({
@@ -191,11 +208,9 @@ export const deleteUserById = async (id) => {
     throw new Error("Gagal menghapus user karena masih memiliki tugas.");
   }
 
-  if (user.role === "admin") {
-    throw new Error("Admin tidak boleh dihapus");
-  }
-
   await user.destroy();
 
-  return true;
+  return {
+    message: "User berhasil dihapus",
+  };
 };

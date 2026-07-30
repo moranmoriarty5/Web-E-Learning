@@ -32,14 +32,11 @@
     <div id="diskusiList">Memuat diskusi...</div>
 
     <script>
+
       const params = new URLSearchParams(location.search);
-
       const materiId = params.get("materiId");
-
       const token = localStorage.getItem("token");
-
       const userId = Number(localStorage.getItem("userId"));
-
       let editId = null;
 
       if (!materiId) {
@@ -49,13 +46,8 @@
 
       if (!token) {
         alert("Silakan login");
-
         location.href = "/login";
       }
-
-      // ==========================
-      // LOAD DISKUSI
-      // ==========================
 
       async function loadDiskusi() {
         try {
@@ -64,42 +56,29 @@
               Authorization: `Bearer ${token}`,
             },
           });
-
           if (res.status === 401) {
             alert("Session habis");
-
             localStorage.clear();
-
             location.href = "/login";
-
             return;
           }
 
           const result = await res.json();
-
           if (!res.ok) {
             return alert(result.message);
           }
-
           const data = result.data || result;
-
           const container = document.getElementById("diskusiList");
-
           if (data.length === 0) {
             container.innerHTML = "<p>Belum ada diskusi.</p>";
-
             return;
           }
 
           let html = "";
-
           data.forEach((d) => {
             const isOwner = d.userId === userId;
-
             const nama = d.User ? d.User.nama : "Anonim";
-
             html += `
-
             <div class="chat-wrapper ${isOwner ? "self" : "other"}">
               <div class="chat-card">
                 <b>${nama}</b>

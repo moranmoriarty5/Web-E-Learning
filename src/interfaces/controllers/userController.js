@@ -3,19 +3,18 @@ import { success, error } from "../../shared/helpers/response.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const { role } = req.query;
-
-    const users = await userUseCase.getAllUsers(role);
+    const users = await userUseCase.getAllUsers(req.query.role);
 
     success(res, users, "Data user berhasil diambil");
   } catch (err) {
-    error(res, err.message);
+    error(res, err.message, 400);
   }
 };
 
 export const register = async (req, res) => {
   try {
     const user = await userUseCase.registerUser(req.body);
+
     success(res, user, "Registrasi berhasil");
   } catch (err) {
     error(res, err.message, 400);
@@ -24,8 +23,11 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const result = await userUseCase.loginUser(email, password);
+    const result = await userUseCase.loginUser(
+      req.body.email,
+      req.body.password,
+    );
+
     success(res, result, "Login berhasil");
   } catch (err) {
     error(res, err.message, 400);
@@ -38,7 +40,7 @@ export const getProfile = async (req, res) => {
 
     success(res, profile, "Profil berhasil diambil");
   } catch (err) {
-    error(res, err.message, 400);
+    error(res, err.message, 404);
   }
 };
 
@@ -46,9 +48,7 @@ export const updateProfile = async (req, res) => {
   try {
     const result = await userUseCase.updateProfile({
       id: req.user.id,
-      nama: req.body.nama,
-      email: req.body.email,
-      password: req.body.password,
+      ...req.body,
     });
 
     success(res, result, "Profil berhasil diperbarui");
@@ -59,23 +59,9 @@ export const updateProfile = async (req, res) => {
 
 export const createUserByAdmin = async (req, res) => {
   try {
-    const { nama, email, password, role } = req.body;
+    const user = await userUseCase.createUserByAdmin(req.body);
 
-    if (!nama || !email || !password || !role) {
-      return error(
-        res,
-        "Semua field wajib diisi (nama, email, password, role)",
-      );
-    }
-
-    const newUser = await userUseCase.createUserByAdmin({
-      nama,
-      email,
-      password,
-      role,
-    });
-
-    success(res, newUser, "User baru berhasil dibuat oleh admin");
+    success(res, user, "User baru berhasil dibuat oleh admin");
   } catch (err) {
     error(res, err.message, 400);
   }
@@ -85,13 +71,10 @@ export const updateUserByAdmin = async (req, res) => {
   try {
     const result = await userUseCase.updateUserByAdmin({
       id: req.params.id,
-      nama: req.body.nama,
-      email: req.body.email,
-      password: req.body.password,
-      role: req.body.role,
+      ...req.body,
     });
 
-    success(res, result, "User berhasil diperbarui oleh admin");
+    success(res, result, "User berhasil diperbarui");
   } catch (err) {
     error(res, err.message, 400);
   }
@@ -99,9 +82,7 @@ export const updateUserByAdmin = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    await userUseCase.deleteUserById(id);
+    await userUseCase.deleteUserById(req.params.id);
 
     success(res, null, "User berhasil dihapus");
   } catch (err) {
