@@ -1,14 +1,15 @@
 import express from "express";
 import * as mataPelajaranController from "../controllers/mataPelajaranController.js";
+import { verifyToken, authorizeRoles } from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", mataPelajaranController.getAll);
+router.get("/", verifyToken, mataPelajaranController.getAll);
 
-router.get("/pengajar/:userId", mataPelajaranController.getByPengajar);
+router.get("/pengajar/:userId", verifyToken, mataPelajaranController.getByPengajar);
 
-router.post("/", mataPelajaranController.create);
+router.post("/", verifyToken, authorizeRoles("admin"), mataPelajaranController.create);
 
-router.put("/:id", mataPelajaranController.update);
+router.put("/:id", verifyToken,  mataPelajaranController.update);
 
 export default router;

@@ -65,9 +65,13 @@
       } else {
         document.getElementById("nama").textContent = nama;
       }
+      
        async function loadMapel() {
         try {
-          const response = await fetch(`/api/mata-pelajaran/pengajar/${pengajarId}`);
+          const response = await fetch(`/api/mata-pelajaran/pengajar/${pengajarId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
           const result = await response.json();
           const data = result.data || result;
 
@@ -119,10 +123,12 @@
       }
 
       async function loadMataPelajaran() {
-        const res = await fetch("/api/mata-pelajaran");
+        const res = await fetch("/api/mata-pelajaran", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
         const result = await res.json();
         const mapel = result.data || result;
-
         const select = document.getElementById("filterMapel");
 
         mapel.forEach(m => {
@@ -138,7 +144,6 @@
         tbody.innerHTML = "";
 
         data.forEach((m, i) => {
-          const isOwner = m.MataPelajaran?.pengajarId == pengajarId;
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
@@ -173,7 +178,7 @@
       }
 
       function openForum(materiId) {
-        globalThis.location.href = `/diskusi.html?materiId=${materiId}`;
+        globalThis.location.href = `/diskusi?materiId=${materiId}`;
       }
 
       loadMateri();

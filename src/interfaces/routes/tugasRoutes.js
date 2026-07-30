@@ -36,6 +36,7 @@ router.get("/materi/:materiId", tugasController.listByMateri);
 router.post(
   "/submit",
   verifyToken,
+  authorizeRoles("siswa"),
   upload.single("file"),
   tugasController.submit
 );

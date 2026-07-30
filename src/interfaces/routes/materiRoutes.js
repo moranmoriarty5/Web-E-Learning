@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as materiController from "../controllers/materiController.js";
-import { verifyToken } from "../../shared/middleware/authMiddleware.js";
+import { verifyToken, authorizeRoles } from "../../shared/middleware/authMiddleware.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +20,8 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 router.post(
   "/upload",
+  verifyToken,
+  authorizeRoles("pengajar"),
   upload.single("filePath"),
   materiController.uploadMateri,
 );

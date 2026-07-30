@@ -14,7 +14,9 @@
         <p id="studentName"></p>
 
         <nav>
-          <button onclick="location.href='/edit-profile'">👤 Edit Profil</button>
+          <button onclick="location.href = '/edit-profile'">
+            👤 Edit Profil
+          </button>
           <button onclick="toggleDarkMode()">🌙 Mode Gelap</button>
           <button onclick="logout()">🚪 Logout</button>
         </nav>
@@ -84,370 +86,174 @@
         globalThis.location.href = "/login";
       }
 
-      document.getElementById(
-        "studentName"
-      ).textContent = "👩‍🎓 " + nama;
+      document.getElementById("studentName").textContent = "👩‍🎓 " + nama;
 
       function logout() {
         localStorage.clear();
         globalThis.location.href = "/login";
       }
 
-      function toggleDarkMode() {
-        document.body.classList.toggle("dark");
-
-        localStorage.setItem(
-          "darkMode",
-          document.body.classList.contains("dark")
-        );
-      }
-
-      if (
-        localStorage.getItem("darkMode") ===
-        "true"
-      ) {
-        document.body.classList.add("dark");
-      }
-
       let allMateri = [];
 
       async function loadMateri() {
         try {
+          const res = await fetch("/api/materi", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-          const res = await fetch(
-            "/api/materi",
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`
-              }
-            }
-          );
-
-          const result =
-            await res.json();
-
-          allMateri =
-            result.data || result;
-
+          const result = await res.json();
+          allMateri = result.data || result;
           await renderMateri(allMateri);
-
           loadMataPelajaran();
-
         } catch (error) {
           console.error(error);
-
-          alert(
-            "Gagal memuat data materi"
-          );
+          alert("Gagal memuat data materi");
         }
       }
 
       async function loadMataPelajaran() {
+        const res = await fetch("/api/mata-pelajaran", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        const res = await fetch(
-          "/api/mata-pelajaran"
-        );
+        const result = await res.json();
 
-        const result =
-          await res.json();
+        const mapel = result.data || result;
 
-        const mapel =
-          result.data || result;
-
-        const select =
-          document.getElementById(
-            "filterMapel"
-          );
+        const select = document.getElementById("filterMapel");
 
         mapel.forEach((m) => {
-
-          const opt =
-            document.createElement(
-              "option"
-            );
-
+          const opt = document.createElement("option");
           opt.value = m.nama_mapel;
-
-          opt.textContent =
-            m.nama_mapel;
-
+          opt.textContent = m.nama_mapel;
           select.appendChild(opt);
-
         });
       }
 
-      /* ================= STATISTIK ================= */
+      function updateStatistics(totalTugasSelesai) {
+        document.getElementById("totalMateri").textContent = allMateri.length;
 
-      function updateStatistics(
-        totalTugasSelesai
-      ) {
+        const uniqueMapel = new Set(
+          allMateri.map((m) => m.MataPelajaran?.nama_mapel),
+        );
 
-        document.getElementById(
-          "totalMateri"
-        ).textContent =
-          allMateri.length;
-
-        const uniqueMapel =
-          new Set(
-            allMateri.map(
-              m =>
-                m.MataPelajaran
-                  ?.nama_mapel
-            )
-          );
-
-        document.getElementById(
-          "totalMapel"
-        ).textContent =
-          uniqueMapel.size;
-
-        document.getElementById(
-          "tugasSelesai"
-        ).textContent =
-          totalTugasSelesai;
+        document.getElementById("totalMapel").textContent = uniqueMapel.size;
+        document.getElementById("tugasSelesai").textContent = totalTugasSelesai;
       }
 
-      async function renderMateri(
-        data
-      ) {
-
-        const tbody =
-          document.querySelector(
-            "#materiTable tbody"
-          );
-
+      async function renderMateri(data) {
+        const tbody = document.querySelector("#materiTable tbody");
         tbody.innerHTML = "";
-
         let tugasSelesai = 0;
-
         await Promise.all(
-
           data.map(async (m, i) => {
-
-            let submitted =
-              false;
-
-            let submissionInfo =
-              null;
-
+            let submitted = false;
+            let submissionInfo = null;
             try {
-
-              const res =
-                await fetch(
-                  `/api/tugas/materi/${m.id}`
-                );
+              const res = await fetch(`/api/tugas/materi/${m.id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
 
               if (res.ok) {
+                const result = await res.json();
+                const list = result.data || result;
 
-                const result =
-                  await res.json();
-
-                const list =
-                  result.data ||
-                  result;
-
-                const my =
-                  list.find(
-                    (t) =>
-                      String(
-                        t.siswaId
-                      ) ===
-                        String(
-                          userId
-                        ) ||
-                      (
-                        t.User &&
-                        String(
-                          t.User.id
-                        ) ===
-                          String(
-                            userId
-                          )
-                      )
-                  );
+                const my = list.find(
+                  (t) =>
+                    String(t.siswaId) === String(userId) ||
+                    (t.User && String(t.User.id) === String(userId)),
+                );
 
                 if (my) {
-
-                  submitted =
-                    true;
-
-                  submissionInfo =
-                    my;
-
+                  submitted = true;
+                  submissionInfo = my;
                   tugasSelesai++;
-
                 }
               }
-
             } catch (err) {
-
-              console.error(
-                err
-              );
-
+              console.error(err);
             }
 
-            const tr =
-              document.createElement(
-                "tr"
-              );
+            const tr = document.createElement("tr");
 
             tr.innerHTML = `
               <td>${i + 1}</td>
-
               <td>${m.judul}</td>
+              <td>${m.MataPelajaran?.nama_mapel || "-"}</td>
+              <td><a href="${m.filePath}"target="_blank">📄 Lihat</a></td>
 
-              <td>
-                ${
-                  m.MataPelajaran
-                    ?.nama_mapel ||
-                  "-"
-                }
-              </td>
-
-              <td>
-                <a
-                  href="${m.filePath}"
-                  target="_blank"
-                >
-                  📄 Lihat
-                </a>
-              </td>
-
-              <td>
-                <button
-                  onclick="openForum(${m.id})"
-                >
-                  💬 Diskusi
-                </button>
-              </td>
-
-              <td>
-                ${
-                  submitted
-                    ? `
-                    <span style="color:green">
-                      ✅ Sudah Dikumpulkan
-                    </span>
+              <td><button 
+                onclick="openForum(${m.id})"> 💬 Diskusi
+              </button></td>
+              <td>${
+                submitted
+                  ? `<span style="color:green">✅ Sudah Dikumpulkan</span>
 
                     <br>
 
-                    <a
-                      href="${submissionInfo.filePath}"
-                      target="_blank"
-                    >
-                      Lihat File
-                    </a>
-
+                    <a href="${submissionInfo.filePath}"target="_blank">Lihat File</a>
                     <br><br>
 
                     <button
-                      onclick="hapusTugas(${m.id})"
-                      class="delete-btn"
-                    >
-                      🗑 Hapus Pengumpulan
+                    onclick="hapusTugas(${m.id})" class="delete-btn">🗑 Hapus Pengumpulan
                     </button>
                   `
-                    : `
-                    <button
-                      onclick="openTugas(${m.id})"
-                    >
-                      📤 Submit Tugas
+                  : `
+                    <button 
+                    onclick="openTugas(${m.id})">📤 Submit Tugas
                     </button>
                   `
-                }
+              }
               </td>
             `;
 
             tbody.appendChild(tr);
-
-          })
-
+          }),
         );
-
-        updateStatistics(
-          tugasSelesai
-        );
+        updateStatistics(tugasSelesai);
       }
 
       function filterMateri() {
+        const keyword = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const mapel = document.getElementById("filterMapel").value;
 
-        const keyword =
-          document
-            .getElementById(
-              "searchInput"
-            )
-            .value
-            .toLowerCase();
-
-        const mapel =
-          document.getElementById(
-            "filterMapel"
-          ).value;
-
-        const filtered =
-          allMateri.filter(
-            (m) =>
-              m.judul
-                .toLowerCase()
-                .includes(
-                  keyword
-                ) &&
-              (
-                mapel === "" ||
-                m
-                  .MataPelajaran
-                  ?.nama_mapel ===
-                  mapel
-              )
-          );
-
-        renderMateri(
-          filtered
+        const filtered = allMateri.filter(
+          (m) =>
+            m.judul.toLowerCase().includes(keyword) &&
+            (mapel === "" || m.MataPelajaran?.nama_mapel === mapel),
         );
+
+        renderMateri(filtered);
       }
 
-      function openForum(
-        materiId
-      ) {
-        globalThis.location.href =
-          `/diskusi.html?materiId=${materiId}`;
+      function openForum(materiId) {
+        globalThis.location.href = `/diskusi?materiId=${materiId}`;
       }
 
-      function openTugas(
-        materiId
-      ) {
-        globalThis.location.href =
-          `/tugas?materiId=${materiId}`;
+      function openTugas(materiId) {
+        globalThis.location.href = `/tugas?materiId=${materiId}`;
       }
 
-      async function hapusTugas(materiId){
+      async function hapusTugas(materiId) {
+        if (!confirm("Hapus tugas yang sudah dikumpulkan?")) {
+          return;
+        }
 
-          if(!confirm("Hapus tugas yang sudah dikumpulkan?")){
-              return;
-          }
+        try {
+          const res = await fetch(`/api/tugas/submit/${materiId}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-          try{
-
-              const res = await fetch(
-                  `/api/tugas/submit/${materiId}`,
-                  {
-                      method:"DELETE",
-                      headers:{
-                          Authorization:`Bearer ${token}`
-                      }
-                  }
-              );
-
-              const result = await res.json();
-              alert(result.message);
-              loadMateri();
-
-          }catch(err){
-              console.error(err);
-              alert("Gagal menghapus tugas");
-          }
+          const result = await res.json();
+          alert(result.message);
+          loadMateri();
+        } catch (err) {
+          console.error(err);
+          alert("Gagal menghapus tugas");
+        }
       }
       loadMateri();
     </script>
