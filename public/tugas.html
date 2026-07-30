@@ -50,7 +50,12 @@
         }
 
         try {
-          const res = await fetch(`/api/materi/${materiId}`);
+          const res = await fetch(`/api/materi/${materiId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          
           if (!res.ok) {
             throw new Error('Materi tidak ditemukan');
           }

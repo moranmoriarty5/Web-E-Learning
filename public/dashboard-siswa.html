@@ -17,7 +17,6 @@
           <button onclick="location.href = '/edit-profile'">
             👤 Edit Profil
           </button>
-          <button onclick="toggleDarkMode()">🌙 Mode Gelap</button>
           <button onclick="logout()">🚪 Logout</button>
         </nav>
       </aside>
@@ -98,7 +97,9 @@
       async function loadMateri() {
         try {
           const res = await fetch("/api/materi", {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           const result = await res.json();
@@ -113,7 +114,9 @@
 
       async function loadMataPelajaran() {
         const res = await fetch("/api/mata-pelajaran", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          },
         });
 
         const result = await res.json();
@@ -151,7 +154,9 @@
             let submissionInfo = null;
             try {
               const res = await fetch(`/api/tugas/materi/${m.id}`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { 
+                  Authorization: `Bearer ${token}` 
+                },
               });
 
               if (res.ok) {
@@ -244,7 +249,9 @@
         try {
           const res = await fetch(`/api/tugas/submit/${materiId}`, {
             method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { 
+              Authorization: `Bearer ${token}` 
+            },
           });
 
           const result = await res.json();

@@ -53,7 +53,6 @@
     </div>
 
     <script>
-
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
 
@@ -65,48 +64,34 @@
       let mataPelajaranId = null;
 
       async function loadMataPelajaran() {
-
         try {
-
-          const res = await fetch(
-            `/api/mata-pelajaran/pengajar/${userId}`
-          );
+          const res = await fetch(`/api/mata-pelajaran/pengajar/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
           const result = await res.json();
           const data = result.data || result;
 
           // jika pengajar belum punya mapel
           if (!data || data.length === 0) {
-
             document.getElementById("infoMapel").innerHTML = `
-              <p style="color:red;">
-                Anda belum memiliki mata pelajaran
-              </p>
+              <p style="color:red;"> Anda belum memiliki mata pelajaran</p>
             `;
-
             return;
           }
-
-          // otomatis ambil mapel pertama
           mataPelajaranId = data[0].id;
 
           document.getElementById("infoMapel").innerHTML = `
-            <h3>
-              Mata Pelajaran:
-              ${data[0].nama_mapel}
-            </h3>
+            <h3> Mata Pelajaran : ${data[0].nama_mapel} </h3>
           `;
-
         } catch (err) {
           console.log(err);
         }
       }
 
-      uploadForm.addEventListener("submit", async e => {
-
+      uploadForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // belum punya mapel
         if (!mataPelajaranId) {
           alert("Anda belum memiliki mata pelajaran");
           return;
@@ -114,29 +99,16 @@
 
         const formData = new FormData(uploadForm);
 
-        formData.append(
-          "mataPelajaranId",
-          mataPelajaranId
-        );
+        formData.append("mataPelajaranId", mataPelajaranId);
 
-        formData.append(
-          "userId",
-          userId
-        );
+        formData.append("userId", userId);
 
-        const res = await fetch(
-          "/api/materi/upload",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          }
-        );
-
+        const res = await fetch("/api/materi/upload", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
         const result = await res.json();
-
         alert(result.message);
 
         if (res.ok) {
@@ -146,23 +118,22 @@
       });
 
       async function loadMateri() {
-
         const res = await fetch("/api/materi", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
 
         const result = await res.json();
         const materi = result.data || result;
 
-        const tbody =
-          document.querySelector("#materiTable tbody");
+        const tbody = document.querySelector("#materiTable tbody");
 
         tbody.innerHTML = "";
 
         materi.forEach((m, i) => {
-          const isOwner = m.MataPelajaran?.pengajarId === Number.parseInt(userId);
+          const isOwner =
+            m.MataPelajaran?.pengajarId === Number.parseInt(userId);
 
           tbody.innerHTML += `
             <tr>
@@ -187,7 +158,9 @@
               </td>
 
               <td>
-                ${isOwner ? `
+                ${
+                  isOwner
+                    ? `
                   <div class="action-buttons">
                     <button onclick="editMateri(${m.id}, '${m.judul.replaceAll("'", "\\'")}')">
                       ✏️ Edit
@@ -196,7 +169,9 @@
                       🗑️ Hapus
                     </button>
                   </div>
-                ` : "-"}
+                `
+                    : "-"
+                }
               </td>
 
             </tr>
@@ -205,8 +180,7 @@
       }
 
       function openForum(materiId) {
-        globalThis.location.href =
-          `/diskusi.html?materiId=${materiId}`;
+        globalThis.location.href = `/diskusi?materiId=${materiId}`;
       }
 
       function editMateri(id, judul) {

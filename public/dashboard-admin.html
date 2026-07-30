@@ -21,7 +21,7 @@
     </div>
 
     <nav class="menu">
-      <button onclick="location.href='/edit-profile'">👤 Edit Profil</button>
+      <button onclick="location.href = '/edit-profile'">👤 Edit Profil</button>
       <button onclick="showSection('users')">👥 Kelola Pengguna</button>
       <button onclick="showSection('pelajaran')">
         📚 Kelola Mata Pelajaran
@@ -154,7 +154,9 @@
 
       async function loadUsers() {
         const response = await fetch("/api/users", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
 
         const result = await response.json();
@@ -183,6 +185,70 @@
           </tr>`,
           )
           .join("");
+      }
+
+      document
+        .getElementById("addUserForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const id = document.getElementById("userId").value;
+
+          const data = {
+            nama: document.getElementById("namaUser").value,
+            email: document.getElementById("emailUser").value,
+            password: document.getElementById("passwordUser").value,
+            role: document.getElementById("roleUser").value,
+          };
+
+          let url = "/api/users/admin/create";
+          let method = "POST";
+
+          if (id) {
+            url = `/api/users/${id}`;
+            method = "PUT";
+          }
+
+          const res = await fetch(url, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await res.json();
+
+          alert(result.message || "Berhasil");
+
+          cancelUserEdit();
+          loadUsers();
+          loadAvailablePengajar();
+        });
+
+      async function editUser(id, nama, email, role) {
+        document.getElementById("userId").value = id;
+        document.getElementById("namaUser").value = nama;
+        document.getElementById("emailUser").value = email;
+        document.getElementById("passwordUser").value = "";
+        document.getElementById("roleUser").value = role;
+        document.getElementById("passwordUser").required = false;
+        document.querySelector(
+          "#addUserForm button[type='submit']",
+        ).textContent = "Update Pengguna";
+        document.getElementById("cancelUserEditBtn").style.display =
+          "inline-block";
+      }
+
+      async function cancelUserEdit() {
+        document.getElementById("userId").value = "";
+        document.getElementById("addUserForm").reset();
+        document.getElementById("passwordUser").required = true;
+        document.querySelector(
+          "#addUserForm button[type='submit']",
+        ).textContent = "Tambah Pengguna";
+        document.getElementById("cancelUserEditBtn").style.display = "none";
       }
 
       async function deleteUser(id) {
@@ -215,104 +281,6 @@
           console.error(error);
           alert("Terjadi kesalahan saat menghubungi server.");
         }
-      }
-
-      async function loadAvailablePengajar(selectedId = "") {
-        const resPengajar = await fetch("/api/users?role=pengajar", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-
-        const result = await resPengajar.json();
-        const pengajar = result.data || result;
-        const select = document.getElementById("pengajarSelect");
-        select.innerHTML = '<option value="">-- Pilih Pengajar --</option>';
-
-        pengajar.forEach((p) => {
-          const opt = document.createElement("option");
-          opt.value = p.id;
-          opt.textContent = p.nama;
-          if (selectedId == p.id) {
-            opt.selected = true;
-          }
-          select.appendChild(opt);
-        });
-      }
-
-      async function loadPelajaran() {
-        const res = await fetch("/api/mata-pelajaran");
-
-        const result = await res.json();
-        const pelajaran = result.data || result;
-
-        const tbody = document.querySelector("#pelajaranTable tbody");
-
-        tbody.innerHTML = pelajaran
-          .map(
-            (p) => `
-            <tr>
-              <td>${p.id}</td>
-              <td>${p.nama_mapel}</td>
-              <td>${p.User ? p.User.nama : "-"}</td>
-              <td>${p.User ? p.User.email : "-"}</td>
-              <td>${p.deskripsi || "-"}</td>
-
-              <td>
-                <button onclick="editPelajaran(
-                    ${p.id},
-                    '${p.nama_mapel}',
-                    '${p.deskripsi || ""}',
-                    '${p.pengajarId}'
-                  )"
-                >
-                  ✏ Edit
-                </button>
-              </td>
-            </tr>
-          `,
-          )
-          .join("");
-      }
-
-      async function editUser(id, nama, email, role) {
-        document.getElementById("userId").value = id;
-        document.getElementById("namaUser").value = nama;
-        document.getElementById("emailUser").value = email;
-        document.getElementById("passwordUser").value = "";
-        document.getElementById("roleUser").value = role;
-        document.getElementById("passwordUser").required = false;
-        document.querySelector(
-          "#addUserForm button[type='submit']",
-        ).textContent = "Update Pengguna";
-        document.getElementById("cancelUserEditBtn").style.display =
-          "inline-block";
-      }
-
-      async function cancelUserEdit() {
-        document.getElementById("userId").value = "";
-        document.getElementById("addUserForm").reset();
-        document.getElementById("passwordUser").required = true;
-        document.querySelector(
-          "#addUserForm button[type='submit']",
-        ).textContent = "Tambah Pengguna";
-        document.getElementById("cancelUserEditBtn").style.display = "none";
-      }
-
-      async function editPelajaran(id, nama_mapel, deskripsi, pengajarId) {
-        document.getElementById("pelajaranId").value = id;
-        document.getElementById("namaPelajaran").value = nama_mapel;
-        document.getElementById("deskripsiPelajaran").value = deskripsi;
-        loadAvailablePengajar(pengajarId);
-        document.getElementById("submitPelajaranBtn").textContent = "Update";
-        document.getElementById("cancelEditBtn").style.display = "inline-block";
-      }
-
-      async function cancelEditPelajaran() {
-        document.getElementById("pelajaranId").value = "";
-        document.getElementById("addPelajaranForm").reset();
-        document.getElementById("submitPelajaranBtn").textContent = "Tambah";
-        document.getElementById("cancelEditBtn").style.display = "none";
-
-        loadAvailablePengajar();
       }
 
       document
@@ -355,45 +323,85 @@
           e.target.reset();
         });
 
-      document
-        .getElementById("addUserForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const id = document.getElementById("userId").value;
-
-          const data = {
-            nama: document.getElementById("namaUser").value,
-            email: document.getElementById("emailUser").value,
-            password: document.getElementById("passwordUser").value,
-            role: document.getElementById("roleUser").value,
-          };
-
-          let url = "/api/users/admin/create";
-          let method = "POST";
-
-          if (id) {
-            url = `/api/users/${id}`;
-            method = "PUT";
-          }
-
-          const res = await fetch(url, {
-            method,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify(data),
-          });
-
-          const result = await res.json();
-
-          alert(result.message || "Berhasil");
-
-          cancelUserEdit();
-          loadUsers();
-          loadAvailablePengajar();
+      async function loadAvailablePengajar(selectedId = "") {
+        const resPengajar = await fetch("/api/users?role=pengajar", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
+
+        const result = await resPengajar.json();
+        const pengajar = result.data || result;
+        const select = document.getElementById("pengajarSelect");
+        select.innerHTML = '<option value="">-- Pilih Pengajar --</option>';
+
+        pengajar.forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent = p.nama;
+          if (selectedId == p.id) {
+            opt.selected = true;
+          }
+          select.appendChild(opt);
+        });
+      }
+
+      async function loadPelajaran() {
+        const res = await fetch("/api/mata-pelajaran", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const result = await res.json();
+        const pelajaran = result.data || result;
+
+        const tbody = document.querySelector("#pelajaranTable tbody");
+
+        tbody.innerHTML = pelajaran
+          .map(
+            (p) => `
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.nama_mapel}</td>
+              <td>${p.User ? p.User.nama : "-"}</td>
+              <td>${p.User ? p.User.email : "-"}</td>
+              <td>${p.deskripsi || "-"}</td>
+
+              <td>
+                <button onclick="editPelajaran(
+                    ${p.id},
+                    '${p.nama_mapel}',
+                    '${p.deskripsi || ""}',
+                    '${p.pengajarId}'
+                  )"
+                >
+                  ✏ Edit
+                </button>
+              </td>
+            </tr>
+          `,
+          )
+          .join("");
+      }
+
+      async function editPelajaran(id, nama_mapel, deskripsi, pengajarId) {
+        document.getElementById("pelajaranId").value = id;
+        document.getElementById("namaPelajaran").value = nama_mapel;
+        document.getElementById("deskripsiPelajaran").value = deskripsi;
+        loadAvailablePengajar(pengajarId);
+        document.getElementById("submitPelajaranBtn").textContent = "Update";
+        document.getElementById("cancelEditBtn").style.display = "inline-block";
+      }
+
+      async function cancelEditPelajaran() {
+        document.getElementById("pelajaranId").value = "";
+        document.getElementById("addPelajaranForm").reset();
+        document.getElementById("submitPelajaranBtn").textContent = "Tambah";
+        document.getElementById("cancelEditBtn").style.display = "none";
+
+        loadAvailablePengajar();
+      }
 
       loadUsers();
       loadPelajaran();
