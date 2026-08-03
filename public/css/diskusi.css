@@ -190,7 +190,7 @@ button {
 .action-btn button:last-child {
   background: #ef4444;
 
-  color: white;
+  color: black;
 }
 
 .action-btn button:last-child:hover {
