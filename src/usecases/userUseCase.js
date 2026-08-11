@@ -7,12 +7,12 @@ import { Tugas } from "../entities/Tugas.js";
 export const getAllUsers = async (role) => {
   const whereClause = role ? { role } : {};
 
-  const users = await User.findAll({
+  const user = await User.findAll({
     where: whereClause,
     attributes: ["id", "nama", "email", "role"],
   });
 
-  return users;
+  return user;
 };
 
 export const registerUser = async (data) => {

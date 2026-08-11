@@ -3,9 +3,9 @@ import { success, error } from "../../shared/helpers/response.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await userUseCase.getAllUsers(req.query.role);
+    const user = await userUseCase.getAllUsers(req.query.role);
 
-    success(res, users, "Data user berhasil diambil");
+    success(res, user, "Data user berhasil diambil");
   } catch (err) {
     error(res, err.message, 400);
   }
