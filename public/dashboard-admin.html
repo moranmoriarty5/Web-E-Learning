@@ -132,7 +132,7 @@
       const role = localStorage.getItem("role");
 
       if (!nama || role !== "admin") {
-        alert("Akses ditolak!");
+        alert("Akses ditolak, Anda bukan admin!");
 
         globalThis.location.href = "/login";
       } else {

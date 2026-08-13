@@ -81,7 +81,7 @@
       const userId = localStorage.getItem("userId");
 
       if (!nama || role !== "siswa") {
-        alert("Akses ditolak!");
+        alert("Akses ditolak, Anda bukan siswa!");
         globalThis.location.href = "/login";
       }
 
@@ -114,8 +114,8 @@
 
       async function loadMataPelajaran() {
         const res = await fetch("/api/mata-pelajaran", {
-          headers: { 
-            Authorization: `Bearer ${token}` 
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -154,8 +154,8 @@
             let submissionInfo = null;
             try {
               const res = await fetch(`/api/tugas/materi/${m.id}`, {
-                headers: { 
-                  Authorization: `Bearer ${token}` 
+                headers: {
+                  Authorization: `Bearer ${token}`,
                 },
               });
 
@@ -249,8 +249,8 @@
         try {
           const res = await fetch(`/api/tugas/submit/${materiId}`, {
             method: "DELETE",
-            headers: { 
-              Authorization: `Bearer ${token}` 
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
           });
 
