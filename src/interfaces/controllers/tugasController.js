@@ -29,7 +29,7 @@ export const submit = async (req, res) => {
 export const listByMateri = async (req, res) => {
   try {
     const { materiId } = req.params;
-    const list = await tugasUseCase.getTugasByMateri(materiId);
+    const list = await tugasUseCase.getTugasByMateri(materiId, req.user.id);
     success(res, list, "Daftar tugas berhasil diambil");
   } catch (err) {
     error(res, err.message);

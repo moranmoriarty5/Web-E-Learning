@@ -22,7 +22,9 @@
 
     <nav class="menu">
       <button onclick="location.href = '/edit-profile'">👤 Edit Profil</button>
+
       <button onclick="showSection('users')">👥 Kelola Pengguna</button>
+
       <button onclick="showSection('pelajaran')">
         📚 Kelola Mata Pelajaran
       </button>
@@ -30,8 +32,22 @@
       <button onclick="logout()">🚪 Logout</button>
     </nav>
 
+    <!-- ========================= -->
+    <!-- KELOLA PENGGUNA -->
+    <!-- ========================= -->
+
     <section id="users" class="section">
       <h2>Daftar Pengguna</h2>
+
+      <!-- SEARCH PENGGUNA -->
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchUser"
+          placeholder="🔍 Cari nama pengguna..."
+          autocomplete="off"
+        />
+      </div>
 
       <table id="userTable">
         <thead>
@@ -51,6 +67,7 @@
 
       <form id="addUserForm">
         <input type="hidden" id="userId" />
+
         <input type="text" id="namaUser" placeholder="Nama" required />
 
         <input type="email" id="emailUser" placeholder="Email" required />
@@ -68,6 +85,7 @@
         </select>
 
         <button type="submit">Tambah Pengguna</button>
+
         <button
           type="button"
           id="cancelUserEditBtn"
@@ -79,7 +97,10 @@
       </form>
     </section>
 
-    <!-- PELAJARAN -->
+    <!-- ========================= -->
+    <!-- KELOLA MATA PELAJARAN -->
+    <!-- ========================= -->
+
     <section id="pelajaran" class="section hidden">
       <h2>Kelola Mata Pelajaran</h2>
 
@@ -149,43 +170,119 @@
         document.querySelectorAll(".section").forEach((sec) => {
           sec.classList.add("hidden");
         });
+
         document.getElementById(sectionId).classList.remove("hidden");
       }
 
-      async function loadUsers() {
-        const response = await fetch("/api/users", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+      let allUsers = [];
 
-        const result = await response.json();
-        const users = result.data || result;
+      async function loadUsers() {
+        try {
+          const response = await fetch("/api/users", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            alert(result.message || "Gagal mengambil data pengguna");
+            return;
+          }
+
+          const users = result.data || result;
+          allUsers = users;
+
+          renderUsers(allUsers);
+        } catch (error) {
+          console.error(error);
+          alert("Gagal mengambil data pengguna");
+        }
+      }
+
+      function renderUsers(users) {
         const tbody = document.querySelector("#userTable tbody");
+
+        if (!users || users.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td
+                colspan="5"
+                style="text-align: center;"
+              >
+                Pengguna tidak ditemukan
+              </td>
+            </tr>
+          `;
+
+          return;
+        }
+
         tbody.innerHTML = users
           .map(
             (u) => `
-          <tr>
-            <td>${u.id}</td>
-            <td>${u.nama}</td>
-            <td>${u.email}</td>
-            <td><span class="role ${u.role}">${u.role}</span></td>
+              <tr>
+                <td>${u.id}</td>
 
-            <td>${
-              u.role === "admin"
-                ? "-"
-                : `<button class="delete-btn" onclick="editUser(${u.id},'${u.nama}','${u.email}','${u.role}')">
-                ✏ Edit
-              </button>
-              <button class="delete-btn" onclick="deleteUser(${u.id})">
-                🗑 Hapus
-              </button>`
-            }
-            </td>
-          </tr>`,
+                <td>${u.nama}</td>
+
+                <td>${u.email}</td>
+
+                <td>
+                  <span class="role ${u.role}">
+                    ${u.role}
+                  </span>
+                </td>
+
+                <td>
+                  ${
+                    u.role === "admin"
+                      ? "-"
+                      : `
+                        <button
+                          class="delete-btn"
+                          onclick="editUser(
+                            ${u.id},
+                            '${u.nama.replaceAll("'", "\\'")}',
+                            '${u.email.replaceAll("'", "\\'")}',
+                            '${u.role}'
+                          )"
+                        >
+                          ✏ Edit
+                        </button>
+
+                        <button
+                          class="delete-btn"
+                          onclick="deleteUser(${u.id})"
+                        >
+                          🗑 Hapus
+                        </button>
+                      `
+                  }
+                </td>
+              </tr>
+            `,
           )
           .join("");
       }
+
+      function filterUsers() {
+        const keyword = document
+          .getElementById("searchUser")
+          .value.toLowerCase()
+          .trim();
+
+        const filteredUsers = allUsers.filter((user) =>
+          user.nama.toLowerCase().includes(keyword),
+        );
+
+        renderUsers(filteredUsers);
+      }
+
+      document
+        .getElementById("searchUser")
+        .addEventListener("input", filterUsers);
 
       document
         .getElementById("addUserForm")
@@ -200,7 +297,6 @@
             password: document.getElementById("passwordUser").value,
             role: document.getElementById("roleUser").value,
           };
-
           let url = "/api/users/admin/create";
           let method = "POST";
 
@@ -237,6 +333,7 @@
         document.querySelector(
           "#addUserForm button[type='submit']",
         ).textContent = "Update Pengguna";
+
         document.getElementById("cancelUserEditBtn").style.display =
           "inline-block";
       }
@@ -248,6 +345,7 @@
         document.querySelector(
           "#addUserForm button[type='submit']",
         ).textContent = "Tambah Pengguna";
+
         document.getElementById("cancelUserEditBtn").style.display = "none";
       }
 
@@ -262,18 +360,12 @@
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
-
           const result = await res.json();
-
-          // Jika request gagal
           if (!res.ok) {
             alert(result.message);
             return;
           }
-
-          // Jika berhasil
           alert(result.message);
-
           loadUsers();
           loadAvailablePengajar();
           loadPelajaran();
@@ -287,14 +379,12 @@
         .getElementById("addPelajaranForm")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
           const id = document.getElementById("pelajaranId").value;
           const nama_mapel = document.getElementById("namaPelajaran").value;
           const deskripsi = document.getElementById("deskripsiPelajaran").value;
           const pengajarId = document.getElementById("pengajarSelect").value;
           let url = "/api/mata-pelajaran";
           let method = "POST";
-
           if (id) {
             url = `/api/mata-pelajaran/${id}`;
             method = "PUT";
@@ -316,7 +406,6 @@
           alert(data.message || "Berhasil!");
           loadPelajaran();
           loadAvailablePengajar();
-
           document.getElementById("pelajaranId").value = "";
           document.getElementById("submitPelajaranBtn").textContent = "Tambah";
           document.getElementById("cancelEditBtn").style.display = "none";
@@ -355,32 +444,43 @@
 
         const result = await res.json();
         const pelajaran = result.data || result;
-
         const tbody = document.querySelector("#pelajaranTable tbody");
-
         tbody.innerHTML = pelajaran
           .map(
             (p) => `
-            <tr>
-              <td>${p.id}</td>
-              <td>${p.nama_mapel}</td>
-              <td>${p.User ? p.User.nama : "-"}</td>
-              <td>${p.User ? p.User.email : "-"}</td>
-              <td>${p.deskripsi || "-"}</td>
+                <tr>
+                  <td>${p.id}</td>
 
-              <td>
-                <button onclick="editPelajaran(
-                    ${p.id},
-                    '${p.nama_mapel}',
-                    '${p.deskripsi || ""}',
-                    '${p.pengajarId}'
-                  )"
-                >
-                  ✏ Edit
-                </button>
-              </td>
-            </tr>
-          `,
+                  <td>
+                    ${p.nama_mapel}
+                  </td>
+
+                  <td>
+                    ${p.User ? p.User.nama : "-"}
+                  </td>
+
+                  <td>
+                    ${p.User ? p.User.email : "-"}
+                  </td>
+
+                  <td>
+                    ${p.deskripsi || "-"}
+                  </td>
+
+                  <td>
+                    <button
+                      onclick="editPelajaran(
+                        ${p.id},
+                        '${p.nama_mapel.replaceAll("'", "\\'")}',
+                        '${(p.deskripsi || "").replaceAll("'", "\\'")}',
+                        '${p.pengajarId}'
+                      )"
+                    >
+                      ✏ Edit
+                    </button>
+                  </td>
+                </tr>
+              `,
           )
           .join("");
       }
@@ -399,7 +499,6 @@
         document.getElementById("addPelajaranForm").reset();
         document.getElementById("submitPelajaranBtn").textContent = "Tambah";
         document.getElementById("cancelEditBtn").style.display = "none";
-
         loadAvailablePengajar();
       }
 

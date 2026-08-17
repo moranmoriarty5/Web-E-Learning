@@ -38,7 +38,6 @@
           if (data.status === "success") {
             alert("Login berhasil!");
             localStorage.setItem("token", data.data.token);
-            localStorage.setItem("userId", data.data.user.id);
             localStorage.setItem("role", data.data.user.role);
             localStorage.setItem("nama", data.data.user.nama);
 

@@ -35,7 +35,6 @@
       const params = new URLSearchParams(location.search);
       const materiId = params.get("materiId");
       const token = localStorage.getItem("token");
-      const userId = Number(localStorage.getItem("userId"));
       let editId = null;
 
       if (!materiId) {
@@ -75,7 +74,7 @@
 
           let html = "";
           data.forEach((d) => {
-            const isOwner = d.userId === userId;
+            const isOwner = d.isOwner === true;
             const nama = d.User ? d.User.nama : "Anonim";
             html += `
             <div class="chat-wrapper ${isOwner ? "self" : "other"}">

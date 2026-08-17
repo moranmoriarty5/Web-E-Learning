@@ -26,6 +26,8 @@ router.post(
   materiController.uploadMateri,
 );
 
+router.get("/mine", verifyToken, authorizeRoles("pengajar"), materiController.getMateriByPengajar);
+
 router.get("/", verifyToken, materiController.getMateri);
 
 router.get("/:id", verifyToken, materiController.getMateriById);

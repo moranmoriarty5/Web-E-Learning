@@ -54,7 +54,6 @@
 
     <script>
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
 
       if (!localStorage.getItem("token")) {
         alert("Silakan login terlebih dahulu");
@@ -65,7 +64,7 @@
 
       async function loadMataPelajaran() {
         try {
-          const res = await fetch(`/api/mata-pelajaran/pengajar/${userId}`, {
+          const res = await fetch("/api/mata-pelajaran/me", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +102,6 @@
 
         formData.append("mataPelajaranId", mataPelajaranId);
 
-        formData.append("userId", userId);
 
         const res = await fetch("/api/materi/upload", {
           method: "POST",
@@ -122,7 +120,7 @@
       });
 
       async function loadMateri() {
-        const res = await fetch("/api/materi", {
+        const res = await fetch("/api/materi/mine", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -136,8 +134,7 @@
         tbody.innerHTML = "";
 
         materi.forEach((m, i) => {
-          const isOwner =
-            m.MataPelajaran?.pengajarId === Number.parseInt(userId);
+          const isOwner = true;
 
           tbody.innerHTML += `
             <tr>
@@ -213,8 +210,7 @@
         try {
           const formData = new FormData();
           formData.append("judul", judul);
-          formData.append("userId", userId);
-          if (fileInput.files.length > 0) {
+            if (fileInput.files.length > 0) {
             formData.append("filePath", fileInput.files[0]);
           }
 
@@ -245,7 +241,7 @@
         }
 
         try {
-          const res = await fetch(`/api/materi/${id}?userId=${userId}`, {
+          const res = await fetch(`/api/materi/${id}`, {
             method: "DELETE",
             headers: {
               Authorization: `Bearer ${token}`,

@@ -19,7 +19,6 @@
     </div>
 
     <script>
-      const userId = localStorage.getItem("userId");
       const nama = localStorage.getItem("nama");
       const role = localStorage.getItem("role");
       const token = localStorage.getItem("token");
@@ -32,7 +31,7 @@
       document.getElementById("infoNama").textContent = `👨‍🏫 ${nama}`;
 
       async function loadMateriPengajar() {
-        const res = await fetch("/api/materi", {
+        const res = await fetch("/api/materi/mine", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,9 +39,7 @@
         const result = await res.json();
         const materi = result.data || result;
 
-        const myMateri = materi.filter(
-          (m) => m.MataPelajaran?.pengajarId == userId,
-        );
+        const myMateri = materi;
 
         const container = document.getElementById("materiList");
         if (myMateri.length === 0) {

@@ -30,6 +30,18 @@ export const uploadMateri = async ({
   });
 };
 
+export const getMateriByPengajar = async (pengajarId) => {
+  return await Materi.findAll({
+    include: [
+      {
+        model: MataPelajaran,
+        where: { pengajarId },
+        attributes: ["nama_mapel", "pengajarId"],
+      },
+    ],
+  });
+};
+
 export const getAllMateri = async () => {
   return await Materi.findAll({
     include: [

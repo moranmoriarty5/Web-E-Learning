@@ -78,7 +78,6 @@
       const nama = localStorage.getItem("nama");
       const role = localStorage.getItem("role");
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
 
       if (!nama || role !== "siswa") {
         alert("Akses ditolak, Anda bukan siswa!");
@@ -163,11 +162,7 @@
                 const result = await res.json();
                 const list = result.data || result;
 
-                const my = list.find(
-                  (t) =>
-                    String(t.siswaId) === String(userId) ||
-                    (t.User && String(t.User.id) === String(userId)),
-                );
+                const my = list.find((t) => t.isMine === true);
 
                 if (my) {
                   submitted = true;

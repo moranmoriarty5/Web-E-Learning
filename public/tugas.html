@@ -31,7 +31,6 @@
       const token = localStorage.getItem('token');
       const nama = localStorage.getItem('nama');
       const role = localStorage.getItem('role');
-      const siswaId = localStorage.getItem('userId');
 
       if (!nama || role !== 'siswa') {
         alert('Akses ditolak!');
@@ -88,7 +87,6 @@
         const fd = new FormData();
         fd.append('judul', judul);
         fd.append('materiId', materiId);
-        fd.append('siswaId', siswaId);
         fd.append('file', fileInput.files[0]);
 
         try {
