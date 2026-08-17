@@ -8,10 +8,9 @@
   <body>
     <h1>Selamat datang, <span id="nama"></span> 👨‍🏫</h1>
     <p>Anda login sebagai <b>Pengajar</b>.</p>
-    
 
     <nav class="menu">
-      <button onclick="location.href='/edit-profile'">👤 Edit Profil</button>
+      <button onclick="location.href = '/edit-profile'">👤 Edit Profil</button>
       <button onclick="addmateri()">📂 Kelola Materi</button>
       <button onclick="viewTugasPage()">📁 Tugas Siswa</button>
       <button onclick="logout()">🚪 Logout</button>
@@ -65,12 +64,15 @@
       } else {
         document.getElementById("nama").textContent = nama;
       }
-      
-       async function loadMapel() {
+
+      async function loadMapel() {
         try {
-          const response = await fetch(`/api/mata-pelajaran/pengajar/${pengajarId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const response = await fetch(
+            `/api/mata-pelajaran/pengajar/${pengajarId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
 
           const result = await response.json();
           const data = result.data || result;
@@ -94,7 +96,7 @@
           console.error(error);
         }
       }
-       function addmateri() {
+      function addmateri() {
         globalThis.location.href = "/materi";
       }
 
@@ -113,7 +115,7 @@
 
       async function loadMateri() {
         const res = await fetch("/api/materi", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const result = await res.json();
@@ -124,14 +126,14 @@
 
       async function loadMataPelajaran() {
         const res = await fetch("/api/mata-pelajaran", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const result = await res.json();
         const mapel = result.data || result;
         const select = document.getElementById("filterMapel");
 
-        mapel.forEach(m => {
+        mapel.forEach((m) => {
           const opt = document.createElement("option");
           opt.value = m.nama_mapel;
           opt.textContent = m.nama_mapel;
@@ -144,7 +146,6 @@
         tbody.innerHTML = "";
 
         data.forEach((m, i) => {
-
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${i + 1}</td>
@@ -169,9 +170,10 @@
 
         const mapel = document.getElementById("filterMapel").value;
 
-        const filtered = allMateri.filter(m =>
-          m.judul.toLowerCase().includes(keyword) &&
-          (mapel === "" || m.MataPelajaran?.nama_mapel === mapel)
+        const filtered = allMateri.filter(
+          (m) =>
+            m.judul.toLowerCase().includes(keyword) &&
+            (mapel === "" || m.MataPelajaran?.nama_mapel === mapel),
         );
 
         renderMateri(filtered);
