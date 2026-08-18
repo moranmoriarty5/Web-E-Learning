@@ -3,3 +3,5 @@ node_modules/
 uploads/
 sonar-project.properties
 .scannerwork/
+package-lock.json
+package.json
