@@ -32,14 +32,9 @@
       <button onclick="logout()">🚪 Logout</button>
     </nav>
 
-    <!-- ========================= -->
-    <!-- KELOLA PENGGUNA -->
-    <!-- ========================= -->
-
     <section id="users" class="section">
       <h2>Daftar Pengguna</h2>
 
-      <!-- SEARCH PENGGUNA -->
       <div class="search-container">
         <input
           type="text"
@@ -67,9 +62,7 @@
 
       <form id="addUserForm">
         <input type="hidden" id="userId" />
-
         <input type="text" id="namaUser" placeholder="Nama" required />
-
         <input type="email" id="emailUser" placeholder="Email" required />
 
         <input
@@ -78,7 +71,6 @@
           placeholder="Password"
           required
         />
-
         <select id="roleUser" required>
           <option value="siswa">Siswa</option>
           <option value="pengajar">Pengajar</option>
@@ -97,31 +89,22 @@
       </form>
     </section>
 
-    <!-- ========================= -->
-    <!-- KELOLA MATA PELAJARAN -->
-    <!-- ========================= -->
-
     <section id="pelajaran" class="section hidden">
       <h2>Kelola Mata Pelajaran</h2>
 
       <form id="addPelajaranForm">
         <input type="hidden" id="pelajaranId" />
-
         <input
           type="text"
           id="namaPelajaran"
           placeholder="Nama Mata Pelajaran"
           required
         />
-
         <select id="pengajarSelect" required>
           <option value="">-- Pilih Pengajar --</option>
         </select>
-
         <textarea id="deskripsiPelajaran" placeholder="Deskripsi"></textarea>
-
         <button type="submit" id="submitPelajaranBtn">Tambah</button>
-
         <button
           type="button"
           id="cancelEditBtn"
@@ -224,17 +207,13 @@
             (u) => `
               <tr>
                 <td>${u.id}</td>
-
                 <td>${u.nama}</td>
-
                 <td>${u.email}</td>
-
                 <td>
                   <span class="role ${u.role}">
                     ${u.role}
                   </span>
                 </td>
-
                 <td>
                   ${
                     u.role === "admin"
