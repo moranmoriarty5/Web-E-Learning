@@ -1,16 +1,6 @@
 import * as userUseCase from "../../usecases/userUseCase.js";
 import { success, error } from "../../shared/helpers/response.js";
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const user = await userUseCase.getAllUsers(req.query.role);
-
-    success(res, user, "Data user berhasil diambil");
-  } catch (err) {
-    error(res, err.message, 400);
-  }
-};
-
 export const register = async (req, res) => {
   try {
     const user = await userUseCase.registerUser(req.body);
@@ -29,6 +19,16 @@ export const login = async (req, res) => {
     );
 
     success(res, result, "Login berhasil");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const user = await userUseCase.getAllUsers(req.query.role);
+
+    success(res, user, "Data user berhasil diambil");
   } catch (err) {
     error(res, err.message, 400);
   }

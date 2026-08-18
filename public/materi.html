@@ -13,11 +13,8 @@
 
       <form id="uploadForm" enctype="multipart/form-data">
         <input type="text" name="judul" placeholder="Judul Materi" required />
-
         <input type="file" name="filePath" accept=".ppt,.pptx,.pdf" required />
-
         <button type="submit">Upload</button>
-
         <a href="/dashboard-pengajar"> Kembali </a>
       </form>
 
@@ -101,7 +98,6 @@
         const formData = new FormData(uploadForm);
 
         formData.append("mataPelajaranId", mataPelajaranId);
-
 
         const res = await fetch("/api/materi/upload", {
           method: "POST",

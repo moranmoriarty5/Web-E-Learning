@@ -4,17 +4,6 @@ import { User } from "../entities/User.js";
 import { MataPelajaran } from "../entities/MataPelajaran.js";
 import { Tugas } from "../entities/Tugas.js";
 
-export const getAllUsers = async (role) => {
-  const whereClause = role ? { role } : {};
-
-  const user = await User.findAll({
-    where: whereClause,
-    attributes: ["id", "nama", "email", "role"],
-  });
-
-  return user;
-};
-
 export const registerUser = async (data) => {
   const { nama, email, password, role } = data;
   const hashed = await bcrypt.hash(password, 10);
@@ -49,6 +38,17 @@ export const loginUser = async (email, password) => {
       role: user.role,
     },
   };
+};
+
+export const getAllUsers = async (role) => {
+  const whereClause = role ? { role } : {};
+
+  const user = await User.findAll({
+    where: whereClause,
+    attributes: ["id", "nama", "email", "role"],
+  });
+
+  return user;
 };
 
 export const getProfile = async (id) => {
@@ -110,8 +110,8 @@ export const createUserByAdmin = async ({ nama, email, password, role }) => {
   if (existing) throw new Error("Email sudah digunakan");
 
   if (password.length < 6) {
-      throw new Error("Password minimal 6 karakter.");
-    }
+    throw new Error("Password minimal 6 karakter.");
+  }
 
   const hashed = await bcrypt.hash(password, 10);
   const user = await User.create({ nama, email, password: hashed, role });
