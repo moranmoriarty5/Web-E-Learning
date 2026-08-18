@@ -8,10 +8,6 @@ export const Diskusi = sequelize.define("Diskusi", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  parent_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
 });
 
 User.hasMany(Diskusi, { foreignKey: "userId" });
@@ -19,6 +15,3 @@ Diskusi.belongsTo(User, { foreignKey: "userId" });
 
 Materi.hasMany(Diskusi, { foreignKey: "materiId" });
 Diskusi.belongsTo(Materi, { foreignKey: "materiId" });
-
-Diskusi.hasMany(Diskusi, { foreignKey: "parent_id", as: "replies" });
-Diskusi.belongsTo(Diskusi, { foreignKey: "parent_id", as: "parent" });
