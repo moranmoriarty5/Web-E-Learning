@@ -7,16 +7,16 @@ import {
 
 const router = express.Router();
 
+router.post("/register", userController.register);
+
+router.post("/login", userController.login);
+
 router.get(
   "/",
   verifyToken,
   authorizeRoles("admin"),
   userController.getAllUsers,
 );
-
-router.post("/register", userController.register);
-
-router.post("/login", userController.login);
 
 router.get("/profile", verifyToken, userController.getProfile);
 
