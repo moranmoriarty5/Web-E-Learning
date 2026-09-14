@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", verifyToken, mataPelajaranController.getAll);
 
-router.get("/pengajar/:userId", verifyToken, mataPelajaranController.getByPengajar);
+router.get("/me", verifyToken, authorizeRoles("pengajar"), mataPelajaranController.getMyMataPelajaran);
 
 router.post("/", verifyToken, authorizeRoles("admin"), mataPelajaranController.create);
 

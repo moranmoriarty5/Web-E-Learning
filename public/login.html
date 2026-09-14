@@ -38,15 +38,12 @@
           if (data.status === "success") {
             alert("Login berhasil!");
             localStorage.setItem("token", data.data.token);
-            localStorage.setItem("userId", data.data.user.id);
             localStorage.setItem("role", data.data.user.role);
             localStorage.setItem("nama", data.data.user.nama);
 
             // Redirect berdasarkan role
             if (data.data.user.role === "pengajar") {
               globalThis.location.href = "/dashboard-pengajar";
-            } else if (data.data.user.role === "admin") {
-              globalThis.location.href = "/dashboard-admin";
             } else {
               globalThis.location.href = "/dashboard-siswa";
             }

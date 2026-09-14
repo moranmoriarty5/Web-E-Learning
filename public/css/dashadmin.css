@@ -1,206 +1,433 @@
-/* RESET */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: #f4f6f9;
-  color: #333;
-  padding: 20px;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fa;
+  color: #1f2937;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
+
 .header {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: white;
-  padding: 25px;
-  border-radius: 15px;
-  text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  padding: 30px 40px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
 .header h1 {
   margin-bottom: 8px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
 }
 
-/* MENU */
+.header p {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.header #nama {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* =========================
+   MENU
+========================= */
+
 .menu {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
   flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 40px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
 }
 
 .menu button {
-  flex: 1;
-  min-width: 180px;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #2a5298;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .menu button:hover {
-  background: #1e3c72;
-  transform: translateY(-2px);
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+  transform: translateY(-1px);
 }
 
-/* SECTION */
+.menu button:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   SECTION
+========================= */
+
 .section {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: calc(100% - 80px);
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 30px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
 }
 
-.hidden {
+.section.hidden {
   display: none;
 }
 
 .section h2 {
-  margin-bottom: 15px;
-  color: #2a5298;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
 }
 
 .section h3 {
-  margin-top: 25px;
-  margin-bottom: 15px;
+  margin-top: 35px;
+  margin-bottom: 18px;
+  font-size: 19px;
+  color: #374151;
 }
 
-/* FORM */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* =========================
+   SEARCH
+========================= */
+
+.search-container {
+  margin-bottom: 20px;
 }
 
-input,
-select,
-textarea {
+.search-container input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #d5d9df;
-  border-radius: 10px;
-  font-size: 14px;
+  max-width: 420px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #2a5298;
+.search-container input::placeholder {
+  color: #9ca3af;
 }
 
-textarea {
-  min-height: 120px;
+.search-container input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* =========================
+   FORM
+========================= */
+
+#addUserForm,
+#addPelajaranForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+#addUserForm input,
+#addUserForm select,
+#addPelajaranForm input,
+#addPelajaranForm select,
+#addPelajaranForm textarea {
+  width: 100%;
+  min-height: 45px;
+  padding: 10px 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#addUserForm input::placeholder,
+#addPelajaranForm input::placeholder,
+#addPelajaranForm textarea::placeholder {
+  color: #9ca3af;
+}
+
+#addUserForm input:focus,
+#addUserForm select:focus,
+#addPelajaranForm input:focus,
+#addPelajaranForm select:focus,
+#addPelajaranForm textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+#addPelajaranForm textarea {
+  min-height: 100px;
   resize: vertical;
 }
 
-/* BUTTON */
-button {
+/* =========================
+   FORM BUTTON
+========================= */
+
+#addUserForm button,
+#addPelajaranForm button {
+  min-height: 44px;
+  padding: 10px 16px;
   border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-form button {
-  background: #2a5298;
-  color: white;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: bold;
-  transition: 0.3s;
+#addUserForm button:hover,
+#addPelajaranForm button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.18);
+  transform: translateY(-1px);
 }
 
-form button:hover {
-  background: #1e3c72;
+#addUserForm button:active,
+#addPelajaranForm button:active {
+  transform: translateY(0);
 }
 
+#cancelUserEditBtn,
 #cancelEditBtn {
-  background: #6c757d;
+  background: #ffffff !important;
+  color: #6b7280 !important;
+  border: 1px solid #d1d5db !important;
 }
 
+#cancelUserEditBtn:hover,
 #cancelEditBtn:hover {
-  background: #555;
+  background: #f3f4f6 !important;
+  color: #374151 !important;
 }
 
-/* TABLE */
-table {
+/* =========================
+   TABLE
+========================= */
+
+#userTable,
+#pelajaranTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
 }
 
-thead {
-  background: #2a5298;
-  color: white;
-}
-
-th,
-td {
-  padding: 12px;
-  border: 1px solid #ddd;
+#userTable th,
+#pelajaranTable th {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
   text-align: left;
 }
 
-tbody tr:nth-child(even) {
-  background: #f8f9fa;
+#userTable td,
+#pelajaranTable td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #4b5563;
+  font-size: 14px;
+  vertical-align: middle;
 }
 
-tbody tr:hover {
-  background: #eef3ff;
+#userTable tbody tr,
+#pelajaranTable tbody tr {
+  transition: background 0.2s ease;
 }
 
-/* ROLE BADGE */
+#userTable tbody tr:hover,
+#pelajaranTable tbody tr:hover {
+  background: #f9fafb;
+}
+
+#userTable tbody tr:last-child td,
+#pelajaranTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =========================
+   ROLE BADGE
+========================= */
+
 .role {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 5px 10px;
   border-radius: 20px;
-  color: white;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 700;
+  text-transform: capitalize;
 }
 
 .role.admin {
-  background: #dc3545;
-}
-
-.role.pengajar {
-  background: #198754;
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
 .role.siswa {
-  background: #0d6efd;
+  background: #dcfce7;
+  color: #15803d;
 }
 
-/* DELETE BUTTON */
+.role.pengajar {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* =========================
+   ACTION BUTTON
+========================= */
+
 .delete-btn {
-  background: #dc3545;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: 0.3s;
+  margin: 2px;
+  padding: 7px 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .delete-btn:hover {
-  background: #b02a37;
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
 }
 
-/* RESPONSIVE TABLE */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
+#pelajaranTable button {
+  padding: 7px 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+#pelajaranTable button:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+/* =========================
+   EMPTY TABLE
+========================= */
+
+#userTable td[colspan],
+#pelajaranTable td[colspan] {
+  padding: 30px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .header {
+    padding: 28px 24px;
   }
 
   .menu {
+    padding: 18px 24px;
+  }
+
+  .section {
+    width: calc(100% - 40px);
+    padding: 24px;
+  }
+
+  #addUserForm,
+  #addPelajaranForm {
+    grid-template-columns: 1fr;
+  }
+
+  #userTable,
+  #pelajaranTable {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 24px 18px;
+  }
+
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .menu {
+    padding: 16px 18px;
     flex-direction: column;
   }
 
@@ -208,39 +435,18 @@ tbody tr:hover {
     width: 100%;
   }
 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  th,
-  td {
-    font-size: 13px;
-  }
-
-  .header {
+  .section {
+    width: calc(100% - 24px);
+    margin: 18px auto;
     padding: 20px;
   }
 
-  .header h1 {
-    font-size: 24px;
-  }
-}
-
-/* MOBILE EXTRA */
-@media (max-width: 480px) {
-  .section {
-    padding: 15px;
+  .section h2 {
+    font-size: 21px;
   }
 
-  input,
-  select,
-  textarea {
-    font-size: 16px;
-  }
-
-  form button {
-    width: 100%;
+  #addUserForm,
+  #addPelajaranForm {
+    padding: 16px;
   }
 }

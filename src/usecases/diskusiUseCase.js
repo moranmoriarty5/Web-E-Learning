@@ -20,7 +20,7 @@ export const createDiskusi = async (
   });
 };
 
-export const getDiskusiByMateri = async (materiId) => {
+export const getDiskusiByMateri = async (materiId, currentUserId) => {
   return await Diskusi.findAll({
     where: { materiId },
     include: [
@@ -30,7 +30,12 @@ export const getDiskusiByMateri = async (materiId) => {
       },
     ],
     order: [["createdAt", "ASC"]],
-  });
+  }).then((items) =>
+    items.map((item) => ({
+      ...item.toJSON(),
+      isOwner: item.userId === currentUserId,
+    })),
+  );
 };
 
 export const deleteDiskusi = async (id, userId) => {

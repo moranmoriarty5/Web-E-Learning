@@ -33,6 +33,10 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
+app.get("/admin-login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/admin-login.html"));
+});
+
 app.get("/edit-profile", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/edit-profile.html"));
 });

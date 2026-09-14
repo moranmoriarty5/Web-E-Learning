@@ -10,10 +10,9 @@ export const getAll = async (req, res) => {
   }
 };
 
-export const getByPengajar = async (req, res) => {
+export const getMyMataPelajaran = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const data = await mataPelajaranUseCase.getMataPelajaranByPengajar(userId);
+    const data = await mataPelajaranUseCase.getMataPelajaranByPengajar(req.user.id);
     success(res, data, "Data mata pelajaran pengajar berhasil diambil");
   } catch (err) {
     error(res, err.message);

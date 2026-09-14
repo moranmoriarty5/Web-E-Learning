@@ -31,7 +31,7 @@ const upload = multer({
   },
 });
 
-router.get("/materi/:materiId", tugasController.listByMateri);
+router.get("/materi/:materiId", verifyToken, tugasController.listByMateri);
 
 router.post(
   "/submit",

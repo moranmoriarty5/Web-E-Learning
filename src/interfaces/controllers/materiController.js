@@ -34,6 +34,15 @@ export const getMateri = async (req, res) => {
   }
 };
 
+export const getMateriByPengajar = async (req, res) => {
+  try {
+    const materiList = await materiUseCase.getMateriByPengajar(req.user.id);
+    success(res, materiList, "Data materi pengajar berhasil diambil");
+  } catch (err) {
+    error(res, err.message);
+  }
+};
+
 export const getMateriById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -48,14 +57,10 @@ export const getMateriById = async (req, res) => {
 export const updateMateri = async (req, res) => {
   try {
     const { id } = req.params;
-    const { judul, userId } = req.body;
+    const { judul } = req.body;
 
     if (!judul && !req.file) {
       return error(res, "Judul atau file harus diisi", 400);
-    }
-
-    if (!userId) {
-      return error(res, "userId tidak ditemukan", 400);
     }
 
     const updateData = { judul };
@@ -66,7 +71,7 @@ export const updateMateri = async (req, res) => {
     const updatedMateri = await materiUseCase.updateMateri(
       id,
       updateData,
-      userId,
+      req.user.id,
     );
     success(res, updatedMateri, "Materi berhasil diupdate");
   } catch (err) {
@@ -77,13 +82,7 @@ export const updateMateri = async (req, res) => {
 export const deleteMateri = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.query.userId;
-
-    if (!userId) {
-      return error(res, "userId tidak ditemukan", 400);
-    }
-
-    const result = await materiUseCase.deleteMateri(id, userId);
+    const result = await materiUseCase.deleteMateri(id, req.user.id);
     success(res, null, result.message);
   } catch (err) {
     error(res, err.message);

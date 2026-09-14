@@ -55,7 +55,6 @@
     <script>
       const nama = localStorage.getItem("nama");
       const role = localStorage.getItem("role");
-      const pengajarId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
 
       if (!nama || role !== "pengajar") {
@@ -68,7 +67,7 @@
       async function loadMapel() {
         try {
           const response = await fetch(
-            `/api/mata-pelajaran/pengajar/${pengajarId}`,
+            "/api/mata-pelajaran/me",
             {
               headers: { Authorization: `Bearer ${token}` },
             },
@@ -114,7 +113,7 @@
       let allMateri = [];
 
       async function loadMateri() {
-        const res = await fetch("/api/materi", {
+        const res = await fetch("/api/materi/mine", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

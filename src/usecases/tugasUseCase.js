@@ -25,11 +25,18 @@ export const submitTugas = async ({ judul, materiId, siswaId, filePath }) => {
   return await Tugas.create({ judul, filePath, materiId, siswaId });
 };
 
-export const getTugasByMateri = async (materiId) => {
-  return await Tugas.findAll({
+export const getTugasByMateri = async (materiId, currentUserId = null) => {
+  const list = await Tugas.findAll({
     where: { materiId },
     include: [{ model: User, attributes: ["id", "nama", "email"] }],
   });
+
+  if (currentUserId === null) return list;
+
+  return list.map((item) => ({
+    ...item.toJSON(),
+    isMine: item.siswaId === currentUserId,
+  }));
 };
 
 export const deleteTugas = async (materiId, siswaId) => {

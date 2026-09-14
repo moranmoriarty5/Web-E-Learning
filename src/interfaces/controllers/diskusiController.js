@@ -3,7 +3,7 @@ import { success, error } from "../../shared/helpers/response.js";
 
 export const getByMateri = async (req, res) => {
   try {
-    const data = await DiskusiUseCase.getDiskusiByMateri(req.params.materiId);
+    const data = await DiskusiUseCase.getDiskusiByMateri(req.params.materiId, req.user.id);
     success(res, data, "Data diskusi berhasil diambil");
   } catch (err) {
     error(res, err.message, 400);
