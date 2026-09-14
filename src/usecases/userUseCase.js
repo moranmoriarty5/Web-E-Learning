@@ -17,6 +17,44 @@ export const loginUser = async (email, password) => {
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw new Error("Password salah");
 
+  if (user.role === "admin") {
+    throw new Error("Silahkan login melalui halaman admin");
+  }
+
+  // Buat JWT token
+  const token = jwt.sign(
+    {
+      id: user.id,
+      role: user.role,
+      nama: user.nama,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" },
+  );
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      nama: user.nama,
+      email: user.email,
+      role: user.role,
+    },
+  };
+};
+
+export const adminLogin = async (email, password) => {
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw new Error("Email tidak ditemukan");
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) throw new Error("Password salah");
+
+  if (user.role !== "admin") {
+    throw new Error("Akses ditolak, Anda bukan admin!");
+  }
+
   // Buat JWT token
   const token = jwt.sign(
     {

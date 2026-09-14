@@ -11,6 +11,8 @@ router.post("/register", userController.register);
 
 router.post("/login", userController.login);
 
+router.post("/admin/login", userController.adminLogin);
+
 router.get(
   "/",
   verifyToken,

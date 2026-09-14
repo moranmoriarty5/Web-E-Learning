@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Login Admin - E-Learning</title>
+
+    <link rel="stylesheet" href="css/admin-login.css" />
+  </head>
+
+  <body>
+    <main class="admin-login-container">
+      <section class="admin-login-card">
+        <div class="admin-icon" aria-hidden="true">⚙</div>
+
+        <h1>Login Admin</h1>
+
+        <p class="admin-subtitle">Masuk ke panel administrasi E-Learning</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Masukkan email admin"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Masukkan password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <button type="submit" id="loginButton">Masuk sebagai Admin</button>
+        </form>
+
+        <div class="extra-buttons">
+          <a href="/" class="secondary-btn"> ← Kembali ke Beranda </a>
+        </div>
+
+        <p id="errorMessage" class="error-message" role="alert"></p>
+      </section>
+    </main>
+
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const loginButton = document.getElementById("loginButton");
+      const errorMessage = document.getElementById("errorMessage");
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        errorMessage.textContent = "";
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Memproses...";
+
+        try {
+          const res = await fetch("/api/users/admin/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          });
+
+          const contentType = res.headers.get("content-type") || "";
+
+          if (!contentType.includes("application/json")) {
+            throw new Error("Server mengembalikan response yang tidak valid.");
+          }
+
+          const data = await res.json();
+
+          if (!res.ok || data.status !== "success") {
+            throw new Error(data.message || "Login admin gagal.");
+          }
+
+          if (data.data?.user?.role !== "admin") {
+            throw new Error("Akun ini bukan akun admin.");
+          }
+
+          // Hanya hapus data autentikasi sebelumnya.
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          localStorage.removeItem("nama");
+          localStorage.removeItem("userId");
+
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("role", data.data.user.role);
+          localStorage.setItem("nama", data.data.user.nama);
+          localStorage.setItem("userId", data.data.user.id);
+
+          window.location.href = "/dashboard-admin";
+        } catch (error) {
+          console.error("Login admin error:", error);
+
+          errorMessage.textContent =
+            error.message || "Terjadi kesalahan saat login.";
+
+          loginButton.disabled = false;
+          loginButton.textContent = "Masuk sebagai Admin";
+        }
+      });
+    </script>
+  </body>
+</html>

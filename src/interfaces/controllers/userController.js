@@ -24,6 +24,19 @@ export const login = async (req, res) => {
   }
 };
 
+export const adminLogin = async (req, res) => {
+  try {
+    const result = await userUseCase.adminLogin(
+      req.body.email,
+      req.body.password,
+    );
+
+    success(res, result, "Login berhasil");
+  } catch (err) {
+    error(res, err.message, 400);
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     const user = await userUseCase.getAllUsers(req.query.role);

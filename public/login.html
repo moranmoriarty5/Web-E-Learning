@@ -44,8 +44,6 @@
             // Redirect berdasarkan role
             if (data.data.user.role === "pengajar") {
               globalThis.location.href = "/dashboard-pengajar";
-            } else if (data.data.user.role === "admin") {
-              globalThis.location.href = "/dashboard-admin";
             } else {
               globalThis.location.href = "/dashboard-siswa";
             }
