@@ -11,7 +11,11 @@ export const Materi = sequelize.define("Materi", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+},
+{
+  tableName: "materis",
+},
+);
 
 Materi.belongsTo(MataPelajaran, { foreignKey: "mataPelajaranId" });
 MataPelajaran.hasMany(Materi, { foreignKey: "mataPelajaranId" });

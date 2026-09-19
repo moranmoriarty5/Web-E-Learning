@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import { sequelize } from "./config/database.js";
 import userRoutes from "./interfaces/routes/userRoutes.js";
 import mataPelajaranRoutes from "./interfaces/routes/mataPelajaranRoutes.js";
 import materiRoutes from "./interfaces/routes/materiRoutes.js";
@@ -10,8 +9,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 dotenv.config();
+
 const app = express();
+
 app.disable("x-powered-by");
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -69,12 +71,4 @@ app.get("/diskusi", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/diskusi.html"));
 });
 
-try {
-  await sequelize.sync();
-
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ Server berjalan di http://localhost:${process.env.PORT}`);
-  });
-} catch (err) {
-  console.error("❌ Gagal koneksi database:", err);
-}
+export default app;

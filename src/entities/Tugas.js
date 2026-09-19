@@ -16,7 +16,11 @@ export const Tugas = sequelize.define("Tugas", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-});
+},
+{
+  tableName: "tugas",
+},
+);
 
 Tugas.belongsTo(Materi, { foreignKey: "materiId" });
 Materi.hasMany(Tugas, { foreignKey: "materiId" });

@@ -8,7 +8,11 @@ export const Diskusi = sequelize.define("Diskusi", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-});
+},
+{
+  tableName: "diskusis",
+},
+);
 
 User.hasMany(Diskusi, { foreignKey: "userId" });
 Diskusi.belongsTo(User, { foreignKey: "userId" });
